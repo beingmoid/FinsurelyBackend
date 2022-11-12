@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+
+  <ItemGroup>
+   
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.10.0" />
+   
+    <PackageReference Include="EFCore.BulkExtensions" Version="3.6.5" />
+   
+    <PackageReference Include="EPPlus" Version="5.7.1" />
+   
+    <PackageReference Include="EPPlus.Core.Extensions" Version="2.4.0" />
+   
+    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+
+    <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ArcherMicroFinanceBackend.Data\PanoramaBackend.Data.csproj" />
+    <ProjectReference Include="..\NukesLab.Core.Repository\NukesLab.Core.Repository.csproj" />
+    <ProjectReference Include="..\NukesLab.Core.Services\NukesLab.Core.Services.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,36 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "8709f69f-7d47-4963-a8aa-b24f69cee9da": {
+      "ProjectGuid": "8709f69f-7d47-4963-a8aa-b24f69cee9da",
+      "DisplayName": "PanoramaBackend.Data",
+      "ColorIndex": 0
+    },
+    "545fcbcc-918e-4c3b-a653-4b7e990c7e95": {
+      "ProjectGuid": "545fcbcc-918e-4c3b-a653-4b7e990c7e95",
+      "DisplayName": "PanoramaBackend.Api",
+      "ColorIndex": 1
+    },
+    "5ef95f7e-2a13-42c0-b866-c7896dd9c3aa": {
+      "ProjectGuid": "5ef95f7e-2a13-42c0-b866-c7896dd9c3aa",
+      "DisplayName": "PanoramaBackend.Services",
+      "ColorIndex": 2
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Miscellaneous Files",
+      "ColorIndex": -1
+    },
+    "5399277e-3eb3-4baa-acf3-be7c35c5e4c0": {
+      "ProjectGuid": "5399277e-3eb3-4baa-acf3-be7c35c5e4c0",
+      "DisplayName": "NukesLab.Core.Common",
+      "ColorIndex": 3
+    },
+    "1eeb8443-2a33-4ac7-a9e5-895cb1b7f686": {
+      "ProjectGuid": "1eeb8443-2a33-4ac7-a9e5-895cb1b7f686",
+      "DisplayName": "NukesLab.Core.Repository",
+      "ColorIndex": 4
+    }
+  },
+  "NextColorIndex": 5
+}

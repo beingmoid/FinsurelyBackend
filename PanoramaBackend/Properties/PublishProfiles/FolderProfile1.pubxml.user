@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <_PublishTargetUrl>I:\Finsurely\Afnan\afnaninsurancebackend\PanoramaBackend\bin\Release\netcoreapp3.1\publish\</_PublishTargetUrl>
+    <History>True|2022-07-25T21:26:35.8724393Z;True|2022-07-25T16:20:53.8257704-05:00;</History>
+  </PropertyGroup>
+</Project>
