@@ -42,7 +42,7 @@ namespace PanoramaBackend.Api.Controllers
 
         private readonly IServiceProvider _serviceProvider;
 
-        private readonly IElasticClient _elasticClient;
+        //private readonly IElasticClient _elasticClient;
         private readonly ISalesInvoiceRepository _salesRepo;
 
 //        public string GetElasticsearchBulkJsonFromJson(string jsonStringWithArrayOfObjects, string firstParameterNameOfObjectInJsonStringArrayOfObjects)
@@ -57,7 +57,7 @@ namespace PanoramaBackend.Api.Controllers
                    IFileUploader fileUploader,
                    IServiceProvider serviceProvider,
                    ISalesInvoiceRepository salesRepo,
-                   IElasticClient elasticClient,
+                   //IElasticClient elasticClient,
                    IDocumentService docService)    
             :base(requestScope,service)
         {
@@ -65,7 +65,7 @@ namespace PanoramaBackend.Api.Controllers
             _fileUploader = fileUploader;
             _docService = docService;
             _serviceProvider = serviceProvider;
-            _elasticClient = elasticClient;
+            //_elasticClient = elasticClient;
             _salesRepo = salesRepo;
         }
 
