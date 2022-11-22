@@ -44,7 +44,7 @@ namespace PanoramaBackend
     public class Startup
     {
         private readonly IWebHostEnvironment _env;
-        //private readonly IServiceProvider serviceProvider;
+        private readonly IServiceProvider serviceProvider;
 
         //public static readonly ILoggerFactory loggerFactory = new LoggerFactory(new[] {
         //      new ConsoleLoggerProvider((_, __) => true, true)
@@ -92,11 +92,14 @@ namespace PanoramaBackend
             //CreateIndex(client, defaultIndex);
 
             services.AddAutoMapper(typeof(AutoMapperMappings).Assembly);
+            services.AddHttpContextAccessor();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
+            services.AddScoped<IUserProvider, IdentityUserProvider>();
+            services.AddScoped<UserGenerator>();
             services.AddDbContext<AMFContext>(option =>
             {
                 option.UseSqlServer(Utils._config.GetConnectionString("AMFDB"));
+                option.UseInternalServiceProvider(serviceProvider);
                 //option.EnableSensitiveDataLogging(true);
                 option.EnableDetailedErrors(true);
                 option.UseLoggerFactory(LoggerFactory.Create(builder => { builder.AddConsole(); }));
@@ -111,8 +114,9 @@ namespace PanoramaBackend
                 option.Password.RequireUppercase = false;
                 option.Password.RequireLowercase = false;
             }).AddEntityFrameworkStores<AMFContext>()
-              .AddDefaultTokenProviders();
-            services.AddHttpContextAccessor();
+              .AddDefaultTokenProviders() ;
+   
+        
 
             services.AddScoped<RequestScope>(services =>
             {
@@ -286,6 +290,8 @@ namespace PanoramaBackend
             services.AddScoped<IServiceService, ServiceService>();
 
             #endregion
+
+            
 
 
    

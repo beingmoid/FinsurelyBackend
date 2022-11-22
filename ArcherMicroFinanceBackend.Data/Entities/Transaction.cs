@@ -9,11 +9,11 @@ namespace PanoramBackend.Data.Entities
     {
         public DateTime TransactionDate { get; set; }
         public string Memo { get; set; }
-        public int? UserDetailId { get; set; } //SaleAgent 
+        public int? UserDetailId { get; set; } //SaleAgent / Insurance Company /
         public int? SalesInvoiceId { get; set; } //Invoice
         public int? PaymentId { get; set; } //ReceivePayment
         public Payment Payment { get; set; }
-
+        public string TransactionReferenceNumber { get; set; }
         public int? RefundId { get; set; } //Refund
         public Refund Refund { get; set; }
         public TransactionTypes? TransactionType { get; set; }

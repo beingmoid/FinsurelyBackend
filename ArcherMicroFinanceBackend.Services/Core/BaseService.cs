@@ -133,7 +133,7 @@ namespace PanoramBackend.Services.Core
         public async Task<IEnumerable<TEntity>> Get(Func<IQueryable<TEntity>, IQueryable<TEntity>> includeExpression, params Expression<Func<TEntity, bool>>[] predicates)
         {
             return await this.Repository.Get(includeExpression, predicates);
-        }
+            }
         public async Task<IEnumerable<TReturn>> Get<TReturn>(Expression<Func<TEntity, TReturn>> selectExpression)
         {
             return await this.Repository.Get(selectExpression);
@@ -165,6 +165,7 @@ namespace PanoramBackend.Services.Core
                 {
                  
                     this.Map(entity, newEntity);
+                    
                     newEntities.Add(newEntity);
                 }));
                 await this.WhileInserting(newEntities);

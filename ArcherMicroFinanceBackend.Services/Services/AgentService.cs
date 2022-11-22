@@ -66,7 +66,7 @@ namespace PanoramBackend.Services.Services
                 transaction.TransactionDate = (DateTime)paymentAndBilling?.Asof;
                 transaction.UserDetailId = item.Id;
                 transaction.SalesInvoiceId = sales.Id;
-                transaction.TransactionType = TransactionTypes.Invoice;
+                transaction.TransactionType = TransactionTypes.Bill;
                     //Recording Transaction In Ledger
                 LedgarEntries ledgar = new LedgarEntries();
                 ledgar.TransactionDate = (DateTime)paymentAndBilling?.Asof;

@@ -28,9 +28,9 @@ namespace PanoramBackend.Data
         private ModelBuilder _modelBuilder;
 		private readonly byte[] tenantId;
 		private readonly IServiceProvider _serviceProvider;
-        public AMFContext(DbContextOptions<AMFContext> otp, IServiceProvider serviceProvider) : base(otp)
+        public AMFContext(DbContextOptions<AMFContext> otp) : base(otp)
         {
-			_serviceProvider = serviceProvider;
+		
 			//tenantId = Utils.GetTenantId(_serviceProvider);
 			Database.SetCommandTimeout(120000);
 		}
@@ -40,6 +40,7 @@ namespace PanoramBackend.Data
         {
             base.OnModelCreating(modelBuilder);
             _modelBuilder = modelBuilder;
+
 
 
 			InitializeEntities();
@@ -60,7 +61,7 @@ namespace PanoramBackend.Data
         {
 
            optionsBuilder.UseSqlServer(ConnectionStrings.PortalConnectionString);
-
+			optionsBuilder.UseInternalServiceProvider(_serviceProvider);
             base.OnConfiguring(optionsBuilder); 
         }
         protected  void InitializeEntities()
@@ -199,7 +200,7 @@ namespace PanoramBackend.Data
 
 		}
 
-
+		
 		//protected EntityTypeBuilder<TEntity> InitializeEntity<TEntity>()
 		//where TEntity : class, IBaseEntity
 		//{

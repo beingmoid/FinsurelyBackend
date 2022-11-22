@@ -10,8 +10,8 @@ using PanoramBackend.Data;
 namespace PanoramaBackend.Data.Migrations
 {
     [DbContext(typeof(AMFContext))]
-    [Migration("20221112204621_11122022212")]
-    partial class _11122022212
+    [Migration("20221121161136_Init354als")]
+    partial class Init354als
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -596,7 +596,9 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -605,7 +607,9 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -1524,13 +1528,17 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -1678,7 +1686,9 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<string>("DefaultTaxCode")
                         .HasColumnType("nvarchar(max)");
@@ -1690,7 +1700,9 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -1812,13 +1824,17 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<string>("FormName")
                         .HasColumnType("nvarchar(max)");
@@ -1887,13 +1903,17 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -1936,13 +1956,17 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -1976,13 +2000,17 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -2037,13 +2065,17 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<int>("EmploymentDetailId")
                         .HasColumnType("int");
@@ -2086,13 +2118,17 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -2134,13 +2170,17 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<int>("EmploymentDetailId")
                         .HasColumnType("int");
@@ -2171,13 +2211,17 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -2212,13 +2256,17 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -2244,13 +2292,17 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<bool>("Effective")
                         .HasColumnType("bit");
@@ -2296,7 +2348,9 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -2305,7 +2359,9 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -2348,7 +2404,9 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<int>("DeductionTypeId")
                         .HasColumnType("int");
@@ -2357,7 +2415,9 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -2399,13 +2459,17 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -2431,7 +2495,9 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -2443,7 +2509,9 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<int>("EmploymentDetailId")
                         .HasColumnType("int");
@@ -2474,13 +2542,17 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<bool>("EmployeeIsActive")
                         .HasColumnType("bit");
@@ -2530,13 +2602,17 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<int>("EmploymentDetailId")
                         .HasColumnType("int");
@@ -2567,13 +2643,17 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -2616,7 +2696,9 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime>("DateOfReturn")
                         .HasColumnType("datetime2");
@@ -2625,7 +2707,9 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<int>("EmploymentStatusId")
                         .HasColumnType("int");
@@ -2683,7 +2767,9 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<int?>("CreditAccountId")
                         .HasColumnType("int");
@@ -2695,7 +2781,9 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -2733,13 +2821,17 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -2777,7 +2869,9 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<int?>("CreditAccountId")
                         .HasColumnType("int");
@@ -2789,7 +2883,9 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
@@ -2855,13 +2951,17 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -2908,13 +3008,17 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -2969,13 +3073,17 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -3018,13 +3126,17 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -3079,13 +3191,17 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -3137,7 +3253,9 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<int>("DocumentId")
                         .HasColumnType("int");
@@ -3146,7 +3264,9 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime>("From")
                         .HasColumnType("datetime2");
@@ -3294,13 +3414,17 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<decimal?>("Gross")
                         .HasColumnType("decimal(18,2)");
@@ -3366,7 +3490,9 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<int?>("CustomerDetailId")
                         .HasColumnType("int");
@@ -3378,7 +3504,9 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<int?>("InsuranceCompanyId")
                         .HasColumnType("int");
@@ -3458,13 +3586,17 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -3496,7 +3628,9 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime>("DateOfNotice")
                         .HasColumnType("datetime2");
@@ -3505,7 +3639,9 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<int>("EmploymentStatusId")
                         .HasColumnType("int");
@@ -3542,13 +3678,17 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -3603,7 +3743,9 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime?>("DueDate")
                         .HasColumnType("datetime2");
@@ -3612,7 +3754,9 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -3664,13 +3808,17 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -3704,13 +3852,17 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -3765,13 +3917,17 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -3795,6 +3951,9 @@ namespace PanoramaBackend.Data.Migrations
 
                     b.Property<DateTime>("TransactionDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("TransactionReferenceNumber")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("TransactionType")
                         .HasColumnType("int");
@@ -3832,7 +3991,9 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<int?>("DefaultAccountId")
                         .HasColumnType("int");
@@ -3844,7 +4005,9 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
@@ -3965,13 +4128,17 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<int>("EmploymentDetailId")
                         .HasColumnType("int");
@@ -4008,13 +4175,17 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -4072,13 +4243,17 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTime?>("ExpiredDate")
                         .HasColumnType("datetime2");
@@ -4143,14 +4318,14 @@ namespace PanoramaBackend.Data.Migrations
                         new
                         {
                             Id = "a18be9c0-aa65-4af8-bd17-00bd9344e575",
-                            ConcurrencyStamp = "5864a91c-de78-45ca-9a30-d879120c10e5",
+                            ConcurrencyStamp = "56ee1736-753c-4ac4-affe-4fe2cd0810ab",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
                             Id = "a18be9c0-aa65-4af8-bd17-00bd9344e678",
-                            ConcurrencyStamp = "b94ea42b-b242-4a5d-a476-db043361e1f4",
+                            ConcurrencyStamp = "b94fd7aa-bb98-41d0-9ed2-b6bac152d1b8",
                             Name = "CompanyAdmin",
                             NormalizedName = "CompanyAdmin"
                         });
@@ -4225,13 +4400,13 @@ namespace PanoramaBackend.Data.Migrations
                         {
                             Id = "a18be9c0-aa65-4af8-bd17-00bd9344e575",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "8f09273d-26ac-45a0-838c-e7634377cc21",
+                            ConcurrencyStamp = "8598a50c-13ee-4726-8afd-8cdfafb1c4d0",
                             Email = "admin@nukeslab.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "admin@nukeslab.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEOFV7XIgqMGCbzhsBai6iGxpf+tGrDl7Vb0EDE590gVsQ38dkavAFRCcn4GQ8jMovA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEKUkpciN7ASAB/MCWWhqnpcOM0lFH6C0YvdIryKKHLA16dcdC3dPNylpsv5RdFAOLg==",
                             PhoneNumber = "+923400064394",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",

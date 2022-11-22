@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using NukesLab.Core.Common;
 using NukesLab.Core.Repository;
 using System;
-using System.Collections;
+using System.Collections;	
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -153,6 +153,13 @@ namespace PanoramBackend.Data
 
 		public async Task Insert(IEnumerable<TEntity> entities)
         {
+			foreach (var item in entities)
+			{
+				this._requestScope.Entry(item).Property("CreateUserId").CurrentValue = _requestScope.GetService<IUserProvider>().UserId;
+				this._requestScope.Entry(item).Property("CreateTime").CurrentValue = DateTime.Now;
+
+
+            }
 			this._requestScope.Set<TEntity>().AddRange(entities);
 			await Task.FromResult(true);
 		}
@@ -162,8 +169,13 @@ namespace PanoramBackend.Data
 					=> await this._requestScope.BulkInsertAsync(entities);
 		public async Task<bool> Update(TKey id, TEntity entity)
         {
-			//TEntity dbEntity = await _requestScope.FindAsync<TEntity>(entity.Id);
-			return  _requestScope.Update(entity).State == EntityState.Modified;
+          
+                this._requestScope.Entry(entity).Property("EditUserId").CurrentValue = _requestScope.GetService<IUserProvider>().UserId;
+                this._requestScope.Entry(entity).Property("EditTime").CurrentValue = DateTime.Now;
+
+
+            //TEntity dbEntity = await _requestScope.FindAsync<TEntity>(entity.Id);
+            return  _requestScope.Update(entity).State == EntityState.Modified;
 			//var dbEntry = _requestScope.Entry(dbEntity);
 			//dbEntry.CurrentValues.SetValues(entity);
 			
@@ -258,7 +270,7 @@ namespace PanoramBackend.Data
 		
 		{
 			entity.IsDeleted = true;
-            if (navigations != null)
+            if (navigations.Count()>0)
             {
                 if (includeExpression != null)
                 {
@@ -274,7 +286,7 @@ namespace PanoramBackend.Data
             {
                 return await this.Update(id, entity);
             }
-            return await this.Update(id, entity);
+         //   return await this.Update(id, entity);
 
 		}
 		#endregion
