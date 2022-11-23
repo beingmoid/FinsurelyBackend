@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 namespace PanoramaBackend.Api.Controllers
 {
 
+    [ResponseCache]
     public class AccountDetailTypeController : BaseController<AccountDetailType,int>
     {
         private readonly IAccountDetailTypeService _service;

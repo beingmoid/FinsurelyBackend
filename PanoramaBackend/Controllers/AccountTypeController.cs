@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace PanoramaBackend.Api.Controllers
 {
-
+    [ResponseCache]
     public class AccountTypeController : BaseController<AccountType,int>
     {
         public AccountTypeController(RequestScope requestScope,IAccountTypeService service)

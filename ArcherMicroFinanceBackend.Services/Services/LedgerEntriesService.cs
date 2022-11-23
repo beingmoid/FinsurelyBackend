@@ -33,7 +33,7 @@ namespace PanoramBackend.Services.Services
             .Include(x => x.Transaction).ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.InsuranceType)
              .Include(x => x.Transaction).ThenInclude(x => x.Payment)
              .Include(x=>x.Transaction).ThenInclude(x=>x.Refund).ThenInclude(x => x.Vehicle)
-           .Include(x => x.CreditAccount), x => x.DebitAccountId == accountId || x.CreditAccountId == accountId
+           .Include(x => x.CreditAccount), x => x.Transaction.UserDetailId.Equals(accountId.ToString())
             )).ToList();
 
             var accountType = (await _accountsService.Get(x => x.Include(x => x.AccountDetailType).ThenInclude(x => x.AccountType), x => x.Id == accountId)).SingleOrDefault();

@@ -21,6 +21,8 @@ using PanoramBackend.Data.Entities;
 using NukesLab.Core.Common;
 using Microsoft.AspNetCore.Http;
 using PanoramBackend.Data;
+using System.Threading;
+using System.Security.Principal;
 
 namespace PanoramBackend.Services.Services
 {
@@ -75,6 +77,7 @@ namespace PanoramBackend.Services.Services
                     };
                     var role = await _roleManager.FindByNameAsync(userRoles.FirstOrDefault());
                     var claimsList = await _roleManager.GetClaimsAsync(role);
+                    
                     claims.AddRange(claimsList.ToList());
 
                     foreach (var item in userRoles)
@@ -91,6 +94,9 @@ namespace PanoramBackend.Services.Services
                     };
                     await _loginRepo.Insert(new[] { login});
                     await _loginRepo.SaveChanges();
+                    var principle = new GenericPrincipal(new ClaimsIdentity(user.UserName), userRoles.ToArray());
+                    Thread.CurrentPrincipal = principle;
+                    _serviceProvider.GetRequiredService<IHttpContextAccessor>().HttpContext.User = principle;
                     //var accDetails = new UserDTO();
                     //accDetails.Email = user.Email;
                     //accDetails.Id = user.Id;

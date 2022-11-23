@@ -7,6 +7,7 @@ using System.Text;
 using NukesLab.Core.Common;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace NukesLab.Core.Repository
 {
@@ -17,6 +18,7 @@ namespace NukesLab.Core.Repository
 		where TRole :IdentityRole
 	{
         private readonly IRequestInfo _requestInfo;
+        private readonly IServiceProvider serviceProvider;
         private readonly DbContextOptions _options;
         private readonly string _connectionString;
 		private ModelBuilder _modelBuilder;
@@ -46,7 +48,8 @@ namespace NukesLab.Core.Repository
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
 			optionsBuilder.UseSqlServer(ConnectionStrings.PortalConnectionString);
-			optionsBuilder.EnableDetailedErrors(true);
+            optionsBuilder.UseInternalServiceProvider(serviceProvider);
+            optionsBuilder.EnableDetailedErrors(true);
 			base.OnConfiguring(optionsBuilder);
 		}
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -71,21 +74,24 @@ namespace NukesLab.Core.Repository
 		{
 			var entityTypeBuilder = _modelBuilder.Entity<TEntity>();
 
-			//CreateRelation<TEntity,AuditEntries<TEntity>>(x=>x.AuditEntries<TEntity>,x=>x.)
+			//CreateRelation<TEntity,AuditEntries<TEntity>>(x=>~.AuditEntries<TEntity>,x=>x.)
 
 			entityTypeBuilder
 				.HasQueryFilter(o => !o.IsDeleted);
 
 
 
-            //entityTypeBuilder
-            //    .Property(o => o.AuditEntries.CreateUserId)
-            //    .HasMaxLength(100)
-            //    .HasValueGenerator<UserIdGenerator>();
+			entityTypeBuilder
+				.Property(o => o.CreateUserId)
+				.HasMaxLength(100).HasColumnName("CreateUserId");
+			entityTypeBuilder
+		.Property(o => o.EditUserId)
+		.HasMaxLength(100).HasColumnName("EditUserId");
+
 
             //entityTypeBuilder
             //    .Property(o => o.AuditEntries<TEntity>.CreateTime)
-            //    .HasValueGenerator<CurrentTimeGenerator>();
+            //    .HasValueGenerator<CurrentTimeGener~tor>();
 
 
             entityTypeBuilder

@@ -25,9 +25,12 @@ namespace NukesLab.Core.Common
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public virtual TKey Id { get; set; }
+
+
 		public string CreateUserId { get;  set; }
 		public DateTime? CreateTime { get;  set; }
-		public string EditUserId { get;  set; }
+
+        public string EditUserId { get;  set; }
 		public DateTime? EditTime { get;  set; }
 
 		[JsonIgnore]
