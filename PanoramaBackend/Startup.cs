@@ -38,6 +38,8 @@ using PanoramBackend.Data.Entities;
 using Newtonsoft.Json;
 using System.IO;
 using Microsoft.Extensions.FileProviders;
+using DinkToPdf.Contracts;
+using DinkToPdf;
 
 namespace PanoramaBackend
 {
@@ -67,6 +69,7 @@ namespace PanoramaBackend
 
 
         {
+            services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
             services.AddCors();
 
             services.AddControllers().AddNewtonsoftJson(options => {
@@ -225,6 +228,8 @@ namespace PanoramaBackend
             services.AddScoped<IBranchService, BranchService>();
             services.AddScoped<IAttendanceRepository, AttendanceRepository>();
             services.AddScoped<IAttendanceService, AttendanceService>();
+            services.AddScoped<IAnnouncementRepository, AnnouncementRepository>();
+            services.AddScoped<IAnnoucementService, AnnoucementService>();
             //services.AddScoped<IElasticClient, ElasticClient>();
             //services.AddScoped<ICompanyRepo, CompanyRepo>();
             //services.AddScoped<ICardInfoRepo, CardInfoRepo>();
@@ -316,7 +321,7 @@ namespace PanoramaBackend
         {
           
             ServiceActivator.Configure(app.ApplicationServices);
-
+        
             if (_env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

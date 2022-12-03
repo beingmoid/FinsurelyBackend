@@ -17,6 +17,7 @@ namespace PanoramaBackend.Api.Controllers
         public int TotalPages { get; set; }
         public int CurrentPage { get; set; }
         public int PageSize { get; set; }
+        public decimal TotalBalance { get; set; }
         public List<dynamic> Data { get; set; }
 
     }

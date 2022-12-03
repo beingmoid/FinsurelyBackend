@@ -19,6 +19,7 @@ using System.Linq;
 using PanoramBackend.Data.CatalogDb;
 using PanoramBackend.Data.CatalogDb.Repos;
 using Microsoft.Extensions.DependencyInjection;
+using PanoramaBackend.Data.Entities;
 
 namespace PanoramBackend.Data
 {
@@ -117,6 +118,7 @@ namespace PanoramBackend.Data
 			this.InitializeEntity<PolicyType>();
 			this.InitializeEntity<Service>();
 			this.InitializeEntity<Transaction>();
+			this.InitializeEntity<Announcement>();
 
 			//EmployeeRelations
 			this.CreateRelation<UserDetails, Teams>(x => x.ManagerTeams, x => x.Manager, x => x.ManagerId);
