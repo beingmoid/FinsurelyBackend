@@ -33,13 +33,16 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
-    <PackageReference Include="DotLiquid" Version="2.2.544" />
+    <PackageReference Include="DinkToPdf" Version="1.0.8" />
+    <PackageReference Include="DotLiquid" Version="2.2.656" />
     <PackageReference Include="EFCore.BulkExtensions" Version="3.6.5" />
     <PackageReference Include="Elastic.Apm.EntityFrameworkCore" Version="1.13.0" />
     <PackageReference Include="Elastic.Apm.MongoDb" Version="1.13.0" />
     <PackageReference Include="Elastic.Apm.NetCoreAll" Version="1.13.0" />
     <PackageReference Include="Elasticsearch.Net" Version="7.16.0" />
     <PackageReference Include="EntityFrameworkCore.Cacheable" Version="2.0.1" />
+    <PackageReference Include="FluentExcel" Version="2.2.0" />
+    <PackageReference Include="FluentExcel_Forked" Version="2.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.16" />
     <PackageReference Include="Microsoft.AspNetCore.ResponseCaching.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="3.1.19" />
