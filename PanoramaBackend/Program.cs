@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Server.HttpSys;
+using System.Net;
 
 namespace PanoramaBackend
 {
@@ -26,7 +27,28 @@ namespace PanoramaBackend
               
         .ConfigureWebHostDefaults(webBuilder =>
         {
-            webBuilder.UseStartup<Startup>().UseKestrel();
+            webBuilder.ConfigureKestrel(serverOptions =>
+            {
+
+                //serverOptions.Listen(IPAddress.Parse("192.168.18.7"), 5000);
+                //serverOptions.Limits.MaxConcurrentConnections = 100;
+                //serverOptions.Limits.MaxConcurrentUpgradedConnections = 100;
+                //serverOptions.Limits.MaxRequestBodySize = 10 * 1024;
+                //serverOptions.Limits.MinRequestBodyDataRate =
+                //    new MinDataRate(bytesPerSecond: 100,
+                //        gracePeriod: TimeSpan.FromSeconds(10));
+                //serverOptions.Limits.MinResponseDataRate =
+                //    new MinDataRate(bytesPerSecond: 100,
+                //        gracePeriod: TimeSpan.FromSeconds(10));
+
+                //serverOptions.Listen(IPAddress.Loopback, 5001,
+                //    listenOptions =>
+                //    {
+                //        listenOptions.UseHttps("testCert.pfx",
+                //            "testPassword");
+                //    });
+            })
+            .UseStartup<Startup>();
         });
                
     }
