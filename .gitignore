@@ -9,3 +9,9 @@
 /NukesLab.Core.Api/bin
 /NukesLab.Core.Api/obj
 
+/.vs
+.vs
+/ArcherMicroFinanceBackend.Services/bin
+/ArcherMicroFinanceBackend.Services/obj
+/ArcherMicroFinanceBackend.Data/bin
+/ArcherMicroFinanceBackend.Data/obj

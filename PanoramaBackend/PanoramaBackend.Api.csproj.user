@@ -5,7 +5,8 @@
   </PropertyGroup>
   <PropertyGroup>
     <ActiveDebugProfile>Prod</ActiveDebugProfile>
-    <NameOfLastUsedPublishProfile>FolderProfile1</NameOfLastUsedPublishProfile>
+    <NameOfLastUsedPublishProfile>finsurelybackend - Web Deploy</NameOfLastUsedPublishProfile>
+    <ShowAllFiles>true</ShowAllFiles>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>

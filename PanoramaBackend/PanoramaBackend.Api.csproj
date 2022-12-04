@@ -22,10 +22,31 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="DIHelper\EmailTemplates\EmailTemplateForVerifyAndReset.html" />
+    <None Remove="DIHelper\EmailTemplates\Group 1.png" />
+    <None Remove="DIHelper\EmailTemplates\statement.html" />
+    <None Remove="EmailTemplates\EmailTemplateForVerifyAndReset.html" />
+    <None Remove="EmailTemplates\Group 1.png" />
+    <None Remove="EmailTemplates\statement.html" />
     <None Remove="Uploads\Test.xlsx" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="DIHelper\EmailTemplates\Group 1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DIHelper\EmailTemplates\statement.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EmailTemplates\EmailTemplateForVerifyAndReset.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EmailTemplates\Group 1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EmailTemplates\statement.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Uploads\Test.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -93,6 +114,24 @@
 
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="DIHelper\EmailTemplates\EmailTemplateForVerifyAndReset.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="DIHelper\EmailTemplates\Group 1.png" />
+    <Resource Include="DIHelper\EmailTemplates\statement.html" />
+    <Resource Include="DIHelper\EmailTemplates\statementConfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="DIHelper\EmailTemplates\statementConfig.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="EmailTemplates\statementConfig.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 

@@ -122,7 +122,6 @@ namespace PanoramaBackend.Api.Controllers
             {
                 count++;
 
-
                 AgentStatementDTO debit = new AgentStatementDTO();
                 debit.Num = count;
                 if (item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id) != null)
