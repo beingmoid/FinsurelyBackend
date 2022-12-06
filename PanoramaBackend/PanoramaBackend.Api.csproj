@@ -26,8 +26,6 @@
     <None Remove="DIHelper\EmailTemplates\Group 1.png" />
     <None Remove="DIHelper\EmailTemplates\statement.html" />
     <None Remove="EmailTemplates\EmailTemplateForVerifyAndReset.html" />
-    <None Remove="EmailTemplates\Group 1.png" />
-    <None Remove="EmailTemplates\statement.html" />
     <None Remove="Uploads\Test.xlsx" />
   </ItemGroup>
 
@@ -39,12 +37,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="EmailTemplates\EmailTemplateForVerifyAndReset.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="EmailTemplates\Group 1.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="EmailTemplates\statement.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Uploads\Test.xlsx">

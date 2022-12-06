@@ -18,6 +18,7 @@ using DinkToPdf;
 using DinkToPdf.Contracts;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using DotLiquid;
 
 namespace PanoramaBackend.Api.Controllers
 {
@@ -69,6 +70,49 @@ namespace PanoramaBackend.Api.Controllers
              )).SingleOrDefault();
             OtherConstants.isSuccessful = true;
             return constructResponse(userDetail);
+
+        }
+        
+        private async Task<PageConfig> GetAgentStatementByDate(int agentId , DateTime  dateFrom , DateTime dateTo)
+        {
+            var agent = (await _service.Get(x => x.Include(x => x.Accounts), x => x.Id == agentId)).SingleOrDefault();
+
+            var ledgers = (await _entriesService.Get(x => x.Include(x => x.Transaction)
+
+            .ThenInclude(x => x.SalesInvoice)
+                        .ThenInclude(x => x.SaleLineItem)
+                            .ThenInclude(x => x.Vehicle)
+
+            .Include(x => x.Transaction)
+                   .ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.InsuranceType)
+        .Include(x => x.Transaction)
+                   .ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.Branch)
+            .Include(x => x.Transaction)
+                   .ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.Service)
+        .Include(x => x.Transaction)
+                   .ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.PolicyType)
+        .Include(x => x.Transaction)
+                   .ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.BodyType)
+
+
+
+            , x => x.TransactionDate>=dateFrom && x.TransactionDate<=dateTo && x.Transaction.UserDetailId == agentId)).GroupBy(x => x.TransactionId).Select(
+
+                x => new
+                {
+                    Key = x.Key,
+                    Value = x
+                }
+                );
+
+            //List<dynamic> accountStatement = new List<dynamic>();
+            PageConfig page = new PageConfig();
+            //int count = 0;
+            //page.TotalPages = ledgers.ToList().Count / pageNo;
+            //page.CurrentPage = pageNo;
+            //page.PageSize = pageSize;
+            //decimal debitBalance = 0;
+            return page;
 
         }
 
@@ -188,13 +232,122 @@ namespace PanoramaBackend.Api.Controllers
 
         [AllowAnonymous]
         [HttpGet("Download")]
-        public async Task<ActionResult> Downnload()
+        public async Task<ActionResult> DownloadStatement(int agentId, DateTime from , DateTime to)
         {
             string path = Path.Combine(_env.ContentRootPath, "EmailTemplates\\statement.html");
-            
+            var agent = (await _service.Get(x => x.Include(x => x.Accounts), x => x.Id == agentId)).SingleOrDefault();
+            var ledgers = (await _entriesService.Get(x => x.Include(x => x.Transaction)
+
+     .ThenInclude(x => x.SalesInvoice)
+                 .ThenInclude(x => x.SaleLineItem)
+                     .ThenInclude(x => x.Vehicle)
+
+     .Include(x => x.Transaction)
+            .ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.InsuranceType)
+ .Include(x => x.Transaction)
+            .ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.Branch)
+     .Include(x => x.Transaction)
+            .ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.Service)
+ .Include(x => x.Transaction)
+            .ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.PolicyType)
+ .Include(x => x.Transaction)
+            .ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.BodyType)
+
+
+
+     , x => (x.TransactionDate>=from && x.TransactionDate<=to ) && x.Transaction.UserDetailId == agentId)).GroupBy(x => x.TransactionId).Select(
+
+         x => new
+         {
+             Key = x.Key,
+             Value = x
+         }
+         );
+            decimal debitBalance = 0;
+            List<dynamic> accountStatement = new List<dynamic>();
+            PageConfig page = new PageConfig();
+            int count = 0;
+            foreach (var item in ledgers)
+            {
+                count++;
+
+                AgentStatementDTO debit = new AgentStatementDTO();
+                debit.Num = count;
+                if (item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id) != null)
+                {
+
+                    debitBalance += item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id).Amount;
+
+
+                    debit.InvoiceDate = item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id).Transaction.SalesInvoice.SalesInvoiceDate;
+                    debit.CustomerName = "x => x.DebitAccountId ==agent.Accounts.Id";
+                    debit.PolicyNumber = item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id).Transaction.SalesInvoice.SaleLineItem.SingleOrDefault().PolicyNumber;
+                    debit.PolicyType = item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id)?.Transaction?.SalesInvoice?.PolicyType?.Name;
+                    debit.ServiceType = item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id)?.Transaction?.SalesInvoice?.Service?.Name;
+                    debit.InsuranceType = item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id)?.Transaction?.SalesInvoice?.InsuranceType?.Name;
+                    debit.Vehicle = item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id)?.Transaction?.SalesInvoice?.SaleLineItem?.
+                                SingleOrDefault().Vehicle?.Make + " " + " | " +
+                                item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id)?.Transaction?.SalesInvoice?.SaleLineItem?.
+                                SingleOrDefault().Vehicle?.Model;
+                    debit.BodyType = item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id)?.Transaction?.SalesInvoice?.BodyType?.Name;
+                    debit.RefNo = item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id)?.Transaction?.TransactionReferenceNumber;
+                    debit.Debit = item?.Value?.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id)?.Amount;
+                    debit.Credit = 0;
+                    debit.Balance = debitBalance;
+
+                }
+                else
+                {
+                    debitBalance += -(item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id).Amount);
+
+                    debit.InvoiceDate = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id).Transaction.SalesInvoice.SalesInvoiceDate;
+                    debit.CustomerName = "x => x.CreditAccountId ==agent.Accounts.Id";
+                    debit.PolicyNumber = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id).Transaction.SalesInvoice.SaleLineItem.SingleOrDefault().PolicyNumber;
+                    debit.PolicyType = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id)?.Transaction?.SalesInvoice?.PolicyType?.Name;
+                    debit.ServiceType = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id)?.Transaction?.SalesInvoice?.Service?.Name;
+                    debit.InsuranceType = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id)?.Transaction?.SalesInvoice?.InsuranceType?.Name;
+                    debit.Vehicle = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id)?.Transaction?.SalesInvoice?.SaleLineItem?.
+                                SingleOrDefault().Vehicle?.Make + " " + " | " +
+                                item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id)?.Transaction?.SalesInvoice?.SaleLineItem?.
+                                SingleOrDefault().Vehicle?.Model;
+                    debit.BodyType = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id)?.Transaction?.SalesInvoice?.BodyType?.Name;
+                    debit.RefNo = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id)?.Transaction?.TransactionReferenceNumber;
+                    debit.Debit = item?.Value?.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id)?.Amount;
+                    debit.Credit = -(item?.Value?.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id)?.Amount);
+                    debit.Debit = 0;
+                    debit.Balance = debitBalance;
+                }
+
+
+                accountStatement.Add(debit);
+
+
+            }
+
+
+            //OtherConstants.isSuccessful = true;
+            page.Data.AddRange(accountStatement);
+
+
+
+   
             if (System.IO.File.Exists(path))
             {
                 string html = System.IO.File.ReadAllText(path);
+                Template template = Template.Parse(html);
+
+                string renderedHtml = template.Render(Hash.FromAnonymousObject(new
+                {
+                    accountNo = agent.DisplayNameAs.First() + agent.DisplayNameAs.Last() + agent.DefaultAccountId + agentId.ToString(),
+                    agentName = agent.DisplayNameAs,
+                    phoneNumber = agent.Phone,
+                    emirates = "AJMAN",
+                    source=page.Data,
+                    country = "UNITED ARAB EMIRATES",
+                    dateFrom = from.ToString("MMMM d, yyyy"),
+                    dateTo = to.ToString("MMMM d, yyyy")
+                })); ;
+                
            
                 var doc = new HtmlToPdfDocument()
             {
@@ -206,13 +359,14 @@ namespace PanoramaBackend.Api.Controllers
                 Objects = {
         new ObjectSettings() {
             PagesCount = true,
-            HtmlContent = html,
+            HtmlContent = renderedHtml,
             WebSettings = { DefaultEncoding = "utf-8" },
             HeaderSettings = { FontSize = 9, Right = "Page [page] of [toPage]", Line = true, Spacing = 2.812 }
         }
     }
             };
             byte[] pdf = _converter.Convert(doc);
+
 
 
 
