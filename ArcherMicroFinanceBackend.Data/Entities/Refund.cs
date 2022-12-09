@@ -1,4 +1,5 @@
 ﻿using NukesLab.Core.Common;
+using Stripe;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -28,6 +29,8 @@ namespace PanoramBackend.Data.Entities
         public string MessageOnStatement { get; set; }
         public decimal AmountForSalesAgent { get; set; }
         public decimal AmountForBroker { get; set; }
+        public int AccountId { get; set; }
+        public Accounts Account { get; set; }
         private ICollection<Transaction> _Transaction;
         public ICollection<Transaction> Transactions => _Transaction ?? (_Transaction = new List<Transaction>());
     }

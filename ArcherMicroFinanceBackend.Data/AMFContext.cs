@@ -1,29 +1,19 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PanoramBackend.Data;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using NukesLab.Core.Common;
+using NukesLab.Core.Repository;
+using PanoramaBackend.Data.Entities;
+using PanoramBackend.Data.Entities;
+using PanoramBackend.Data.Repository;
+using PanoramBackend.Services.Data.DTOs;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using NukesLab.Core.Repository;
-using NukesLab.Core.Common;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 using System.Linq.Expressions;
-
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PanoramBackend.Services.Data.DTOs;
-using PanoramBackend.Data.Entities;
-using System.Transactions;
 using Transaction = PanoramBackend.Data.Entities.Transaction;
-using PanoramBackend.Data.Repository;
-using System.Linq;
-using PanoramBackend.Data.CatalogDb;
-using PanoramBackend.Data.CatalogDb.Repos;
-using Microsoft.Extensions.DependencyInjection;
-using PanoramaBackend.Data.Entities;
 
 namespace PanoramBackend.Data
 {
-	
+
 	public class AMFContext : NukesLabEFContext<ExtendedUser,ExtendedRole>
     {
         private ModelBuilder _modelBuilder;
@@ -117,8 +107,10 @@ namespace PanoramBackend.Data
 			this.InitializeEntity<BodyType>();
 			this.InitializeEntity<PolicyType>();
 			this.InitializeEntity<Service>();
-			this.InitializeEntity<Transaction>();
+			this.InitializeEntity<Refund>();
+			this.InitializeEntity<Expense>();
 			this.InitializeEntity<Announcement>();
+			this.InitializeEntity<ExpenseCategory>();
 
 			//EmployeeRelations
 			this.CreateRelation<UserDetails, Teams>(x => x.ManagerTeams, x => x.Manager, x => x.ManagerId);
@@ -199,8 +191,11 @@ namespace PanoramBackend.Data
 			this.CreateRelation<BodyType, SalesInvoice>(x => x.SalesInvoice, x => x.BodyType, x => x.BodyTypeId);
 			this.CreateRelation<PolicyType, SalesInvoice>(x => x.SalesInvoice, x => x.PolicyType, x => x.PolicyTypeId);
 			this.CreateRelation<Service, SalesInvoice>(x => x.SalesInvoice, x => x.Service, x => x.ServiceId);
+			this.CreateRelation<Expense, Transaction>(x => x.Transactions, x => x.Expense, x => x.ExpenseId);
+            this.CreateRelation<Accounts,Refund>(x => x.Refunds, x => x.Account, x => x.AccountId);
+			
 
-		}
+        }
 
 		
 		//protected EntityTypeBuilder<TEntity> InitializeEntity<TEntity>()

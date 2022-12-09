@@ -230,6 +230,10 @@ namespace PanoramaBackend
             services.AddScoped<IAttendanceService, AttendanceService>();
             services.AddScoped<IAnnouncementRepository, AnnouncementRepository>();
             services.AddScoped<IAnnoucementService, AnnoucementService>();
+            services.AddScoped<IExpenseRepository,ExpenseRepository>();
+            services.AddScoped<IExpenseService, ExpenseService>();
+            services.AddScoped<IExpenseCategoryReposiotory, ExpenseCategoryRepository>();
+            services.AddScoped<IExpenseCategoryService, ExpenseCategoryService>();
             //services.AddScoped<IElasticClient, ElasticClient>();
             //services.AddScoped<ICompanyRepo, CompanyRepo>();
             //services.AddScoped<ICardInfoRepo, CardInfoRepo>();

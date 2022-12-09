@@ -3310,7 +3310,7 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("AccountsId")
+                    b.Property<int>("AccountId")
                         .HasColumnType("int");
 
                     b.Property<int?>("AgentId")
@@ -3329,7 +3329,9 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<string>("CustomerName")
                         .HasColumnType("nvarchar(max)");
@@ -3338,7 +3340,9 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<int?>("InsuranceCompanyId")
                         .HasColumnType("int");
@@ -3368,14 +3372,16 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<byte[]>("Timestamp")
-                        .HasColumnType("varbinary(max)");
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
                     b.Property<int?>("VehilcleId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountsId");
+                    b.HasIndex("AccountId");
 
                     b.HasIndex("AgentId");
 
@@ -3927,6 +3933,9 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
+                    b.Property<int?>("ExpenseId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -3960,6 +3969,8 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ExpenseId");
 
                     b.HasIndex("PaymentId");
 
@@ -4316,14 +4327,14 @@ namespace PanoramaBackend.Data.Migrations
                         new
                         {
                             Id = "a18be9c0-aa65-4af8-bd17-00bd9344e575",
-                            ConcurrencyStamp = "b175762b-d1ea-4d3a-9c3d-d3e0f4d3ede4",
+                            ConcurrencyStamp = "56fbb01f-9b92-441d-b57b-a539c36a79f6",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
                             Id = "a18be9c0-aa65-4af8-bd17-00bd9344e678",
-                            ConcurrencyStamp = "9ae2261c-52ce-4c8a-9f45-750f895da2ef",
+                            ConcurrencyStamp = "14e7cd45-6405-46fd-92c6-5563e5daf8af",
                             Name = "CompanyAdmin",
                             NormalizedName = "CompanyAdmin"
                         });
@@ -4398,13 +4409,13 @@ namespace PanoramaBackend.Data.Migrations
                         {
                             Id = "a18be9c0-aa65-4af8-bd17-00bd9344e575",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "c6e1a6c7-810b-4380-b7d9-d7447717dd02",
+                            ConcurrencyStamp = "5c117773-11bc-468a-9882-e726a3ae7c7e",
                             Email = "admin@nukeslab.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "admin@nukeslab.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEG2O5hjD+H0yYJGYMVieZdwrcsz1V4+IfiI2s/SCOKvsC9dCoM+gsJvWaf8eOs4LGw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEFPWCeij39wVLChoRv5gbnMFiv6yMELlvdyGNooVrj+YXOCGpDwqQYfaP1wm3r7Brg==",
                             PhoneNumber = "+923400064394",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
@@ -4462,6 +4473,100 @@ namespace PanoramaBackend.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Announcement");
+                });
+
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.Expense", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AccountId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreateUserId")
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<DateTime?>("EditTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EditUserId")
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<decimal>("ExpenseAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("ExpenseCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ExpenseDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ExpenseName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<byte[]>("Timestamp")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("ExpenseCategoryId");
+
+                    b.ToTable("Expense");
+                });
+
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.ExpenseCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime?>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreateUserId")
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<DateTime?>("EditTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EditUserId")
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("Timestamp")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ExpenseCategory");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -4767,9 +4872,11 @@ namespace PanoramaBackend.Data.Migrations
 
             modelBuilder.Entity("PanoramBackend.Data.Entities.Refund", b =>
                 {
-                    b.HasOne("PanoramBackend.Data.Entities.Accounts", null)
+                    b.HasOne("PanoramBackend.Data.Entities.Accounts", "Account")
                         .WithMany("Refunds")
-                        .HasForeignKey("AccountsId");
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("PanoramBackend.Data.Entities.UserDetails", "Agent")
                         .WithMany("AgentRefunds")
@@ -4908,6 +5015,11 @@ namespace PanoramaBackend.Data.Migrations
 
             modelBuilder.Entity("PanoramBackend.Data.Entities.Transaction", b =>
                 {
+                    b.HasOne("PanoramaBackend.Data.Entities.Expense", "Expense")
+                        .WithMany("Transactions")
+                        .HasForeignKey("ExpenseId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("PanoramBackend.Data.Entities.Payment", "Payment")
                         .WithMany("Transactions")
                         .HasForeignKey("PaymentId")
@@ -4961,6 +5073,21 @@ namespace PanoramaBackend.Data.Migrations
                         .WithMany("ComissionRates")
                         .HasForeignKey("UserDetailId")
                         .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.Expense", b =>
+                {
+                    b.HasOne("PanoramBackend.Data.Entities.Accounts", "Account")
+                        .WithMany("Expenses")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PanoramaBackend.Data.Entities.ExpenseCategory", "ExpenseCategory")
+                        .WithMany()
+                        .HasForeignKey("ExpenseCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

@@ -144,7 +144,7 @@ namespace PanoramBackend.Services.Services
                 
             var companies = (await this.Get()).ToList();
             var ledger = (await _ledger.Get()).ToList();
-            foreach (var item in companies)
+            foreach (var item in companies) 
             {
                 var debit = ledger.Where(x => x.DebitAccountId == item.DefaultAccountId).Sum(x => x.Amount);
                 var credit = ledger.Where(x => x.CreditAccountId == item.DefaultAccountId).Sum(x => x.Amount);

@@ -9,6 +9,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using PanoramBackend.Data.Repository;
 using PanoramBackend.Services.Services;
+using PanoramaBackend.Data.Entities;
 
 namespace PanoramBackend.Services.Mapper
 {
@@ -84,6 +85,8 @@ namespace PanoramBackend.Services.Mapper
 			this.CreateMap<TaskTodo>();
 			this.CreateMap<Status>();
 			this.CreateMap<Priority>();
+			this.CreateMap<Expense>();
+			this.CreateMap<ExpenseCategory>();
 
 
 		}

@@ -5,7 +5,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <ActiveDebugProfile>Prod</ActiveDebugProfile>
-    <NameOfLastUsedPublishProfile>finsurelybackend - Web Deploy</NameOfLastUsedPublishProfile>
+    <NameOfLastUsedPublishProfile>C:\Users\NUKESLAB\Desktop\FinsurelyBackend\PanoramaBackend\Properties\PublishProfiles\FolderProfile3.pubxml</NameOfLastUsedPublishProfile>
     <ShowAllFiles>true</ShowAllFiles>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

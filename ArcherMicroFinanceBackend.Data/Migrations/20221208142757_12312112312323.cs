@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PanoramaBackend.Data.Migrations
 {
-    public partial class _162022211111104 : Migration
+    public partial class _12312112312323 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,9 +13,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -25,6 +25,29 @@ namespace PanoramaBackend.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AccountType", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Announcement",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
+                    CreateTime = table.Column<DateTime>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
+                    EditTime = table.Column<DateTime>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
+                    Fullname = table.Column<string>(nullable: true),
+                    JobTitle = table.Column<string>(nullable: true),
+                    AnnoucementTitle = table.Column<string>(nullable: true),
+                    Date = table.Column<DateTime>(nullable: false),
+                    Description = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Announcement", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -72,9 +95,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -100,9 +123,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -119,9 +142,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -139,9 +162,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -154,14 +177,33 @@ namespace PanoramaBackend.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ExpenseCategory",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
+                    CreateTime = table.Column<DateTime>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
+                    EditTime = table.Column<DateTime>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ExpenseCategory", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "InsuranceType",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -178,9 +220,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -199,9 +241,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -218,9 +260,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -237,9 +279,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -256,9 +298,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -275,9 +317,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -295,9 +337,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -314,9 +356,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -333,9 +375,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -353,9 +395,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -485,9 +527,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -525,9 +567,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -547,14 +589,49 @@ namespace PanoramaBackend.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Expense",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
+                    CreateTime = table.Column<DateTime>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
+                    EditTime = table.Column<DateTime>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
+                    ExpenseName = table.Column<string>(nullable: true),
+                    ExpenseDate = table.Column<DateTime>(nullable: false),
+                    ExpenseCategoryId = table.Column<int>(nullable: false),
+                    ExpenseAmount = table.Column<decimal>(nullable: false),
+                    AccountId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Expense", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Expense_Accounts_AccountId",
+                        column: x => x.AccountId,
+                        principalTable: "Accounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Expense_ExpenseCategory_ExpenseCategoryId",
+                        column: x => x.ExpenseCategoryId,
+                        principalTable: "ExpenseCategory",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserDetails",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -613,9 +690,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -644,9 +721,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -670,9 +747,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -701,9 +778,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -761,9 +838,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -803,9 +880,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -847,12 +924,12 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
-                    Timestamp = table.Column<byte[]>(nullable: true),
+                    Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
                     AgentId = table.Column<int>(nullable: true),
                     InsuranceCompanyId = table.Column<int>(nullable: true),
                     RefundDate = table.Column<DateTime>(nullable: false),
@@ -867,14 +944,14 @@ namespace PanoramaBackend.Data.Migrations
                     MessageOnStatement = table.Column<string>(nullable: true),
                     AmountForSalesAgent = table.Column<decimal>(nullable: false),
                     AmountForBroker = table.Column<decimal>(nullable: false),
-                    AccountsId = table.Column<int>(nullable: true)
+                    AccountId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Refund", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Refund_Accounts_AccountsId",
-                        column: x => x.AccountsId,
+                        name: "FK_Refund_Accounts_AccountId",
+                        column: x => x.AccountId,
                         principalTable: "Accounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -922,12 +999,14 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
+                    CustomerName = table.Column<string>(nullable: true),
+                    ChassisNumber = table.Column<string>(nullable: true),
                     CustomerDetailId = table.Column<int>(nullable: true),
                     SalesInvoiceDate = table.Column<DateTime>(nullable: false),
                     SalesInvoicePersonId = table.Column<int>(nullable: true),
@@ -1009,9 +1088,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -1060,9 +1139,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -1086,9 +1165,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -1114,9 +1193,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -1156,9 +1235,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -1167,12 +1246,20 @@ namespace PanoramaBackend.Data.Migrations
                     UserDetailId = table.Column<int>(nullable: true),
                     SalesInvoiceId = table.Column<int>(nullable: true),
                     PaymentId = table.Column<int>(nullable: true),
+                    TransactionReferenceNumber = table.Column<string>(nullable: true),
                     RefundId = table.Column<int>(nullable: true),
-                    TransactionType = table.Column<int>(nullable: true)
+                    TransactionType = table.Column<int>(nullable: true),
+                    ExpenseId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Transaction", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Transaction_Expense_ExpenseId",
+                        column: x => x.ExpenseId,
+                        principalTable: "Expense",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Transaction_Payment_PaymentId",
                         column: x => x.PaymentId,
@@ -1205,9 +1292,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -1247,9 +1334,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -1288,9 +1375,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -1317,9 +1404,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -1344,9 +1431,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -1374,9 +1461,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -1401,9 +1488,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -1426,9 +1513,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -1456,9 +1543,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -1491,9 +1578,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -1526,9 +1613,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -1560,9 +1647,9 @@ namespace PanoramaBackend.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
                     EditTime = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
@@ -1620,14 +1707,14 @@ namespace PanoramaBackend.Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "a18be9c0-aa65-4af8-bd17-00bd9344e575", "5cd6c904-51fe-4831-ba40-d2362e366227", "Admin", "Admin" },
-                    { "a18be9c0-aa65-4af8-bd17-00bd9344e678", "9fc31235-86aa-44b5-85b3-13920d1d0285", "CompanyAdmin", "CompanyAdmin" }
+                    { "a18be9c0-aa65-4af8-bd17-00bd9344e575", "56fbb01f-9b92-441d-b57b-a539c36a79f6", "Admin", "Admin" },
+                    { "a18be9c0-aa65-4af8-bd17-00bd9344e678", "14e7cd45-6405-46fd-92c6-5563e5daf8af", "CompanyAdmin", "CompanyAdmin" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "a18be9c0-aa65-4af8-bd17-00bd9344e575", 0, "6dd77e5d-4cd3-41ac-8fb4-89e882dd9658", "admin@nukeslab.com", true, false, null, "admin@nukeslab.com", "admin", "AQAAAAEAACcQAAAAEIwQbNotxo1B+6XhxBJUuHGGAyC8764hbg55DFxRn7Nk1hYHh65lqqEl99h3Lg1lZA==", "+923400064394", false, "", false, "moid" });
+                values: new object[] { "a18be9c0-aa65-4af8-bd17-00bd9344e575", 0, "5c117773-11bc-468a-9882-e726a3ae7c7e", "admin@nukeslab.com", true, false, null, "admin@nukeslab.com", "admin", "AQAAAAEAACcQAAAAEFPWCeij39wVLChoRv5gbnMFiv6yMELlvdyGNooVrj+YXOCGpDwqQYfaP1wm3r7Brg==", "+923400064394", false, "", false, "moid" });
 
             migrationBuilder.InsertData(
                 table: "BDType",
@@ -2091,6 +2178,16 @@ namespace PanoramaBackend.Data.Migrations
                 column: "EmploymentDetailId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Expense_AccountId",
+                table: "Expense",
+                column: "AccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Expense_ExpenseCategoryId",
+                table: "Expense",
+                column: "ExpenseCategoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_LeaveApplication_EmploymentStatusId",
                 table: "LeaveApplication",
                 column: "EmploymentStatusId");
@@ -2166,9 +2263,9 @@ namespace PanoramaBackend.Data.Migrations
                 column: "SalesAgentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Refund_AccountsId",
+                name: "IX_Refund_AccountId",
                 table: "Refund",
-                column: "AccountsId");
+                column: "AccountId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Refund_AgentId",
@@ -2286,6 +2383,11 @@ namespace PanoramaBackend.Data.Migrations
                 column: "ManagerId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Transaction_ExpenseId",
+                table: "Transaction",
+                column: "ExpenseId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Transaction_PaymentId",
                 table: "Transaction",
                 column: "PaymentId");
@@ -2335,6 +2437,9 @@ namespace PanoramaBackend.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Address");
+
+            migrationBuilder.DropTable(
+                name: "Announcement");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -2433,6 +2538,9 @@ namespace PanoramaBackend.Data.Migrations
                 name: "Documents");
 
             migrationBuilder.DropTable(
+                name: "Expense");
+
+            migrationBuilder.DropTable(
                 name: "Payment");
 
             migrationBuilder.DropTable(
@@ -2443,6 +2551,9 @@ namespace PanoramaBackend.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "EmploymentDetails");
+
+            migrationBuilder.DropTable(
+                name: "ExpenseCategory");
 
             migrationBuilder.DropTable(
                 name: "Vehicle");

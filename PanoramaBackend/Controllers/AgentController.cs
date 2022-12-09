@@ -19,6 +19,7 @@ using DinkToPdf.Contracts;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using DotLiquid;
+using Nest;
 
 namespace PanoramaBackend.Api.Controllers
 {
@@ -119,10 +120,12 @@ namespace PanoramaBackend.Api.Controllers
         [AllowAnonymous]
         [HttpGet("statement")]
 
-        public async Task<BaseResponse> GetAccountStatement(int agentId, int pageNo, int pageSize)
+        public async Task<BaseResponse> GetAccountStatement([FromQuery] PaginationParams<int> @params)
         {
 
-            var agent = (await _service.Get(x => x.Include(x => x.Accounts), x => x.Id == agentId)).SingleOrDefault();
+            var agent = (await _service.Get(x => x.Include(x => x.Accounts), x => x.Id == @params.Id)).SingleOrDefault();
+
+            if (agent == null) return constructResponse(NotFound());
 
             var ledgers = (await _entriesService.Get(x => x.Include(x => x.Transaction)
 
@@ -141,27 +144,39 @@ namespace PanoramaBackend.Api.Controllers
         .Include(x => x.Transaction)
                    .ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.BodyType)
 
+                   .Include(x=>x.Transaction)
+
+            , x => x.CreditAccountId == agent.DefaultAccountId || x.DebitAccountId==agent.DefaultAccountId)).OrderBy(x=>x.Id).ToList();
 
 
-            , x => x.Transaction.UserDetailId == agentId)).GroupBy(x => x.TransactionId).Select(
+            var entries = ledgers.GroupBy(x => x.TransactionId).Select(
 
                 x => new
                 {
                     Key = x.Key,
                     Value = x
                 }
-                );
-
+                ).ToList();
             List<dynamic> accountStatement = new List<dynamic>();
             PageConfig page = new PageConfig();
             int count = 0;
-            page.TotalPages = ledgers.ToList().Count / pageNo;
-            page.CurrentPage = pageNo;
-            page.PageSize = pageSize;
+            page.TotalPages = entries.Count() / @params.ItemsPerPage + (entries.Count() % @params.ItemsPerPage > 0 ? 1 : 0);
             decimal debitBalance = 0;
             // decimal creditBalance = 0;
-            var list = ledgers.Skip(pageNo * pageSize).Take(pageSize).ToList();
-            var lastItem = list.Last();
+            var _value = (@params.Page - 1) * @params.ItemsPerPage;
+            var _skipCount = (@params.Page - 1) * @params.ItemsPerPage;
+            bool dontSkip = false;
+            if (_skipCount > entries.Count)
+            {
+                dontSkip = true;
+
+            }
+            else 
+                dontSkip = false;
+
+
+            var list = dontSkip? entries.Take(@params.ItemsPerPage).ToList(): entries.Skip((@params.Page-1) * @params.ItemsPerPage).Take(@params.ItemsPerPage).ToList();
+            //var lastItem = list.Last();
             foreach (var item in list)
             {
                 count++;
@@ -173,10 +188,10 @@ namespace PanoramaBackend.Api.Controllers
 
                     debitBalance += item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id).Amount;
 
-
-                    debit.InvoiceDate = item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id).Transaction.SalesInvoice.SalesInvoiceDate;
+                    
+                    debit.InvoiceDate = item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id)?.Transaction?.SalesInvoice?.SalesInvoiceDate;
                     debit.CustomerName = "x => x.DebitAccountId ==agent.Accounts.Id";
-                    debit.PolicyNumber = item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id).Transaction.SalesInvoice.SaleLineItem.SingleOrDefault().PolicyNumber;
+                    debit.PolicyNumber = item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id)?.Transaction?.SalesInvoice?.SaleLineItem?.SingleOrDefault().PolicyNumber;
                     debit.PolicyType = item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id)?.Transaction?.SalesInvoice?.PolicyType?.Name;
                     debit.ServiceType = item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id)?.Transaction?.SalesInvoice?.Service?.Name;
                     debit.InsuranceType = item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id)?.Transaction?.SalesInvoice?.InsuranceType?.Name;
@@ -193,11 +208,11 @@ namespace PanoramaBackend.Api.Controllers
                 }
                 else
                 {
-                    debitBalance += -(item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id).Amount);
+                    debitBalance += -(item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id)?.Amount) ?? 0;
 
-                    debit.InvoiceDate = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id).Transaction.SalesInvoice.SalesInvoiceDate;
+                    debit.InvoiceDate = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id)?.Transaction?.SalesInvoice?.SalesInvoiceDate;
                     debit.CustomerName = "x => x.CreditAccountId ==agent.Accounts.Id";
-                    debit.PolicyNumber = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id).Transaction.SalesInvoice.SaleLineItem.SingleOrDefault().PolicyNumber;
+                    debit.PolicyNumber = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id)?.Transaction?.SalesInvoice?.SaleLineItem?.SingleOrDefault()?.PolicyNumber;
                     debit.PolicyType = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id)?.Transaction?.SalesInvoice?.PolicyType?.Name;
                     debit.ServiceType = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id)?.Transaction?.SalesInvoice?.Service?.Name;
                     debit.InsuranceType = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id)?.Transaction?.SalesInvoice?.InsuranceType?.Name;
@@ -334,7 +349,7 @@ namespace PanoramaBackend.Api.Controllers
             if (System.IO.File.Exists(path))
             {
                 string html = System.IO.File.ReadAllText(path);
-                Template template = Template.Parse(html);
+                DotLiquid.Template template = DotLiquid.Template.Parse(html);
 
                 string renderedHtml = template.Render(Hash.FromAnonymousObject(new
                 {
