@@ -47,6 +47,7 @@ namespace PanoramaBackend
                 //        listenOptions.UseHttps("testCert.pfx",
                 //            "testPassword");
                 //    });
+                webBuilder.UseUrls("http://192.168.56.1:5000/");
             })
             .UseStartup<Startup>();
         });

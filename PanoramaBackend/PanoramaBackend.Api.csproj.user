@@ -4,7 +4,7 @@
     <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup>
-    <ActiveDebugProfile>Prod</ActiveDebugProfile>
+    <ActiveDebugProfile>PanoramaBackend</ActiveDebugProfile>
     <NameOfLastUsedPublishProfile>finsurelybackend - Web Deploy</NameOfLastUsedPublishProfile>
     <ShowAllFiles>true</ShowAllFiles>
   </PropertyGroup>

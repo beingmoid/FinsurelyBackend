@@ -3,7 +3,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:5000/",
+      "applicationUrl": "http://192.168.18.7:5000/",
       "sslPort": 0
     }
   },
@@ -24,7 +24,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://localhost:5000/"
+      "applicationUrl": "http://192.168.18.7:5000/"
     },
     "Prod": {
       "commandName": "Project",
@@ -34,14 +34,14 @@
         "ASPNETCORE_ENVIRONMENT": "Production"
       },
       "externalUrlConfiguration": true,
-      "applicationUrl": "http://localhost:5000/"
+      "applicationUrl": "http://192.168.18.7:5000/"
     },
     "WSL": {
       "commandName": "WSL2",
       "launchBrowser": true,
-      "launchUrl": "http://localhost:5000/",
+      "launchUrl": "http://192.168.18.7:5000/",
       "environmentVariables": {
-        "ASPNETCORE_URLS": "http://localhost:5000/",
+        "ASPNETCORE_URLS": "http://192.168.18.7:5000/",
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "distributionName": ""
