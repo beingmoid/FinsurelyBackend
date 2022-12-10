@@ -157,8 +157,8 @@ namespace PanoramBackend.Services.Core
         {
             try
             {
-                var connectionSettings = new ConnectionSettings(new Uri("http://localhost:9200/"));
-                var elasticClient = new ElasticClient(connectionSettings);
+                //var connectionSettings = new ConnectionSettings(new Uri("http://localhost:9200/"));
+                //var elasticClient = new ElasticClient(connectionSettings);
                 ConcurrentBag<TEntity> newEntities = new ConcurrentBag<TEntity>();
                 var newEntity = new TEntity();
                 await Task.WhenAll(entities.Select(async entity =>

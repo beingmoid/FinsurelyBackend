@@ -15,6 +15,8 @@ using NukesLab.Core.Api;
 using PanoramaBackend.Services;
 using PanoramBackend.Data;
 using EFCore.BulkExtensions;
+using Nest;
+using NPOI.SS.Formula.Functions;
 
 namespace PanoramaBackend.Api.Controllers
 {
@@ -42,13 +44,16 @@ namespace PanoramaBackend.Api.Controllers
         [HttpGet("GetPaginated")]
         public async Task<BaseResponse> GetPaginated(int page, int pageSize)
         {
+
             OtherConstants.isSuccessful = true;
             OtherConstants.messageType = MessageType.Success;
             var result = (await _service.Get(x => x.Include(x => x.AccountDetailType).ThenInclude(x => x.AccountType)
             .Include(x => x.CreditLedgarEntries)
             .Include(x => x.DebitLedgarEntries)
             ));
-            var skips = result.Skip(page * pageSize).Take(pageSize);
+            var total= result.Count() / pageSize + (result.Count() % pageSize > 0 ? 1 : 0);
+
+            var skips = result.Skip((page-1)*pageSize).Take(pageSize).ToList();
             foreach (var item in skips)
             {
                 if (item.DebitLedgarEntries.Count > 0 | item.CreditLedgarEntries.Count > 0)
@@ -87,7 +92,7 @@ namespace PanoramaBackend.Api.Controllers
             OtherConstants.isSuccessful = true;
             OtherConstants.messageType = MessageType.Success;
 
-            return (constructResponse(new { data = skips, totalRows = result.Count() }));
+            return (constructResponse(new { data =skips, totalRows = result.Count(), totalPages = total }));
         }
         public async override Task<BaseResponse> Get()
         {
@@ -137,7 +142,7 @@ namespace PanoramaBackend.Api.Controllers
 
             return (constructResponse(result));
         }
-        [HttpGet("GetAssetAccounts")]
+        [HttpGet("GetAssetAccounts")]           
         public async Task<BaseResponse> GetAssetAccounts()
         {
             var result = await _service.Get(x => x.Include(x => x.AccountDetailType).ThenInclude(x => x.AccountType));

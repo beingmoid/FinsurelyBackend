@@ -89,7 +89,7 @@ namespace PanoramaBackend.Api.Controllers
             
             if (data != null)
             {
-                var response = new { data = data.Skip(page * pageSize).Take(pageSize).ToList(), totalRows = data.Count };
+                var response = new { data = data.Skip((page-1) * pageSize).Take(pageSize).ToList(), totalRows = data.Count };
          
                 OtherConstants.isSuccessful = true;
                 return constructResponse(response);

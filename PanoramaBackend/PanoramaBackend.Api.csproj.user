@@ -4,8 +4,8 @@
     <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup>
-    <ActiveDebugProfile>PanoramaBackend</ActiveDebugProfile>
-    <NameOfLastUsedPublishProfile>finsurelybackend - Web Deploy</NameOfLastUsedPublishProfile>
+    <ActiveDebugProfile>Prod</ActiveDebugProfile>
+    <NameOfLastUsedPublishProfile>C:\Users\NUKESLAB\Desktop\FinsurelyBackend\PanoramaBackend\Properties\PublishProfiles\FolderProfile3.pubxml</NameOfLastUsedPublishProfile>
     <ShowAllFiles>true</ShowAllFiles>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

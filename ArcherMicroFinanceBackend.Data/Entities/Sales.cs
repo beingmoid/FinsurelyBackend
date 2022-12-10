@@ -74,7 +74,6 @@ namespace PanoramBackend.Data.Entities
         private ICollection<SalesInvoice> _SalesInvoice;
         [IgnoreDataMember]
         [JsonIgnore]
-
         public ICollection<SalesInvoice> SalesInvoice => _SalesInvoice ?? (_SalesInvoice = new List<SalesInvoice>());
 
     }

@@ -1,4 +1,5 @@
 ﻿using NukesLab.Core.Common;
+using PanoramaBackend.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -42,6 +43,8 @@ namespace PanoramBackend.Data.Entities
 
         private ICollection<Refund> _refundPayment;
         public ICollection<Refund> Refunds => _refundPayment ?? (_refundPayment = new List<Refund>());
+        private ICollection<Expense> _expenses;
+        public ICollection<Expense> Expenses => _expenses ?? (_expenses = new List<Expense>());
 
 
     }

@@ -1,4 +1,5 @@
 ﻿using NukesLab.Core.Common;
+using PanoramaBackend.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,6 +20,9 @@ namespace PanoramBackend.Data.Entities
         public TransactionTypes? TransactionType { get; set; }
         public SalesInvoice SalesInvoice { get; set; }
         public UserDetails UserDetails { get; set; }
+
+        public int? ExpenseId { get; set; }
+        public Expense Expense { get; set; }
         private ICollection<LedgarEntries> _ledger;
         public ICollection<LedgarEntries> LedgarEntries => _ledger ?? (_ledger = new List<LedgarEntries>());
     }

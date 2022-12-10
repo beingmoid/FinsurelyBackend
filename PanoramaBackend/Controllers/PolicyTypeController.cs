@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace PanoramaBackend.Api.Controllers
 {
@@ -23,6 +24,11 @@ namespace PanoramaBackend.Api.Controllers
         {
             _service = service;
         }
+        //public override Task<BaseResponse> Get()
+        //{
+
+        //    return constructResponse(_service.Get(x=>x.Include(x=>x.PolicyType)))
+        //}
 
     }
 
