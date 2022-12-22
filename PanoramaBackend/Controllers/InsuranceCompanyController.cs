@@ -47,13 +47,20 @@ namespace PanoramaBackend.Api.Controllers
               x => x.Id == id
 
              )).SingleOrDefault();
-            userDetail.ComissionRates.RemoveAll(x => !x.IsActive);
+           // userDetail.ComissionRates.RemoveAll(x => !x.IsActive);
                
              
 
             OtherConstants.isSuccessful = true;
             return constructResponse(userDetail);
 
+        }
+
+        [HttpGet("GetBalance")]
+        public async Task<BaseResponse> GetBalance([FromQuery] int id)
+        {
+            var balance = await _service.GetBalance(id);
+            return constructResponse(new { balance = balance });
         }
         [HttpGet("GetComissionRates")]
         public async Task<BaseResponse> GetComissionRates(int id,bool isTpl)

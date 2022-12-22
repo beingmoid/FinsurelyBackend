@@ -10,8 +10,8 @@ using PanoramBackend.Data;
 namespace PanoramaBackend.Data.Migrations
 {
     [DbContext(typeof(AMFContext))]
-    [Migration("20221208142757_12312112312323")]
-    partial class _12312112312323
+    [Migration("20221221035331_321321231321")]
+    partial class _321321231321
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -76,253 +76,253 @@ namespace PanoramaBackend.Data.Migrations
                         new
                         {
                             Id = 5,
-                            ClaimType = "Customer",
-                            ClaimValue = "Create",
+                            ClaimType = "Dashboard",
+                            ClaimValue = "Search",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
                             Id = 6,
-                            ClaimType = "Customer",
-                            ClaimValue = "Edit",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            ClaimType = "Customer",
-                            ClaimValue = "View",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            ClaimType = "Customer",
-                            ClaimValue = "Delete",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            ClaimType = "Sales Agent",
+                            ClaimType = "Branch",
                             ClaimValue = "Create",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
-                            Id = 10,
-                            ClaimType = "Sales Agent",
+                            Id = 7,
+                            ClaimType = "Branch",
                             ClaimValue = "Edit",
+                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            ClaimType = "Branch",
+                            ClaimValue = "View",
+                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            ClaimType = "Branch",
+                            ClaimValue = "Delete",
+                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            ClaimType = "Branch",
+                            ClaimValue = "Search",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
                             Id = 11,
                             ClaimType = "Sales Agent",
-                            ClaimValue = "View",
+                            ClaimValue = "Create",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
                             Id = 12,
                             ClaimType = "Sales Agent",
-                            ClaimValue = "Delete",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            ClaimType = "Insurance Companies",
-                            ClaimValue = "Create",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
-                        },
-                        new
-                        {
-                            Id = 14,
-                            ClaimType = "Insurance Companies",
                             ClaimValue = "Edit",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
-                            Id = 15,
-                            ClaimType = "Insurance Companies",
+                            Id = 13,
+                            ClaimType = "Sales Agent",
                             ClaimValue = "View",
+                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            ClaimType = "Sales Agent",
+                            ClaimValue = "Delete",
+                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            ClaimType = "Sales Agent",
+                            ClaimValue = "Search",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
                             Id = 16,
                             ClaimType = "Insurance Companies",
-                            ClaimValue = "Delete",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
-                        },
-                        new
-                        {
-                            Id = 17,
-                            ClaimType = "Sales",
                             ClaimValue = "Create",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
-                            Id = 18,
-                            ClaimType = "Sales",
+                            Id = 17,
+                            ClaimType = "Insurance Companies",
                             ClaimValue = "Edit",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
-                            Id = 19,
-                            ClaimType = "Sales",
+                            Id = 18,
+                            ClaimType = "Insurance Companies",
                             ClaimValue = "View",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
-                            Id = 20,
-                            ClaimType = "Sales",
+                            Id = 19,
+                            ClaimType = "Insurance Companies",
                             ClaimValue = "Delete",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
+                            Id = 20,
+                            ClaimType = "Insurance Companies",
+                            ClaimValue = "Search",
+                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                        },
+                        new
+                        {
                             Id = 21,
-                            ClaimType = "Supplier",
+                            ClaimType = "Sales",
                             ClaimValue = "Create",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
                             Id = 22,
-                            ClaimType = "Supplier",
+                            ClaimType = "Sales",
                             ClaimValue = "Edit",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
                             Id = 23,
-                            ClaimType = "Supplier",
+                            ClaimType = "Sales",
                             ClaimValue = "View",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
                             Id = 24,
-                            ClaimType = "Supplier",
+                            ClaimType = "Sales",
                             ClaimValue = "Delete",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
                             Id = 25,
-                            ClaimType = "Transactions",
-                            ClaimValue = "Create",
+                            ClaimType = "Sales",
+                            ClaimValue = "Search",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
                             Id = 26,
                             ClaimType = "Transactions",
-                            ClaimValue = "Edit",
+                            ClaimValue = "Create",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
                             Id = 27,
                             ClaimType = "Transactions",
-                            ClaimValue = "View",
+                            ClaimValue = "Edit",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
                             Id = 28,
                             ClaimType = "Transactions",
-                            ClaimValue = "Delete",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
-                        },
-                        new
-                        {
-                            Id = 29,
-                            ClaimType = "Calender",
-                            ClaimValue = "Create",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
-                        },
-                        new
-                        {
-                            Id = 30,
-                            ClaimType = "Calender",
-                            ClaimValue = "Edit",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
-                        },
-                        new
-                        {
-                            Id = 31,
-                            ClaimType = "Calender",
                             ClaimValue = "View",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
-                            Id = 32,
-                            ClaimType = "Calender",
+                            Id = 29,
+                            ClaimType = "Transactions",
                             ClaimValue = "Delete",
+                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                        },
+                        new
+                        {
+                            Id = 30,
+                            ClaimType = "Transactions",
+                            ClaimValue = "Search",
+                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                        },
+                        new
+                        {
+                            Id = 31,
+                            ClaimType = "Task",
+                            ClaimValue = "Create",
+                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                        },
+                        new
+                        {
+                            Id = 32,
+                            ClaimType = "Task",
+                            ClaimValue = "Edit",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
                             Id = 33,
                             ClaimType = "Task",
-                            ClaimValue = "Create",
+                            ClaimValue = "View",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
                             Id = 34,
                             ClaimType = "Task",
-                            ClaimValue = "Edit",
+                            ClaimValue = "Delete",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
                             Id = 35,
                             ClaimType = "Task",
-                            ClaimValue = "View",
+                            ClaimValue = "Search",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
                             Id = 36,
-                            ClaimType = "Task",
-                            ClaimValue = "Delete",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
-                        },
-                        new
-                        {
-                            Id = 37,
                             ClaimType = "Documents",
                             ClaimValue = "Create",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
-                            Id = 38,
+                            Id = 37,
                             ClaimType = "Documents",
                             ClaimValue = "Edit",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
-                            Id = 39,
+                            Id = 38,
                             ClaimType = "Documents",
                             ClaimValue = "View",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
-                            Id = 40,
+                            Id = 39,
                             ClaimType = "Documents",
                             ClaimValue = "Delete",
+                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                        },
+                        new
+                        {
+                            Id = 40,
+                            ClaimType = "Documents",
+                            ClaimValue = "Search",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
@@ -356,141 +356,148 @@ namespace PanoramaBackend.Data.Migrations
                         new
                         {
                             Id = 45,
-                            ClaimType = "Accounting",
-                            ClaimValue = "Create",
+                            ClaimType = "Expenses",
+                            ClaimValue = "Search",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
                             Id = 46,
                             ClaimType = "Accounting",
-                            ClaimValue = "Edit",
+                            ClaimValue = "Create",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
                             Id = 47,
                             ClaimType = "Accounting",
-                            ClaimValue = "View",
+                            ClaimValue = "Edit",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
                             Id = 48,
                             ClaimType = "Accounting",
-                            ClaimValue = "Delete",
+                            ClaimValue = "View",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
                             Id = 49,
-                            ClaimType = "Workplace",
-                            ClaimValue = "Create",
+                            ClaimType = "Accounting",
+                            ClaimValue = "Delete",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
                             Id = 50,
-                            ClaimType = "Workplace",
-                            ClaimValue = "Edit",
+                            ClaimType = "Accounting",
+                            ClaimValue = "Search",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
                             Id = 51,
                             ClaimType = "Workplace",
-                            ClaimValue = "View",
+                            ClaimValue = "Create",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
                             Id = 52,
                             ClaimType = "Workplace",
-                            ClaimValue = "Delete",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
-                        },
-                        new
-                        {
-                            Id = 53,
-                            ClaimType = "Teams",
-                            ClaimValue = "Create",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
-                        },
-                        new
-                        {
-                            Id = 54,
-                            ClaimType = "Teams",
                             ClaimValue = "Edit",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
-                            Id = 55,
-                            ClaimType = "Teams",
+                            Id = 53,
+                            ClaimType = "Workplace",
                             ClaimValue = "View",
+                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                        },
+                        new
+                        {
+                            Id = 54,
+                            ClaimType = "Workplace",
+                            ClaimValue = "Delete",
+                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                        },
+                        new
+                        {
+                            Id = 55,
+                            ClaimType = "Workplace",
+                            ClaimValue = "Search",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
                             Id = 56,
                             ClaimType = "Teams",
-                            ClaimValue = "Delete",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
-                        },
-                        new
-                        {
-                            Id = 57,
-                            ClaimType = "Reports",
                             ClaimValue = "Create",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
-                            Id = 58,
-                            ClaimType = "Reports",
+                            Id = 57,
+                            ClaimType = "Teams",
                             ClaimValue = "Edit",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
-                            Id = 59,
-                            ClaimType = "Reports",
+                            Id = 58,
+                            ClaimType = "Teams",
                             ClaimValue = "View",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
-                            Id = 60,
-                            ClaimType = "Reports",
+                            Id = 59,
+                            ClaimType = "Teams",
                             ClaimValue = "Delete",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
+                            Id = 60,
+                            ClaimType = "Teams",
+                            ClaimValue = "Search",
+                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                        },
+                        new
+                        {
                             Id = 61,
-                            ClaimType = "Settings",
+                            ClaimType = "Reports",
                             ClaimValue = "Create",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
                             Id = 62,
-                            ClaimType = "Settings",
+                            ClaimType = "Reports",
                             ClaimValue = "Edit",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
                             Id = 63,
-                            ClaimType = "Settings",
+                            ClaimType = "Reports",
                             ClaimValue = "View",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         },
                         new
                         {
                             Id = 64,
-                            ClaimType = "Settings",
+                            ClaimType = "Reports",
                             ClaimValue = "Delete",
+                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                        },
+                        new
+                        {
+                            Id = 65,
+                            ClaimType = "Reports",
+                            ClaimValue = "Search",
                             RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
                         });
                 });
@@ -3361,9 +3368,6 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<string>("MessageOnStatement")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PaymentMethodId")
-                        .HasColumnType("int");
-
                     b.Property<string>("PolicyNumber")
                         .HasColumnType("nvarchar(max)");
 
@@ -3390,8 +3394,6 @@ namespace PanoramaBackend.Data.Migrations
                     b.HasIndex("InsuranceCompanyId");
 
                     b.HasIndex("InsuranceTypeId");
-
-                    b.HasIndex("PaymentMethodId");
 
                     b.HasIndex("PolicyTypeId");
 
@@ -4329,14 +4331,14 @@ namespace PanoramaBackend.Data.Migrations
                         new
                         {
                             Id = "a18be9c0-aa65-4af8-bd17-00bd9344e575",
-                            ConcurrencyStamp = "56fbb01f-9b92-441d-b57b-a539c36a79f6",
+                            ConcurrencyStamp = "07c30cbd-6c3e-49c7-88e6-8427f98f5978",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
                             Id = "a18be9c0-aa65-4af8-bd17-00bd9344e678",
-                            ConcurrencyStamp = "14e7cd45-6405-46fd-92c6-5563e5daf8af",
+                            ConcurrencyStamp = "413db89d-ecc1-4c36-995b-763bfd0c88dd",
                             Name = "CompanyAdmin",
                             NormalizedName = "CompanyAdmin"
                         });
@@ -4411,13 +4413,13 @@ namespace PanoramaBackend.Data.Migrations
                         {
                             Id = "a18be9c0-aa65-4af8-bd17-00bd9344e575",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "5c117773-11bc-468a-9882-e726a3ae7c7e",
+                            ConcurrencyStamp = "7bd7d888-0908-4d3d-9e7d-15818b4f942f",
                             Email = "admin@nukeslab.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "admin@nukeslab.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEFPWCeij39wVLChoRv5gbnMFiv6yMELlvdyGNooVrj+YXOCGpDwqQYfaP1wm3r7Brg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEEyQlx/p1C39HjhaeAmY6juNdD8SIamNtkKiJZBQSCwq98UH0uJwZxUZT6wF55HGog==",
                             PhoneNumber = "+923400064394",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
@@ -4487,6 +4489,9 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<int>("AccountId")
                         .HasColumnType("int");
 
+                    b.Property<int>("BranchId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
@@ -4526,6 +4531,8 @@ namespace PanoramaBackend.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
+
+                    b.HasIndex("BranchId");
 
                     b.HasIndex("ExpenseCategoryId");
 
@@ -4569,6 +4576,67 @@ namespace PanoramaBackend.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ExpenseCategory");
+                });
+
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.Payroll", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BranchId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreateUserId")
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<DateTime?>("EditTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EditUserId")
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ExpenseAccountId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsRecurring")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<byte[]>("Timestamp")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("ExpenseAccountId");
+
+                    b.ToTable("Payroll");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -4895,12 +4963,6 @@ namespace PanoramaBackend.Data.Migrations
                         .HasForeignKey("InsuranceTypeId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("PanoramBackend.Data.Entities.PaymentMethod", "PaymentMethod")
-                        .WithMany("Refunds")
-                        .HasForeignKey("PaymentMethodId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("PanoramBackend.Data.Entities.PolicyType", "PolicyType")
                         .WithMany()
                         .HasForeignKey("PolicyTypeId");
@@ -5086,10 +5148,31 @@ namespace PanoramaBackend.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("PanoramBackend.Data.Entities.Branch", "Branch")
+                        .WithMany("ExpensesByBranch")
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("PanoramaBackend.Data.Entities.ExpenseCategory", "ExpenseCategory")
                         .WithMany()
                         .HasForeignKey("ExpenseCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.Payroll", b =>
+                {
+                    b.HasOne("PanoramBackend.Data.Entities.Branch", "Branch")
+                        .WithMany("PaidToBranch")
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("PanoramBackend.Data.Entities.Accounts", "ExpenseAccount")
+                        .WithMany("PayrollExpenseAccount")
+                        .HasForeignKey("ExpenseAccountId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

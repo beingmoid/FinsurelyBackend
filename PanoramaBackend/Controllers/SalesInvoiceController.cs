@@ -72,7 +72,7 @@ namespace PanoramaBackend.Api.Controllers
         [HttpGet("GetPaginated")]
         public async Task<BaseResponse> GetPaginated(int page, int pageSize)
         {
-            var data = (await this._service.Get(x => x.Include(x => x.CustomerDetails) //Customer
+            var data = (await this._service.Get(x => x 
             .Include(x => x.SalesInvoicePerson)
             //Sales Agent
             .Include(x => x.PaymentMethod)
@@ -334,7 +334,7 @@ namespace PanoramaBackend.Api.Controllers
 
 
 
-                        var Customers = await _serviceProvider.GetRequiredService<ICustomerService>().Get();
+
                         var Branches = await _serviceProvider.GetRequiredService<IBranchService>().Get();
                         var Policy = await _serviceProvider.GetRequiredService<IPolicyTypeService>().Get();
                         var Services = await _serviceProvider.GetRequiredService<IServiceService>().Get();
@@ -368,7 +368,7 @@ namespace PanoramaBackend.Api.Controllers
 
 
                         isPolicyType = PolicyType != null ? Policy?.FirstOrDefault(x => x.Name == PolicyType) != null : false;
-                        isCustomer = Customers != null ? Customers?.FirstOrDefault(x => x.DisplayNameAs == Customer) != null : false;
+      
                         isVehicle = Vehicles != null ? Vehicles?.FirstOrDefault(x => x.Make == Make && x.Model == Model) != null : false;
                         isBodyType = Body != null ? Body?.FirstOrDefault(x => x.Name == BodyType) != null : false;
                         isService = Service != null ? Services?.FirstOrDefault(x => x.Name == Service) != null : false;
@@ -379,15 +379,15 @@ namespace PanoramaBackend.Api.Controllers
                         InsuranceCompanies?.FirstOrDefault(x => x.DisplayNameAs == InsuranceCompany)?.Id != null : false;
                         isSalesAgent = SalesAgent != null ? SalesAgent?.FirstOrDefault(x => x.DisplayNameAs == Agent) != null : false;
 
-                        if (isCustomer)
-                        {
-                            sales.CustomerDetailId = Customers.FirstOrDefault(x => x.DisplayNameAs == Customer).Id;
-                        }
-                        else
-                        {
-                            var newCustomer = await _serviceProvider.GetRequiredService<ICustomerService>().Insert(new[] { new UserDetails() { DisplayNameAs = Customer, IsCustomer = true } });
-                            sales.CustomerDetailId = newCustomer.Entities.FirstOrDefault().Id;
-                        }
+                        //if (isCustomer)
+                        //{
+                        //    sales.CustomerDetailId = Customers.FirstOrDefault(x => x.DisplayNameAs == Customer).Id;
+                        //}
+                        //else
+                        //{
+                        //    var newCustomer = await _serviceProvider.GetRequiredService<ICustomerService>().Insert(new[] { new UserDetails() { DisplayNameAs = Customer, IsCustomer = true } });
+                        //    sales.CustomerDetailId = newCustomer.Entities.FirstOrDefault().Id;
+                        //}
                         if (isVehicle)
                         {
                             saleLine.VehilcleId = Vehicles?.FirstOrDefault(x => x.Make == Make && x.Model == Model).Id;
@@ -483,7 +483,7 @@ namespace PanoramaBackend.Api.Controllers
                 
                         sales.SaleLineItem.Add(saleLine);
 
-                        if (sales.CustomerDetailId != null && sales.SalesInvoicePersonId != null && sales.BodyTypeId != null &&
+                        if (sales.SalesInvoicePersonId != null && sales.BodyTypeId != null &&
                             sales.PolicyTypeId != null && sales.ServiceId != null && sales.InsuranceCompanyId != null &&
                             sales.InsuranceTypeId != null && sales?.BranchId != null && sales.PaymentMethodId != null &&
                             !string.IsNullOrWhiteSpace(sales.UnderWritter) && !string.IsNullOrWhiteSpace(sales.Notes)
@@ -528,7 +528,14 @@ namespace PanoramaBackend.Api.Controllers
             return constructResponse(await _service.UpdateAsync(id, entity));
         }
 
+        //public async Task Search([FromBody] PaginationParams<int> data)
+        //{
+            
+        //}
+        //public Task ExportExcel(int id)
+        //{
 
+        //}
 
     }
 }

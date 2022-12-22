@@ -15,7 +15,6 @@ namespace PanoramBackend.Data.Entities
    
         private ICollection<Payment> _AgentPayment;
         public ICollection<Payment> Payments => _AgentPayment ?? (_AgentPayment = new List<Payment>());
-        private ICollection<Refund> _Refunds;
-        public ICollection<Refund> Refunds => _Refunds ?? (_Refunds = new List<Refund>());
+
     }
 }

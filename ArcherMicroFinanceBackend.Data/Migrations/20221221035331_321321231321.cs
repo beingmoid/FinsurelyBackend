@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PanoramaBackend.Data.Migrations
 {
-    public partial class _12312112312323 : Migration
+    public partial class _321321231321 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -604,7 +604,8 @@ namespace PanoramaBackend.Data.Migrations
                     ExpenseDate = table.Column<DateTime>(nullable: false),
                     ExpenseCategoryId = table.Column<int>(nullable: false),
                     ExpenseAmount = table.Column<decimal>(nullable: false),
-                    AccountId = table.Column<int>(nullable: false)
+                    AccountId = table.Column<int>(nullable: false),
+                    BranchId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -616,11 +617,54 @@ namespace PanoramaBackend.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_Expense_Branch_BranchId",
+                        column: x => x.BranchId,
+                        principalTable: "Branch",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_Expense_ExpenseCategory_ExpenseCategoryId",
                         column: x => x.ExpenseCategoryId,
                         principalTable: "ExpenseCategory",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Payroll",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
+                    CreateTime = table.Column<DateTime>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
+                    EditTime = table.Column<DateTime>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    BranchId = table.Column<int>(nullable: false),
+                    StartDate = table.Column<DateTime>(nullable: false),
+                    EndDate = table.Column<DateTime>(nullable: false),
+                    Status = table.Column<int>(nullable: false),
+                    ExpenseAccountId = table.Column<int>(nullable: false),
+                    IsRecurring = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Payroll", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Payroll_Branch_BranchId",
+                        column: x => x.BranchId,
+                        principalTable: "Branch",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Payroll_Accounts_ExpenseAccountId",
+                        column: x => x.ExpenseAccountId,
+                        principalTable: "Accounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -933,7 +977,6 @@ namespace PanoramaBackend.Data.Migrations
                     AgentId = table.Column<int>(nullable: true),
                     InsuranceCompanyId = table.Column<int>(nullable: true),
                     RefundDate = table.Column<DateTime>(nullable: false),
-                    PaymentMethodId = table.Column<int>(nullable: false),
                     PolicyTypeId = table.Column<int>(nullable: true),
                     CompanyName = table.Column<string>(nullable: true),
                     CustomerName = table.Column<string>(nullable: true),
@@ -971,12 +1014,6 @@ namespace PanoramaBackend.Data.Migrations
                         name: "FK_Refund_InsuranceType_InsuranceTypeId",
                         column: x => x.InsuranceTypeId,
                         principalTable: "InsuranceType",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Refund_PaymentMethod_PaymentMethodId",
-                        column: x => x.PaymentMethodId,
-                        principalTable: "PaymentMethod",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -1707,14 +1744,14 @@ namespace PanoramaBackend.Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "a18be9c0-aa65-4af8-bd17-00bd9344e575", "56fbb01f-9b92-441d-b57b-a539c36a79f6", "Admin", "Admin" },
-                    { "a18be9c0-aa65-4af8-bd17-00bd9344e678", "14e7cd45-6405-46fd-92c6-5563e5daf8af", "CompanyAdmin", "CompanyAdmin" }
+                    { "a18be9c0-aa65-4af8-bd17-00bd9344e575", "07c30cbd-6c3e-49c7-88e6-8427f98f5978", "Admin", "Admin" },
+                    { "a18be9c0-aa65-4af8-bd17-00bd9344e678", "413db89d-ecc1-4c36-995b-763bfd0c88dd", "CompanyAdmin", "CompanyAdmin" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "a18be9c0-aa65-4af8-bd17-00bd9344e575", 0, "5c117773-11bc-468a-9882-e726a3ae7c7e", "admin@nukeslab.com", true, false, null, "admin@nukeslab.com", "admin", "AQAAAAEAACcQAAAAEFPWCeij39wVLChoRv5gbnMFiv6yMELlvdyGNooVrj+YXOCGpDwqQYfaP1wm3r7Brg==", "+923400064394", false, "", false, "moid" });
+                values: new object[] { "a18be9c0-aa65-4af8-bd17-00bd9344e575", 0, "7bd7d888-0908-4d3d-9e7d-15818b4f942f", "admin@nukeslab.com", true, false, null, "admin@nukeslab.com", "admin", "AQAAAAEAACcQAAAAEEyQlx/p1C39HjhaeAmY6juNdD8SIamNtkKiJZBQSCwq98UH0uJwZxUZT6wF55HGog==", "+923400064394", false, "", false, "moid" });
 
             migrationBuilder.InsertData(
                 table: "BDType",
@@ -1941,70 +1978,71 @@ namespace PanoramaBackend.Data.Migrations
                 columns: new[] { "Id", "ClaimType", "ClaimValue", "RoleId" },
                 values: new object[,]
                 {
-                    { 46, "Accounting", "Edit", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 45, "Accounting", "Create", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 42, "Expenses", "Edit", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 44, "Expenses", "Delete", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 47, "Accounting", "Edit", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 46, "Accounting", "Create", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
                     { 43, "Expenses", "View", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 45, "Expenses", "Search", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 44, "Expenses", "Delete", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 42, "Expenses", "Edit", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 65, "Reports", "Search", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 40, "Documents", "Search", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 39, "Documents", "Delete", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 38, "Documents", "View", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 37, "Documents", "Edit", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 48, "Accounting", "View", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 36, "Documents", "Create", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
                     { 41, "Expenses", "Create", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 64, "Settings", "Delete", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 39, "Documents", "View", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 38, "Documents", "Edit", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 37, "Documents", "Create", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 36, "Task", "Delete", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 47, "Accounting", "View", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 35, "Task", "View", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 40, "Documents", "Delete", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 48, "Accounting", "Delete", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 63, "Settings", "View", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 50, "Workplace", "Edit", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 51, "Workplace", "View", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 52, "Workplace", "Delete", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 53, "Teams", "Create", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 54, "Teams", "Edit", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 55, "Teams", "View", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 56, "Teams", "Delete", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 57, "Reports", "Create", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 58, "Reports", "Edit", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 59, "Reports", "View", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 60, "Reports", "Delete", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 61, "Settings", "Create", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 62, "Settings", "Edit", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 34, "Task", "Edit", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 49, "Workplace", "Create", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 33, "Task", "Create", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 49, "Accounting", "Delete", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 64, "Reports", "Delete", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 51, "Workplace", "Create", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 52, "Workplace", "Edit", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 53, "Workplace", "View", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 54, "Workplace", "Delete", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 55, "Workplace", "Search", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 56, "Teams", "Create", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 57, "Teams", "Edit", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 58, "Teams", "View", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 59, "Teams", "Delete", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 60, "Teams", "Search", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 61, "Reports", "Create", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 62, "Reports", "Edit", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 63, "Reports", "View", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 35, "Task", "Search", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 50, "Accounting", "Search", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 34, "Task", "Delete", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
                     { 2, "Dashboard", "Edit", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 31, "Calender", "View", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 32, "Task", "Edit", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
                     { 1, "Dashboard", "Create", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
                     { 3, "Dashboard", "View", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
                     { 4, "Dashboard", "Delete", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 5, "Customer", "Create", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 6, "Customer", "Edit", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 7, "Customer", "View", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 8, "Customer", "Delete", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 9, "Sales Agent", "Create", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 10, "Sales Agent", "Edit", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 11, "Sales Agent", "View", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 12, "Sales Agent", "Delete", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 13, "Insurance Companies", "Create", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 14, "Insurance Companies", "Edit", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 32, "Calender", "Delete", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 15, "Insurance Companies", "View", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 17, "Sales", "Create", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 30, "Calender", "Edit", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 29, "Calender", "Create", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 28, "Transactions", "Delete", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 27, "Transactions", "View", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 26, "Transactions", "Edit", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 16, "Insurance Companies", "Delete", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 25, "Transactions", "Create", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 23, "Supplier", "View", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 22, "Supplier", "Edit", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 21, "Supplier", "Create", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 20, "Sales", "Delete", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 19, "Sales", "View", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 18, "Sales", "Edit", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
-                    { 24, "Supplier", "Delete", "a18be9c0-aa65-4af8-bd17-00bd9344e575" }
+                    { 5, "Dashboard", "Search", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 6, "Branch", "Create", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 7, "Branch", "Edit", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 8, "Branch", "View", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 9, "Branch", "Delete", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 10, "Branch", "Search", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 11, "Sales Agent", "Create", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 12, "Sales Agent", "Edit", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 13, "Sales Agent", "View", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 14, "Sales Agent", "Delete", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 15, "Sales Agent", "Search", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 33, "Task", "View", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 16, "Insurance Companies", "Create", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 18, "Insurance Companies", "View", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 31, "Task", "Create", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 30, "Transactions", "Search", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 29, "Transactions", "Delete", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 28, "Transactions", "View", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 27, "Transactions", "Edit", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 17, "Insurance Companies", "Edit", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 26, "Transactions", "Create", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 24, "Sales", "Delete", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 23, "Sales", "View", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 22, "Sales", "Edit", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 21, "Sales", "Create", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 20, "Insurance Companies", "Search", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 19, "Insurance Companies", "Delete", "a18be9c0-aa65-4af8-bd17-00bd9344e575" },
+                    { 25, "Sales", "Search", "a18be9c0-aa65-4af8-bd17-00bd9344e575" }
                 });
 
             migrationBuilder.InsertData(
@@ -2183,6 +2221,11 @@ namespace PanoramaBackend.Data.Migrations
                 column: "AccountId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Expense_BranchId",
+                table: "Expense",
+                column: "BranchId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Expense_ExpenseCategoryId",
                 table: "Expense",
                 column: "ExpenseCategoryId");
@@ -2248,6 +2291,16 @@ namespace PanoramaBackend.Data.Migrations
                 column: "UserDetailId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Payroll_BranchId",
+                table: "Payroll",
+                column: "BranchId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Payroll_ExpenseAccountId",
+                table: "Payroll",
+                column: "ExpenseAccountId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Reconcilation_DocumentId",
                 table: "Reconcilation",
                 column: "DocumentId");
@@ -2281,11 +2334,6 @@ namespace PanoramaBackend.Data.Migrations
                 name: "IX_Refund_InsuranceTypeId",
                 table: "Refund",
                 column: "InsuranceTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Refund_PaymentMethodId",
-                table: "Refund",
-                column: "PaymentMethodId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Refund_PolicyTypeId",
@@ -2491,6 +2539,9 @@ namespace PanoramaBackend.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "PaymentAndBilling");
+
+            migrationBuilder.DropTable(
+                name: "Payroll");
 
             migrationBuilder.DropTable(
                 name: "SaleLineItem");

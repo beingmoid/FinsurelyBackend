@@ -66,7 +66,7 @@ namespace PanoramBackend.Services.Services
                 transaction.TransactionDate = (DateTime)paymentAndBilling?.Asof;
                 transaction.UserDetailId = item.Id;
                 transaction.SalesInvoiceId = sales.Id;
-                transaction.TransactionType = TransactionTypes.Bill;
+                transaction.TransactionType = TransactionTypes.OpeningBalance;
                     //Recording Transaction In Ledger
                 LedgarEntries ledgar = new LedgarEntries();
                 ledgar.TransactionDate = (DateTime)paymentAndBilling?.Asof;
@@ -148,15 +148,7 @@ namespace PanoramBackend.Services.Services
             {
                 var debit = ledger.Where(x => x.DebitAccountId == item.DefaultAccountId).Sum(x => x.Amount);
                 var credit = ledger.Where(x => x.CreditAccountId == item.DefaultAccountId).Sum(x => x.Amount);
-                if (debit > credit)
-                {
-                    item.OpenBalance = debit - credit;
-
-                }
-                else
-                {
-                    item.OpenBalance = credit - debit;
-                }
+                item.OpenBalance = debit + credit;
 
             }
 
@@ -164,9 +156,70 @@ namespace PanoramBackend.Services.Services
 
             return companies.ToList();
         }
+
+        
+       
+        public async Task<decimal> GetBalance(int Id)
+        {
+            var agent = await this.GetOne(Id);
+            var ledger = (await _ledger.Get()).ToList();
+
+            return ledger.Where(x => x.DebitAccountId == agent.DefaultAccountId).Sum(x => x.Amount);
+        }
     }
     public interface IAgentService : IBaseService<UserDetails, int>
     {
         Task<List<UserDetails>> GetAgentsWithBalance();
+        Task<decimal> GetBalance(int Id);
+        
+       
+    }
+    public class AutocompleteResponse
+    {
+    
+        public string ResponseString { get; set; }
+
+
+    }
+    public class PageConfig
+    {
+        public PageConfig()
+        {
+            this.Data = new List<dynamic>();
+        }
+        public string From { get; set; }
+        public string To { get; set; }
+        public int TotalPages { get; set; }
+        public int CurrentPage { get; set; }
+        public int PageSize { get; set; }
+        public decimal TotalBalance { get; set; }
+        public List<dynamic> Data { get; set; }
+
+    }
+    public class AgentStatementDTO
+    {
+        public int Num { get; set; }
+        public DateTime? InvoiceDate { get; set; }
+        public string CustomerName { get; set; }
+        public string CompanyName { get; set; }
+        public string BrokerName { get; set; }
+
+        public string PolicyNumber { get; set; }
+        public string PolicyType { get; set; }
+        public string ServiceType { get; set; }
+        public string InsuranceType { get; set; }
+        public string TransactionRef { get; set; }
+        public TransactionTypes TransactionType { get; set; }
+        public string OpeningBalance { get; set; }
+        public string Memo { get; set; }
+        public bool HasOnlyMemo { get; set; }
+        public string Vehicle { get; set; }
+        public string BodyType { get; set; }
+        public string RefNo { get; set; }
+        public dynamic Debit { get; set; }
+        public dynamic Credit { get; set; }
+        public dynamic Balance { get; set; }
+
+        public PageConfig PageConfig { get; set; }
     }
 }

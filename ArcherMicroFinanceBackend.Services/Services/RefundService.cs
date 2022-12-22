@@ -15,21 +15,27 @@ namespace PanoramBackend.Services.Services
 {
     public class RefundService : BaseService<Refund, int>, IRefundService
     {
+        private readonly IAgentService _agentService;
         private readonly ITransactionService _transactionService;
         private IComissionRateService _comissionRateService;
+        private readonly IInsuranceCompanyService _insuranceCompanyService;
 
         public RefundService(RequestScope scopeContext, IRefundRepository repo,ITransactionService transactionService,
+            IAgentService agentService,
+            IInsuranceCompanyService insuranceCompanyService,
             IComissionRateService comissionRateService) : base(scopeContext, repo)
         {
+            _agentService = agentService;
             _transactionService = transactionService;
             _comissionRateService = comissionRateService;
-
+            _insuranceCompanyService = insuranceCompanyService;
         }
         protected async override Task OnInserted(IEnumerable<Refund> entities)
         {
-            var Id = entities.ElementAt(0);
-            var refund =  (await this.Get(x => x.Include(x => x.Agent).Include(x=>x.InsuranceCompany))).SingleOrDefault();
-             double taxForAgent = ((double)refund.AmountForSalesAgent)/ 1.05; 
+            var refund = entities.ElementAt(0);
+            var agent = (await _agentService.Get(x => x.Id == refund.AgentId)).SingleOrDefault();
+            var insuranceCompany = (await _insuranceCompanyService.Get(x => x.Id == refund.InsuranceCompanyId)).SingleOrDefault();
+            double taxForAgent = ((double)refund.AmountForSalesAgent)/ 1.05; 
             var transactionForAgent = new Transaction();
             transactionForAgent.Memo = refund.MessageOnStatement;
             transactionForAgent.TransactionDate = refund.RefundDate;
@@ -42,7 +48,7 @@ namespace PanoramBackend.Services.Services
             debitLedger.TransactionDate = refund.RefundDate;
             transactionForAgent.LedgarEntries.Add(debitLedger);
             var creditLedger = new LedgarEntries();
-            creditLedger.CreditAccountId = refund.Agent.DefaultAccountId; //Credits Receviable Account
+            creditLedger.CreditAccountId = agent.DefaultAccountId; //Credits Receviable Account
             creditLedger.Amount = refund.AmountForSalesAgent;
             creditLedger.TransactionDate = refund.RefundDate;
             transactionForAgent.LedgarEntries.Add(creditLedger);
@@ -56,14 +62,14 @@ namespace PanoramBackend.Services.Services
             transactionForBroker.RefundId = refund.Id;
             transactionForBroker.UserDetailId = refund.InsuranceCompanyId;
             var BrokerdebitLedger = new LedgarEntries();
-            BrokerdebitLedger.DebitAccountId = refund.InsuranceCompany.DefaultAccountId; //Debits Accounts Payable
-            BrokerdebitLedger.Amount = - refund.AmountForBroker;
+            BrokerdebitLedger.DebitAccountId = insuranceCompany.DefaultAccountId; //Debits Accounts Payable
+            BrokerdebitLedger.Amount =  refund.AmountForBroker;
             BrokerdebitLedger.TransactionDate = refund.RefundDate;
             
             transactionForBroker.LedgarEntries.Add(debitLedger);
             var BrokercreditLedger = new LedgarEntries();
             BrokercreditLedger.CreditAccountId = BuiltinAccounts.ExpenseAccount; // Credits Expense
-            BrokercreditLedger.Amount = - refund.AmountForBroker; 
+            BrokercreditLedger.Amount =  refund.AmountForBroker; 
             BrokercreditLedger.TransactionDate = refund.RefundDate;
             transactionForBroker.LedgarEntries.Add(BrokercreditLedger);
 
@@ -78,7 +84,7 @@ namespace PanoramBackend.Services.Services
             IncomeDebitLedger.TransactionDate = refund.RefundDate;
             transactionForIncome.LedgarEntries.Add(IncomeDebitLedger);
             var IncomeCreditLedger = new LedgarEntries();
-            IncomeCreditLedger.CreditAccountId = BuiltinAccounts.RefundIncome; //Refund Income Credits
+            IncomeCreditLedger.CreditAccountId = refund.AccountId; //Refund Income Credits
             IncomeCreditLedger.Amount = refund.AmountForBroker - refund.AmountForSalesAgent;
             IncomeCreditLedger.TransactionDate = refund.RefundDate;
             transactionForIncome.LedgarEntries.Add(IncomeCreditLedger);
@@ -119,12 +125,12 @@ namespace PanoramBackend.Services.Services
             var transactionForBroker= transactions.Where(x=>x.UserDetailId==refund.InsuranceCompanyId).SingleOrDefault();
             var BrokerdebitLedger = transactionForBroker.LedgarEntries.SingleOrDefault(x => x.DebitAccountId != null);
             BrokerdebitLedger.DebitAccountId = refund.InsuranceCompany.DefaultAccountId; //Debits Accounts Payable
-            BrokerdebitLedger.Amount = -refund.AmountForBroker;
+            BrokerdebitLedger.Amount = refund.AmountForBroker;
             BrokerdebitLedger.TransactionDate = refund.RefundDate;
             transactionForBroker.LedgarEntries.Add(debitLedger);
             var BrokercreditLedger = transactionForBroker.LedgarEntries.SingleOrDefault(x => x.CreditAccountId == BuiltinAccounts.ExpenseAccount);
             BrokercreditLedger.CreditAccountId = BuiltinAccounts.ExpenseAccount; // Credits Expense
-            BrokercreditLedger.Amount = - refund.AmountForBroker;
+            BrokercreditLedger.Amount =  refund.AmountForBroker;
             BrokercreditLedger.TransactionDate = refund.RefundDate;
             transactionForBroker.LedgarEntries.Add(BrokercreditLedger);
 
@@ -135,7 +141,7 @@ namespace PanoramBackend.Services.Services
             transactionForIncome.RefundId = refund.Id;
             var IncomeDebitLedger = transactionForIncome.LedgarEntries.SingleOrDefault(x => x.DebitAccountId == BuiltinAccounts.SalesAccount);
            IncomeDebitLedger.DebitAccountId = BuiltinAccounts.SalesAccount; //Sales Income Debits
-            IncomeDebitLedger.Amount = - (refund.AmountForBroker - refund.AmountForSalesAgent);
+            IncomeDebitLedger.Amount =  (refund.AmountForBroker - refund.AmountForSalesAgent);
             IncomeDebitLedger.TransactionDate = refund.RefundDate;
             transactionForIncome.LedgarEntries.Add(IncomeDebitLedger);
             var IncomeCreditLedger = transactionForIncome.LedgarEntries.SingleOrDefault(x => x.CreditAccountId == BuiltinAccounts.RefundIncome);

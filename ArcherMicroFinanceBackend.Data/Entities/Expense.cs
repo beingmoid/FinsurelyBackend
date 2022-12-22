@@ -15,6 +15,8 @@ namespace PanoramaBackend.Data.Entities
         public ExpenseCategory ExpenseCategory { get; set; }
         public decimal ExpenseAmount { get; set; }
         public int AccountId { get; set; }
+        public int BranchId { get; set; }
+        public Branch Branch { get; set; }
         public Accounts Account { get; set; }
 
         private ICollection<Transaction> _Transaction;

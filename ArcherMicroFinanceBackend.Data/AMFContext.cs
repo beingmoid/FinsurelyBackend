@@ -111,6 +111,7 @@ namespace PanoramBackend.Data
 			this.InitializeEntity<Expense>();
 			this.InitializeEntity<Announcement>();
 			this.InitializeEntity<ExpenseCategory>();
+			this.InitializeEntity<Payroll>();
 
 			//EmployeeRelations
 			this.CreateRelation<UserDetails, Teams>(x => x.ManagerTeams, x => x.Manager, x => x.ManagerId);
@@ -134,7 +135,11 @@ namespace PanoramBackend.Data
 			this.CreateRelation<Priority, TaskTodo>(x => x.TaskTodos, x => x.Priority, x => x.PriorityId);
 			this.CreateRelation<UserDetails, TaskTodo>(x => x.AssignedByTask, x => x.AssignedBy, x => x.AssignedById);
 			this.CreateRelation<UserDetails, TaskTodo>(x => x.AssignedTask, x => x.AssignedTo, x => x.AssignedToId);
+			this.CreateRelation<Branch, Expense>(x => x.ExpensesByBranch, x => x.Branch, x => x.BranchId);
 
+			this.CreateRelation< Branch, Payroll>(x => x.PaidToBranch, x => x.Branch, x => x.BranchId);
+
+			this.CreateRelation<Accounts, Payroll>(x => x.PayrollExpenseAccount, x => x.ExpenseAccount, x => x.ExpenseAccountId);
 
 
 
@@ -161,7 +166,7 @@ namespace PanoramBackend.Data
 			this.CreateRelation<UserDetails, Refund>(x => x.AgentRefunds, x => x.Agent, x => x.AgentId);
 			this.CreateRelation<UserDetails, Refund>(x => x.InsuranceCompanyRefunds, x => x.InsuranceCompany, x => x.InsuranceCompanyId);
 			this.CreateRelation<PaymentMethod, SalesInvoice>(x => x.SalesInvoice, x => x.PaymentMethod, x => x.PaymentMethodId);
-			this.CreateRelation<PaymentMethod, Refund>(x => x.Refunds, x => x.PaymentMethod, x => x.PaymentMethodId);
+		
 			this.CreateRelation<PreferredPaymentMethod, PaymentAndBilling>(x => x.PaymentAndBilling, x => x.PreferredPaymentMethod, x => x.PreferredPaymentMethodId);
 			this.CreateRelation<Terms, PaymentAndBilling>(x => x.PaymentAndBilling, x => x.Terms, x => x.TermsId);
 			this.CreateRelation<SalesInvoice,SaleLineItem >(x => x.SaleLineItem, x => x.SalesInvoice, x => x.SaleId);
@@ -269,8 +274,20 @@ namespace PanoramBackend.Data
 				UserId = ADMIN_ID
 			});
 
-			var array = new string[16] { "Dashboard", "Customer", "Sales Agent", "Insurance Companies", "Sales","Supplier", "Transactions",  "Calender", "Task","Documents","Expenses" , "Accounting","Workplace" ,"Teams", "Reports","Settings" };
-			var array2 = new string[4] { "Create", "Edit", "View", "Delete" };
+			var array = new string[13] { "Dashboard", 
+				"Branch", 
+				"Sales Agent",
+				"Insurance Companies", 
+				"Sales",
+				"Transactions",  
+				"Task",
+				"Documents",
+				"Expenses" , 
+				"Accounting",
+				"Workplace" ,
+				"Teams", 
+				"Reports" };
+			var array2 = new string[5] { "Create", "Edit", "View", "Delete","Search" };
 
 			var list = new List<IdentityRoleClaim<string>>();
 			var counter = 1;

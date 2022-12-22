@@ -170,6 +170,7 @@ namespace PanoramBackend.Services.Services
             transaction.TransactionDate = payment.PaymentDate;
             transaction.TransactionType = TransactionTypes.Payment;
             transaction.Memo = payment.Memo;
+            
             LedgarEntries DebitledgerEntry = new LedgarEntries();
             DebitledgerEntry.Amount = payment.Amount;
             DebitledgerEntry.DebitAccountId = payment.DepositAccountId; //Cash Debits
@@ -330,7 +331,7 @@ namespace PanoramBackend.Services.Services
 
             var transaction = new Transaction();
             transaction.TransactionDate = payment.PaymentDate;
-            transaction.TransactionType = TransactionTypes.Bill;
+            transaction.TransactionType = TransactionTypes.Payment;
             transaction.Memo = payment.Memo;
             var insuranceCompany = await _insuranceCompanyService.GetOne(Convert.ToInt32(payment.InsuranceCompanyId));
             LedgarEntries DebitledgerEntry = new LedgarEntries();
@@ -371,7 +372,7 @@ namespace PanoramBackend.Services.Services
             var newPayment = mapper.Map(payment, oldPayment);
             var transaction = (await _transactionService.Get(x => x.Include(x => x.LedgarEntries), x => x.PaymentId == Id)).SingleOrDefault();
             transaction.TransactionDate = newPayment.PaymentDate;
-            transaction.TransactionType = TransactionTypes.Bill;
+            transaction.TransactionType = TransactionTypes.Payment;
             transaction.Memo = newPayment.Memo;
             var insuranceCompany = await _insuranceCompanyService.GetOne(Convert.ToInt32(payment.InsuranceCompanyId));
             LedgarEntries CreditLedgerEntry = transaction.LedgarEntries.SingleOrDefault(x => x.CreditAccountId != null);

@@ -6,9 +6,13 @@ namespace PanoramaBackend.Api
        
     {
         public TKey Id { get; set; }
-        public DateTime from{ get; set; }
-        public DateTime to { get; set; }
-        public int BranchId { get; set; }
+        public DateTime? from{ get; set; }
+        public DateTime? to { get; set; }
+        public int? BranchId { get; set; }
+
+        public string? SearchQuery { get; set; }
+        public string? MyProperty { get; set; }
+
 
         private const int _maxItemPerPage = 50;
         private int itemsPerPage;

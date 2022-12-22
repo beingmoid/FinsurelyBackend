@@ -7,6 +7,7 @@
   <ItemGroup>
     <PackageReference Include="EFCore.BulkExtensions" Version="3.6.5" />
     <PackageReference Include="EntityFrameworkCore.Cacheable" Version="2.0.1" />
+    <PackageReference Include="FluentExcel" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.16" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.16">

@@ -30,24 +30,9 @@ namespace PanoramaBackend
             webBuilder.ConfigureKestrel(serverOptions =>
             {
 
-                //serverOptions.Listen(IPAddress.Parse("192.168.18.7"), 5000);
-                //serverOptions.Limits.MaxConcurrentConnections = 100;
-                //serverOptions.Limits.MaxConcurrentUpgradedConnections = 100;
-                //serverOptions.Limits.MaxRequestBodySize = 10 * 1024;
-                //serverOptions.Limits.MinRequestBodyDataRate =
-                //    new MinDataRate(bytesPerSecond: 100,
-                //        gracePeriod: TimeSpan.FromSeconds(10));
-                //serverOptions.Limits.MinResponseDataRate =
-                //    new MinDataRate(bytesPerSecond: 100,
-                //        gracePeriod: TimeSpan.FromSeconds(10));
+          
+               webBuilder.UseUrls("http://192.168.100.78:5001/");
 
-                //serverOptions.Listen(IPAddress.Loopback, 5001,
-                //    listenOptions =>
-                //    {
-                //        listenOptions.UseHttps("testCert.pfx",
-                //            "testPassword");
-                //    });
-                webBuilder.UseUrls("http://192.168.56.1:5000/");
             })
             .UseStartup<Startup>();
         });

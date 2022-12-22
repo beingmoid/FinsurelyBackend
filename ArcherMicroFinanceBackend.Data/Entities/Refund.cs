@@ -13,8 +13,8 @@ namespace PanoramBackend.Data.Entities
         public int? InsuranceCompanyId { get; set; }
         public UserDetails InsuranceCompany { get; set; }
         public DateTime RefundDate { get; set; }
-        public int PaymentMethodId { get; set; }
-        public PaymentMethod PaymentMethod { get; set; }
+        //public int PaymentMethodId { get; set; }
+        //public PaymentMethod PaymentMethod { get; set; }
         public int? PolicyTypeId { get; set; }
         public PolicyType PolicyType { get; set; }
         public string CompanyName { get; set; }

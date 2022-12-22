@@ -18,6 +18,8 @@ namespace PanoramBackend.Services.Mapper
         public AutoMapperMappings()
         {
 
+			this.CreateMap<Payroll>();
+
 			this.CreateMap<UserDetails>()
 				.ForMember(x => x.Addresses, x => x.MapFrom(x => x.Addresses))
 				.ForMember(x => x.Attachments, x => x.MapFrom(x => x.Attachments))

@@ -40,6 +40,7 @@ using System.IO;
 using Microsoft.Extensions.FileProviders;
 using DinkToPdf.Contracts;
 using DinkToPdf;
+using PanoramaBackend.Services.Reports;
 
 namespace PanoramaBackend
 {
@@ -234,6 +235,10 @@ namespace PanoramaBackend
             services.AddScoped<IExpenseService, ExpenseService>();
             services.AddScoped<IExpenseCategoryReposiotory, ExpenseCategoryRepository>();
             services.AddScoped<IExpenseCategoryService, ExpenseCategoryService>();
+            services.AddScoped<IPayrollRepository, PayrollRepository>();
+            services.AddScoped<IPayrollService,PayrollService>();
+            services.AddScoped<ExpenseExcel>();
+
             //services.AddScoped<IElasticClient, ElasticClient>();
             //services.AddScoped<ICompanyRepo, CompanyRepo>();
             //services.AddScoped<ICardInfoRepo, CardInfoRepo>();
@@ -321,11 +326,13 @@ namespace PanoramaBackend
         //    );
         //} 
         //This method gets called by the runtime.Use this method to configure the HTTP request pipeline.
+
+
         public void Configure(IApplicationBuilder app)
         {
           
             ServiceActivator.Configure(app.ApplicationServices);
-        
+            ExpenseExcel.ConfigureExcel();
             if (_env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

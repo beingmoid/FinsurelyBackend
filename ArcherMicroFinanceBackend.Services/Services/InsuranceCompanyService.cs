@@ -140,7 +140,7 @@ namespace PanoramBackend.Services.Services
             foreach (var item in companies)
             {
              
-                var credit = ledger.Where(x => x.CreditAccountId == item.DefaultAccountId).Sum(x => x.Amount);
+                var credit = ledger.Where(x => x.DebitAccountId == item.DefaultAccountId).Sum(x => x.Amount);
                 item.OpenBalance = credit;
 
             } 
@@ -149,9 +149,19 @@ namespace PanoramBackend.Services.Services
 
                 return companies.ToList();
         }
+
+        public async Task<decimal> GetBalance(int Id)
+        {
+            var companies = await this.GetOne(Id);
+            var ledger = (await _ledger.Get()).ToList();
+
+            return ledger.Where(x =>    x.DebitAccountId == companies.DefaultAccountId).Sum(x => x.Amount);
+        }
+
     }
     public interface IInsuranceCompanyService : IBaseService<UserDetails, int>
     {
         Task<List<UserDetails>> GetCompaniesWithBalance();
+        Task<decimal> GetBalance(int Id);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using NukesLab.Core.Common;
+using PanoramaBackend.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -16,6 +17,12 @@ namespace PanoramBackend.Data.Entities
         [IgnoreDataMember]
         [JsonIgnore]
         public ICollection<SalesInvoice> Sales => _sales ?? (_sales = new List<SalesInvoice>());
+
+        private ICollection<Expense> _expenseByBranch;
+        public ICollection<Expense> ExpensesByBranch => _expenseByBranch ?? (_expenseByBranch = new List<Expense>());
+
+        private ICollection<Payroll> _paidToBranch;
+        public ICollection<Payroll> PaidToBranch => _paidToBranch ?? (_paidToBranch = new List<Payroll>());
 
     }
 }

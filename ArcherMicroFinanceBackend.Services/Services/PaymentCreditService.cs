@@ -14,7 +14,7 @@ namespace PanoramBackend.Services.Services
     public class PaymentCreditService : BaseService<Payment, int>, IPaymentCreditService
     {
         private readonly ITransactionService _transactionService;
-
+    
         public PaymentCreditService(RequestScope scopeContext, IPaymentRepository repo,ITransactionService transactionService) : base(scopeContext, repo)
         {
             _transactionService = transactionService;
@@ -50,7 +50,7 @@ namespace PanoramBackend.Services.Services
             transaction.Memo = payment.Memo;
             transaction.TransactionDate = payment.PaymentDate;
             transaction.PaymentId = payment.Id;
-            transaction.TransactionType = TransactionTypes.Bill;
+            transaction.TransactionType = TransactionTypes.Payment;
             transaction.UserDetailId = payment.InsuranceCompanyId;
             var debitLedger = new LedgarEntries();
             debitLedger.DebitAccountId = payment.CreditAccountId;
@@ -72,7 +72,7 @@ namespace PanoramBackend.Services.Services
             transaction.Memo = payment.Memo;
             transaction.TransactionDate = payment.PaymentDate;
             transaction.PaymentId = payment.Id;
-            transaction.TransactionType = TransactionTypes.Bill;
+            transaction.TransactionType = TransactionTypes.Payment;
             transaction.UserDetailId = payment.InsuranceCompanyId;
             var debitLedger = transaction.LedgarEntries.Where(x => x.DebitAccountId != null).SingleOrDefault();
             debitLedger.DebitAccountId = payment.CreditAccountId; 

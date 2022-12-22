@@ -32,12 +32,11 @@ namespace PanoramBackend.Data.Entities
      
         Invoice=1,
         Payment,
-
+        OpeningBalance,
         InsuranceCredit,
         Transfer,
         Deposit,
         Expense,
-        Bill,
         Refund
 
     }

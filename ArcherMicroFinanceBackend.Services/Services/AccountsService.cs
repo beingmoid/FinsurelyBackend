@@ -44,7 +44,7 @@ namespace PanoramBackend.Services.Services
                     ledgar.DebitAccountId = item.Id;
                     ledgar.Amount = (decimal) item.OpeningBalanceEquity;
                     transaction.LedgarEntries.Add(ledgar);
-                    transaction.TransactionType = TransactionTypes.Deposit;
+                    transaction.TransactionType = TransactionTypes.OpeningBalance;
                     LedgarEntries creditEntry = new LedgarEntries();
                     creditEntry.TransactionDate= (DateTime)item.AsOf;
                     creditEntry.Amount = (decimal)item.OpeningBalanceEquity;
