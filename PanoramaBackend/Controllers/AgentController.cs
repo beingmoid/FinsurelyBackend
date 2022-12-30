@@ -20,6 +20,11 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using DotLiquid;
 using Nest;
+using PanoramBackend.Data;
+using Elastic.Apm;
+using FluentExcel;
+using PanoramaBackend.Services;
+using Wkhtmltopdf.NetCore;
 
 namespace PanoramaBackend.Api.Controllers
 {
@@ -31,10 +36,16 @@ namespace PanoramaBackend.Api.Controllers
         private readonly ITransactionService _tranService;
         private readonly IConverter _converter;
         private readonly IWebHostEnvironment _env;
-
+        private readonly AMFContext _context;
+        private readonly IGeneratePdf _generatePDF;
+        private readonly IRazorViewToStringRenderer _engine;
         public AgentController(RequestScope requestScope, IAgentService service, ILedgerEntriesService entriesService
             , ITransactionService tranService,
+            AMFContext context,
             IWebHostEnvironment env,
+            IRazorViewToStringRenderer engine,
+            IGeneratePdf generatePDF,
+
             IConverter converter            )
             : base(requestScope, service)
         {
@@ -43,7 +54,14 @@ namespace PanoramaBackend.Api.Controllers
             _tranService = tranService;
             _converter = converter;
             _env = env;
+            _context = context;
+            _generatePDF = generatePDF;
+            _engine = engine;
+
         }
+
+
+
         [HttpPost("SearchAndFilter")]
         public async Task<BaseResponse> SearchAndFilter([FromBody] SearchAndFilter filter, int accountId, string start, string end, string sortBy)
         {
@@ -134,150 +152,355 @@ namespace PanoramaBackend.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("statement")]
+        [HttpPost("GetAgentPaginated")]
 
-        public async Task<BaseResponse> GetAccountStatement([FromQuery] PaginationParams<int> @params)
+        public async Task<BaseResponse> GetAgentPaginated([FromBody] PaginationParams<int> @params)
         {
-             
-            var agent = (await _service.Get(x => x.Include(x => x.Accounts), x => x.Id == @params.Id)).SingleOrDefault();
-
-            if (agent == null) return constructResponse(NotFound());
-
-            var ledgers = (await _entriesService.Get(x => x.Include(x => x.Transaction)
-
-            .ThenInclude(x => x.SalesInvoice)
-                        .ThenInclude(x => x.SaleLineItem)
-                            .ThenInclude(x => x.Vehicle)
-
-            .Include(x => x.Transaction)
-                   .ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.InsuranceType)
-        .Include(x => x.Transaction)
-                   .ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.Branch)
-            .Include(x => x.Transaction)
-                   .ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.Service)
-        .Include(x => x.Transaction)
-                   .ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.PolicyType)
-        .Include(x => x.Transaction)
-                   .ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.BodyType)
-
-                   .Include(x=>x.Transaction)
-                   .ThenInclude(x=>x.Payment)
-                   .Include(x => x.Transaction)
-                   .ThenInclude(x => x.Refund)
-                       .Include(x => x.Transaction)
-                       .ThenInclude(x => x.Refund)
-                                .ThenInclude(x=>x.Account)
-                                               .Include(x => x.Transaction)
-                                                    .ThenInclude(x => x.Refund)
-                                                           .ThenInclude(x => x.Vehicle)
-                    .Include(x => x.Transaction)
-                                                    .ThenInclude(x => x.Refund)
-                                                           .ThenInclude(x => x.PolicyType)
-                                                           .Include(x => x.Transaction)
-                                                    .ThenInclude(x => x.Refund)
-                                                           .ThenInclude(x => x.PolicyType)
-                                                                     .Include(x => x.Transaction)
-                                                    .ThenInclude(x => x.Refund)
-                                                           .ThenInclude(x => x.InsuranceType)
-
-
-            , x => x.CreditAccountId == agent.DefaultAccountId || x.DebitAccountId==agent.DefaultAccountId)).OrderBy(x=>x.Id).ToList();
-
-
-            var entries = ledgers.OrderBy(x=>x.TransactionDate).GroupBy(x => x.TransactionId).Select(
-
-                x => new
-                {
-                    Key = x.Key,
-                    Value = x
-                }
-                ).ToList();
-            List<dynamic> accountStatement = new List<dynamic>();
+            List<AgentStatementDTO> accountStatement = new List<AgentStatementDTO>();
+     
             PageConfig page = new PageConfig();
-            int count = 0;
-            page.TotalPages = entries.Count() / @params.ItemsPerPage + (entries.Count() % @params.ItemsPerPage > 0 ? 1 : 0);
-            decimal debitBalance = 0;
-            // decimal creditBalance = 0;
-            var _value = (@params.Page - 1) * @params.ItemsPerPage;
-            var _skipCount = (@params.Page - 1) * @params.ItemsPerPage;
-            bool dontSkip = false;
-            if (_skipCount > entries.Count)
-            {
-                dontSkip = true;
+            int count = ((@params.ItemsPerPage > 10) || (@params.Page > 1)) ? @params.ItemsPerPage : 0;
 
+
+            var agent = _context.Set<UserDetails>().AsNoTracking().Include(x => x.Accounts)
+                               .ThenInclude(x => x.CreditLedgarEntries)
+                               .Include(x => x.Accounts)
+                               .ThenInclude(x => x.DebitLedgarEntries)
+                                     .SingleOrDefault(x => x.IsAgent == true && x.Id == @params.Id);
+
+
+            Console.Clear();
+    
+            Console.WriteLine("Last SQL Execution");
+            var query = _context.Set<LedgarEntries>().Include(x => x.Transaction)
+           .ThenInclude(x => x.SalesInvoice)
+                       .ThenInclude(x => x.SaleLineItem)
+                           .ThenInclude(x => x.Vehicle)
+
+           .Include(x => x.Transaction)
+                  .ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.InsuranceType)
+       .Include(x => x.Transaction)
+                  .ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.Branch)
+           .Include(x => x.Transaction)
+                  .ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.Service)
+       .Include(x => x.Transaction)
+                  .ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.PolicyType)
+       .Include(x => x.Transaction)
+                  .ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.BodyType)
+
+                  .Include(x => x.Transaction)
+                  .ThenInclude(x => x.Payment)
+                  .Include(x => x.Transaction)
+                  .ThenInclude(x => x.Refund)
+                      .Include(x => x.Transaction)
+                      .ThenInclude(x => x.Refund)
+                               .ThenInclude(x => x.Account)
+                                              .Include(x => x.Transaction)
+                                                   .ThenInclude(x => x.Refund)
+                                                          .ThenInclude(x => x.Vehicle)
+                   .Include(x => x.Transaction)
+                                                   .ThenInclude(x => x.Refund)
+                                                          .ThenInclude(x => x.PolicyType)
+                                                          .Include(x => x.Transaction)
+                                                   .ThenInclude(x => x.Refund)
+                                                          .ThenInclude(x => x.PolicyType)
+                                                                    .Include(x => x.Transaction)
+                                                   .ThenInclude(x => x.Refund)
+
+                                                   .ThenInclude(x => x.InsuranceType);
+
+
+
+
+
+
+
+            if (agent == null)
+            {
+
+                return constructResponse(NotFound());
             }
-            else 
-                dontSkip = false;
 
-
-            var list = dontSkip? entries.Take(@params.ItemsPerPage).ToList(): entries.Skip((@params.Page-1) * @params.ItemsPerPage).Take(@params.ItemsPerPage).ToList();
-            //var lastItem = list.Last();
-            foreach (var item in list)
+            //only date
+            // 1 1 0
+            else if (@params.from != null && @params.to != null && @params.SearchQuery == null)
             {
-                count++;
-                var isItemSalesInvoice = item.Value.All(x => x.Transaction.TransactionType == TransactionTypes.Invoice ||
-                
-                x.Transaction.TransactionType == TransactionTypes.Payment
-                    );
-                var isItemPayment = item.Value.All(x=>x.Transaction.TransactionType== TransactionTypes.Payment);
-                var isItemRefund = item.Value.All(x=>x.Transaction.TransactionType== TransactionTypes.Refund);
-                var isOpeningBalance = item.Value.All(x => x.Transaction.TransactionType == TransactionTypes.OpeningBalance);
-              
-                  AgentStatementDTO debit = new AgentStatementDTO();
-                if (isItemSalesInvoice)
+
+                #region Query
+                var ledgers = query.Where(
+             x =>
+
+             (x.CreditAccountId == agent.DefaultAccountId || x.DebitAccountId == agent.DefaultAccountId)
+
+             &&
+             (
+             (x.TransactionDate.Date >= @params.from.ToDateTime().Date)
+             &&
+             (x.TransactionDate.Date <= @params.to.ToDateTime().Date)
+             )
+
+           ).ToList();
+
+                #endregion
+                #region Excel Export
+                if (@params.RequestExcel != null)
                 {
 
-                    debit.Num = count;
-                    debit.TransactionType = TransactionTypes.Invoice;
-                    if (item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id) != null)
+                    var groupedList = ledgers.OrderBy(x => x.TransactionDate).GroupBy(x => x.TransactionId).Select(
+
+               x => new
+               {
+                   Key = x.Key,
+                   Value = x
+               }
+               ).ToList();
+
+
+
+                    decimal Balance = (agent.Accounts.DebitLedgarEntries
+                        .Where(x => x.TransactionDate.Date > @params.from.ToDateTime().Date)
+                                    .Sum(x => x.Amount)) + (-(agent.Accounts.CreditLedgarEntries.
+                                    Where(x => x.TransactionDate.Date > @params.from.ToDateTime().Date).
+                                    Sum(x => x.Amount)));
+
+                    foreach (var item in groupedList)
                     {
-                        var _actualItem = item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id);
-                        debitBalance += _actualItem.Amount;
-                        debit.InvoiceDate = _actualItem?.Transaction?.SalesInvoice?.SalesInvoiceDate;
-                        debit.CustomerName = _actualItem?.Transaction?.SalesInvoice?.CustomerName;
-                        debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.SingleOrDefault().PolicyNumber;
-                        debit.PolicyType = _actualItem?.Transaction?.SalesInvoice?.PolicyType?.Name;
-                        debit.ServiceType = _actualItem?.Transaction?.SalesInvoice?.Service?.Name;
-                        debit.InsuranceType = _actualItem?.Transaction?.SalesInvoice?.InsuranceType?.Name;
-                        debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
-                                    SingleOrDefault().Vehicle?.Make + " " + " | " +
-                                    _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
-                                    SingleOrDefault().Vehicle?.Model;
-                        debit.BodyType = _actualItem?.Transaction?.SalesInvoice?.BodyType?.Name;
-                        debit.RefNo = _actualItem?.Transaction?.TransactionReferenceNumber;
-                        debit.Debit = item?.Value?.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id)?.Amount;
-                        debit.Credit = 0;
-                        debit.Balance = debitBalance;
+                        count++;
+                        var isItemSalesInvoice = item.Value.All(x => x.Transaction.TransactionType == TransactionTypes.Invoice ||
+
+                        x.Transaction.TransactionType == TransactionTypes.Payment
+                            );
+                        var isItemPayment = item.Value.All(x => x.Transaction.TransactionType == TransactionTypes.Payment);
+                        var isItemRefund = item.Value.All(x => x.Transaction.TransactionType == TransactionTypes.Refund);
+                        var isOpeningBalance = item.Value.All(x => x.Transaction.TransactionType == TransactionTypes.OpeningBalance);
+
+                        AgentStatementDTO debit = new AgentStatementDTO();
+                        if (isItemSalesInvoice)
+                        {
+
+                            debit.Num = count;
+                            debit.TransactionType = TransactionTypes.Invoice;
+                            if (item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id) != null)
+                            {
+                                var _actualItem = item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id);
+                                Balance += _actualItem.Amount;
+                                debit.InvoiceDate = _actualItem?.Transaction?.SalesInvoice?.SalesInvoiceDate;
+                                debit.CustomerName = _actualItem?.Transaction?.SalesInvoice?.CustomerName;
+                                debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.SingleOrDefault().PolicyNumber;
+                                debit.PolicyType = _actualItem?.Transaction?.SalesInvoice?.PolicyType?.Name;
+                                debit.ServiceType = _actualItem?.Transaction?.SalesInvoice?.Service?.Name;
+                                debit.InsuranceType = _actualItem?.Transaction?.SalesInvoice?.InsuranceType?.Name;
+                                debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
+                                            SingleOrDefault().Vehicle?.Make + " " + " | " +
+                                            _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
+                                            SingleOrDefault().Vehicle?.Model;
+                                debit.BodyType = _actualItem?.Transaction?.SalesInvoice?.BodyType?.Name;
+                                debit.RefNo = _actualItem?.Transaction?.TransactionReferenceNumber;
+                                debit.Debit = item?.Value?.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id)?.Amount;
+                                debit.Credit = 0;
+                                debit.Balance = Balance;
+
+                            }
+                            else
+                            {
+                                var _actualItem = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id);
+                                Balance -= (item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id)?.Amount) ?? 0;
+
+                                debit.InvoiceDate = _actualItem?.Transaction?.SalesInvoice?.SalesInvoiceDate;
+                                debit.CustomerName = _actualItem?.Transaction?.SalesInvoice?.CustomerName;
+                                debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.SingleOrDefault()?.PolicyNumber;
+                                debit.PolicyType = _actualItem?.Transaction?.SalesInvoice?.PolicyType?.Name;
+                                debit.ServiceType = _actualItem?.Transaction?.SalesInvoice?.Service?.Name;
+                                debit.InsuranceType = _actualItem?.Transaction?.SalesInvoice?.InsuranceType?.Name;
+                                debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
+                                            SingleOrDefault().Vehicle?.Make + " " + " | " +
+                                            _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
+                                            SingleOrDefault().Vehicle?.Model;
+                                debit.BodyType = _actualItem?.Transaction?.SalesInvoice?.BodyType?.Name;
+                                debit.RefNo = _actualItem?.Transaction?.TransactionReferenceNumber;
+                                debit.Debit = _actualItem?.Amount;
+                                debit.Credit = (_actualItem?.Amount);
+                                debit.Debit = 0;
+                                debit.Balance = Balance;
+
+                            }
+                        }
+                        else if (isItemPayment)
+                        {
+                            debit.Num = count;
+                            debit.TransactionType = TransactionTypes.Payment;
+
+                            var _actualItem = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id);
+                            Balance += _actualItem.Amount;
+                            debit.Memo = _actualItem.Transaction?.Payment?.Memo;
+                            debit.InvoiceDate = _actualItem?.Transaction?.Payment?.PaymentDate;
+                            debit.RefNo = _actualItem?.Transaction?.Payment?.TransactionReferenceNumber;
+                            debit.Debit = _actualItem?.Amount;
+                            debit.Credit = (_actualItem?.Amount);
+                            debit.Debit = 0;
+                            debit.Balance = Balance;
+
+                        }
+                        else if (isOpeningBalance)
+                        {
+                            var _actualItem = item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id);
+                            debit.Num = count;
+                            debit.TransactionType = TransactionTypes.OpeningBalance;
+                            debit.Memo = "OPENING BALANCE";
+                            debit.HasOnlyMemo = true;
+                            debit.InvoiceDate = _actualItem.TransactionDate;
+                            Balance += (_actualItem?.Amount) ?? 0;
+                            debit.Debit = Balance;
+                            debit.Balance = Balance;
+                        }
+                        else
+                        {
+                            debit.Num = count;
+                            debit.TransactionType = TransactionTypes.Refund;
+
+                            var _actualItem = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id);
+                            Balance -= _actualItem.Amount;
+                            debit.InvoiceDate = _actualItem?.Transaction?.Refund?.RefundDate;
+                            debit.CustomerName = _actualItem?.Transaction?.Refund?.CustomerName;
+                            debit.PolicyNumber = _actualItem?.Transaction?.Refund?.PolicyNumber;
+                            debit.PolicyType = _actualItem?.Transaction?.Refund?.PolicyType?.Name;
+
+                            debit.InsuranceType = _actualItem?.Transaction?.Refund?.InsuranceType?.Name;
+                            debit.Vehicle = _actualItem?.Transaction?.Refund?.Vehicle?.Make + " " + " | " + // Make 
+                                                                                                            //Concating strings
+                                        _actualItem?.Transaction?.Refund?.Vehicle?.Model; // Model
+
+                            debit.Memo = _actualItem?.Transaction?.Refund?.MessageOnStatement; ;
+                            debit.Debit = _actualItem?.Amount;
+                            debit.Credit = (_actualItem?.Amount);
+                            debit.Debit = 0;
+                            debit.Balance = Balance;
+
+                        }
+
+
+
+
+
+
+                        accountStatement.Add(debit);
 
                     }
-                    else
-                    {
-                        var _actualItem = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id);
-                        debitBalance -= (item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id)?.Amount) ?? 0;
 
-                        debit.InvoiceDate = _actualItem?.Transaction?.SalesInvoice?.SalesInvoiceDate;
-                        debit.CustomerName = _actualItem?.Transaction?.SalesInvoice?.CustomerName;
-                        debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.SingleOrDefault()?.PolicyNumber;
-                        debit.PolicyType = _actualItem?.Transaction?.SalesInvoice?.PolicyType?.Name;
-                        debit.ServiceType = _actualItem?.Transaction?.SalesInvoice?.Service?.Name;
-                        debit.InsuranceType = _actualItem?.Transaction?.SalesInvoice?.InsuranceType?.Name;
-                        debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
-                                    SingleOrDefault().Vehicle?.Make + " " + " | " +
-                                    _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
-                                    SingleOrDefault().Vehicle?.Model;
-                        debit.BodyType = _actualItem?.Transaction?.SalesInvoice?.BodyType?.Name;
-                        debit.RefNo = _actualItem?.Transaction?.TransactionReferenceNumber;
-                        debit.Debit = _actualItem?.Amount;
-                        debit.Credit = (_actualItem?.Amount);
-                        debit.Debit = 0;
-                        debit.Balance = debitBalance;
+                    #region Excel Export Method
 
-                    }
+                    string wwwPath = _env.WebRootPath;
+                    string contentPath = _env.ContentRootPath;
+                    string path = Path.Combine(contentPath, $"\\uploads\\{new DateTime().Ticks.ToString()}.xlsx");
+                    var serverUrl = this.HttpContext.Request.Host.ToString();
+                    var ransomeNameStr = new Random().Next(DateTime.Now.Second, 10000).ToString() +
+                        new DateTime().Ticks.ToString();
+                    var isHttps = this.HttpContext.Request.IsHttps;
+
+                    var serverPath = isHttps ? "https://" : "http://" + serverUrl + $"/uploads/{ransomeNameStr}.xlsx";
+                    accountStatement.ToExcel(contentPath + $"\\uploads\\{ransomeNameStr}.xlsx");
+
+                    page.ExcelFileUrl = serverPath;
+                    accountStatement = new List<AgentStatementDTO>();
+                    #endregion 
                 }
-                else if (isItemPayment)
+                #endregion
+                var entries = ledgers.OrderBy(x => x.TransactionDate).GroupBy(x => x.TransactionId).Select(
+
+                    x => new
+                    {
+                        Key = x.Key,
+                        Value = x
+                    }
+                    ).ToList();
+
+
+                page.TotalPages = entries.Count() / @params.ItemsPerPage + (entries.Count() % @params.ItemsPerPage > 0 ? 1 : 0);
+                var agentCurrentBalance = agent.Accounts.CreditLedgarEntries.Sum(x => x.Amount) + (-agent.Accounts.CreditLedgarEntries.Sum(x => x.Amount)
+);
+
+
+                var creditValueForDateGreaterThanParamsToDate = agent.Accounts.CreditLedgarEntries.Where(x => x.TransactionDate.Date > @params.from.ToDateTime().Date).Sum(x => x.Amount);
+                var debitValueForDateGreaterThanParamsToDate = agent.Accounts.DebitLedgarEntries.Where(x => x.TransactionDate.Date > @params.from.ToDateTime().Date).Sum(x => x.Amount);
+                var creditEntriesForDateGreaterThanParamsToDate = agent.Accounts.CreditLedgarEntries.Where(x => x.TransactionDate.Date > @params.from.ToDateTime().Date).ToList();
+                var debitEntriesForDateGreaterThanParamsToDate = agent.Accounts.DebitLedgarEntries.Where(x => x.TransactionDate.Date > @params.from.ToDateTime().Date).ToList();
+
+                var agentBalanceForDateOf = debitValueForDateGreaterThanParamsToDate + (-creditValueForDateGreaterThanParamsToDate);
+
+                decimal debitBalance = agentBalanceForDateOf;
+                // decimal creditBalance = 0;
+                var _value = (@params.Page - 1) * @params.ItemsPerPage;
+
+
+                var list = entries.Skip((@params.Page - 1) * @params.ItemsPerPage).Take(@params.ItemsPerPage).ToList();
+                //var lastItem = list.Last();
+
+                foreach (var item in list)
                 {
-                    debit.Num = count;
-                   debit.TransactionType = TransactionTypes.Payment;
+                    count++;
+                    var isItemSalesInvoice = item.Value.All(x => x.Transaction.TransactionType == TransactionTypes.Invoice ||
+
+                    x.Transaction.TransactionType == TransactionTypes.Payment
+                        );
+                    var isItemPayment = item.Value.All(x => x.Transaction.TransactionType == TransactionTypes.Payment);
+                    var isItemRefund = item.Value.All(x => x.Transaction.TransactionType == TransactionTypes.Refund);
+                    var isOpeningBalance = item.Value.All(x => x.Transaction.TransactionType == TransactionTypes.OpeningBalance);
+
+                    AgentStatementDTO debit = new AgentStatementDTO();
+                    if (isItemSalesInvoice)
+                    {
+
+                        debit.Num = count;
+                        debit.TransactionType = TransactionTypes.Invoice;
+                        if (item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id) != null)
+                        {
+                            var _actualItem = item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id);
+                            debitBalance += _actualItem.Amount;
+                            debit.InvoiceDate = _actualItem?.Transaction?.SalesInvoice?.SalesInvoiceDate;
+                            debit.CustomerName = _actualItem?.Transaction?.SalesInvoice?.CustomerName;
+                            debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.SingleOrDefault().PolicyNumber;
+                            debit.PolicyType = _actualItem?.Transaction?.SalesInvoice?.PolicyType?.Name;
+                            debit.ServiceType = _actualItem?.Transaction?.SalesInvoice?.Service?.Name;
+                            debit.InsuranceType = _actualItem?.Transaction?.SalesInvoice?.InsuranceType?.Name;
+                            debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
+                                        SingleOrDefault().Vehicle?.Make + " " + " | " +
+                                        _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
+                                        SingleOrDefault().Vehicle?.Model;
+                            debit.BodyType = _actualItem?.Transaction?.SalesInvoice?.BodyType?.Name;
+                            debit.RefNo = _actualItem?.Transaction?.TransactionReferenceNumber;
+                            debit.Debit = item?.Value?.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id)?.Amount;
+                            debit.Credit = 0;
+                            debit.Balance = debitBalance;
+
+                        }
+                        else
+                        {
+                            var _actualItem = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id);
+                            debitBalance -= (item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id)?.Amount) ?? 0;
+
+                            debit.InvoiceDate = _actualItem?.Transaction?.SalesInvoice?.SalesInvoiceDate;
+                            debit.CustomerName = _actualItem?.Transaction?.SalesInvoice?.CustomerName;
+                            debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.SingleOrDefault()?.PolicyNumber;
+                            debit.PolicyType = _actualItem?.Transaction?.SalesInvoice?.PolicyType?.Name;
+                            debit.ServiceType = _actualItem?.Transaction?.SalesInvoice?.Service?.Name;
+                            debit.InsuranceType = _actualItem?.Transaction?.SalesInvoice?.InsuranceType?.Name;
+                            debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
+                                        SingleOrDefault().Vehicle?.Make + " " + " | " +
+                                        _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
+                                        SingleOrDefault().Vehicle?.Model;
+                            debit.BodyType = _actualItem?.Transaction?.SalesInvoice?.BodyType?.Name;
+                            debit.RefNo = _actualItem?.Transaction?.TransactionReferenceNumber;
+                            debit.Debit = _actualItem?.Amount;
+                            debit.Credit = (_actualItem?.Amount);
+                            debit.Debit = 0;
+                            debit.Balance = debitBalance;
+
+                        }
+                    }
+                    else if (isItemPayment)
+                    {
+                        debit.Num = count;
+                        debit.TransactionType = TransactionTypes.Payment;
 
                         var _actualItem = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id);
                         debitBalance += _actualItem.Amount;
@@ -288,25 +511,391 @@ namespace PanoramaBackend.Api.Controllers
                         debit.Credit = (_actualItem?.Amount);
                         debit.Debit = 0;
                         debit.Balance = debitBalance;
-                   
+
+                    }
+                    else if (isOpeningBalance)
+                    {
+                        var _actualItem = item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id);
+                        debit.Num = count;
+                        debit.TransactionType = TransactionTypes.OpeningBalance;
+                        debit.Memo = "OPENING BALANCE";
+                        debit.HasOnlyMemo = true;
+                        debit.InvoiceDate = _actualItem.TransactionDate;
+                        debitBalance += (_actualItem?.Amount) ?? 0;
+                        debit.Debit = debitBalance;
+                        debit.Balance = debitBalance;
+                    }
+                    else
+                    {
+                        debit.Num = count;
+                        debit.TransactionType = TransactionTypes.Refund;
+
+                        var _actualItem = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id);
+                        debitBalance -= _actualItem.Amount;
+                        debit.InvoiceDate = _actualItem?.Transaction?.Refund?.RefundDate;
+                        debit.CustomerName = _actualItem?.Transaction?.Refund?.CustomerName;
+                        debit.PolicyNumber = _actualItem?.Transaction?.Refund?.PolicyNumber;
+                        debit.PolicyType = _actualItem?.Transaction?.Refund?.PolicyType?.Name;
+                        //debit.RefNo = _actualItem?.Transaction?.Refund?.;
+
+                        debit.InsuranceType = _actualItem?.Transaction?.Refund?.InsuranceType?.Name;
+                        debit.Vehicle = _actualItem?.Transaction?.Refund?.Vehicle?.Make + " " + " | " + // Make 
+                                                                                                        //Concating strings
+                                    _actualItem?.Transaction?.Refund?.Vehicle?.Model; // Model
+
+                        debit.Memo = _actualItem?.Transaction?.Refund?.MessageOnStatement; ;
+                        debit.Debit = _actualItem?.Amount;
+                        debit.Credit = (_actualItem?.Amount);
+                        debit.Debit = 0;
+                        debit.Balance = debitBalance;
+
+                    }
+
+
+
+                    if (list.IndexOf(item) == 0)
+                    {
+                        var entry = new AgentStatementDTO();
+                        entry.TransactionType = TransactionTypes.OpeningBalance;
+                        entry.Memo = "Opening balance as balance for date before " + @params.from.ToDateTime().Date.ToShortDateString();
+                        entry.Balance = agentBalanceForDateOf;
+                        entry.Num = count;
+                        count++;
+                    }
+
+
+                    accountStatement.Add(debit);
+
                 }
-                else if (isOpeningBalance)
+
+                OtherConstants.isSuccessful = true;
+                page.Data.AddRange(accountStatement);
+                return constructResponse(page);
+
+
+
+
+            }
+
+            // date & search query
+            //1 1 1
+            else if (@params.from != null && @params.to != null && @params.SearchQuery != null)
+            {
+                var searchString = @params.SearchQuery ?? "";
+
+                #region QUERY
+                var ledgers = query.Where(
+         x =>
+
+         (x.CreditAccountId == agent.DefaultAccountId || x.DebitAccountId == agent.DefaultAccountId)
+
+         &&
+         (
+         (x.TransactionDate.Date >= @params.from.ToDateTime().Date)
+         &&
+         (x.TransactionDate.Date <= @params.to.ToDateTime().Date)
+         )
+         && (
+(
+
+            ((x.Transaction.SalesInvoice.CustomerName.Contains(searchString) || (x.Transaction.Refund.CustomerName.Contains(searchString)))
+            ||
+
+            ((x.Transaction.SalesInvoice.SaleLineItem.SingleOrDefault().PolicyNumber.Contains(searchString) || ((x.Transaction.Refund.PolicyNumber.Contains(searchString)))))
+            )
+            )
+            )
+
+
+
+       ).ToList();
+                #endregion
+                #region Excel Export
+                if (@params.RequestExcel != null)
                 {
-                    var _actualItem = item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id);
-                    debit.Num = count;
-                    debit.TransactionType = TransactionTypes.OpeningBalance;
-                    debit.Memo = "OPENING BALANCE";
-                    debit.HasOnlyMemo = true;
-                    debit.InvoiceDate = _actualItem.TransactionDate;
-                    debitBalance += (_actualItem?.Amount)??0;
-                    debit.Debit = debitBalance;
-                    debit.Balance= debitBalance;
+
+                    var groupedList = ledgers.OrderBy(x => x.TransactionDate).GroupBy(x => x.TransactionId).Select(
+
+               x => new
+               {
+                   Key = x.Key,
+                   Value = x
+               }
+               ).ToList();
+
+
+
+                    decimal Balance = (agent.Accounts.DebitLedgarEntries
+                        .Where(x => x.TransactionDate.Date > @params.from.ToDateTime().Date)
+                                    .Sum(x => x.Amount)) + (-(agent.Accounts.CreditLedgarEntries.
+                                    Where(x => x.TransactionDate.Date > @params.from.ToDateTime().Date).
+                                    Sum(x => x.Amount)));
+
+                    foreach (var item in groupedList)
+                    {
+                        count++;
+                        var isItemSalesInvoice = item.Value.All(x => x.Transaction.TransactionType == TransactionTypes.Invoice ||
+
+                        x.Transaction.TransactionType == TransactionTypes.Payment
+                            );
+                        var isItemPayment = item.Value.All(x => x.Transaction.TransactionType == TransactionTypes.Payment);
+                        var isItemRefund = item.Value.All(x => x.Transaction.TransactionType == TransactionTypes.Refund);
+                        var isOpeningBalance = item.Value.All(x => x.Transaction.TransactionType == TransactionTypes.OpeningBalance);
+
+                        AgentStatementDTO debit = new AgentStatementDTO();
+                        if (isItemSalesInvoice)
+                        {
+
+                            debit.Num = count;
+                            debit.TransactionType = TransactionTypes.Invoice;
+                            if (item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id) != null)
+                            {
+                                var _actualItem = item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id);
+                                Balance += _actualItem.Amount;
+                                debit.InvoiceDate = _actualItem?.Transaction?.SalesInvoice?.SalesInvoiceDate;
+                                debit.CustomerName = _actualItem?.Transaction?.SalesInvoice?.CustomerName;
+                                debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.SingleOrDefault().PolicyNumber;
+                                debit.PolicyType = _actualItem?.Transaction?.SalesInvoice?.PolicyType?.Name;
+                                debit.ServiceType = _actualItem?.Transaction?.SalesInvoice?.Service?.Name;
+                                debit.InsuranceType = _actualItem?.Transaction?.SalesInvoice?.InsuranceType?.Name;
+                                debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
+                                            SingleOrDefault().Vehicle?.Make + " " + " | " +
+                                            _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
+                                            SingleOrDefault().Vehicle?.Model;
+                                debit.BodyType = _actualItem?.Transaction?.SalesInvoice?.BodyType?.Name;
+                                debit.RefNo = _actualItem?.Transaction?.TransactionReferenceNumber;
+                                debit.Debit = item?.Value?.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id)?.Amount;
+                                debit.Credit = 0;
+                                debit.Balance = Balance;
+
+                            }
+                            else
+                            {
+                                var _actualItem = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id);
+                                Balance -= (item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id)?.Amount) ?? 0;
+
+                                debit.InvoiceDate = _actualItem?.Transaction?.SalesInvoice?.SalesInvoiceDate;
+                                debit.CustomerName = _actualItem?.Transaction?.SalesInvoice?.CustomerName;
+                                debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.SingleOrDefault()?.PolicyNumber;
+                                debit.PolicyType = _actualItem?.Transaction?.SalesInvoice?.PolicyType?.Name;
+                                debit.ServiceType = _actualItem?.Transaction?.SalesInvoice?.Service?.Name;
+                                debit.InsuranceType = _actualItem?.Transaction?.SalesInvoice?.InsuranceType?.Name;
+                                debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
+                                            SingleOrDefault().Vehicle?.Make + " " + " | " +
+                                            _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
+                                            SingleOrDefault().Vehicle?.Model;
+                                debit.BodyType = _actualItem?.Transaction?.SalesInvoice?.BodyType?.Name;
+                                debit.RefNo = _actualItem?.Transaction?.TransactionReferenceNumber;
+                                debit.Debit = _actualItem?.Amount;
+                                debit.Credit = (_actualItem?.Amount);
+                                debit.Debit = 0;
+                                debit.Balance = Balance;
+
+                            }
+                        }
+                        else if (isItemPayment)
+                        {
+                            debit.Num = count;
+                            debit.TransactionType = TransactionTypes.Payment;
+
+                            var _actualItem = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id);
+                            Balance += _actualItem.Amount;
+                            debit.Memo = _actualItem.Transaction?.Payment?.Memo;
+                            debit.InvoiceDate = _actualItem?.Transaction?.Payment?.PaymentDate;
+                            debit.RefNo = _actualItem?.Transaction?.Payment?.TransactionReferenceNumber;
+                            debit.Debit = _actualItem?.Amount;
+                            debit.Credit = (_actualItem?.Amount);
+                            debit.Debit = 0;
+                            debit.Balance = Balance;
+
+                        }
+                        else if (isOpeningBalance)
+                        {
+                            var _actualItem = item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id);
+                            debit.Num = count;
+                            debit.TransactionType = TransactionTypes.OpeningBalance;
+                            debit.Memo = "OPENING BALANCE";
+                            debit.HasOnlyMemo = true;
+                            debit.InvoiceDate = _actualItem.TransactionDate;
+                            Balance += (_actualItem?.Amount) ?? 0;
+                            debit.Debit = Balance;
+                            debit.Balance = Balance;
+                        }
+                        else
+                        {
+                            debit.Num = count;
+                            debit.TransactionType = TransactionTypes.Refund;
+
+                            var _actualItem = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id);
+                            Balance -= _actualItem.Amount;
+                            debit.InvoiceDate = _actualItem?.Transaction?.Refund?.RefundDate;
+                            debit.CustomerName = _actualItem?.Transaction?.Refund?.CustomerName;
+                            debit.PolicyNumber = _actualItem?.Transaction?.Refund?.PolicyNumber;
+                            debit.PolicyType = _actualItem?.Transaction?.Refund?.PolicyType?.Name;
+
+                            debit.InsuranceType = _actualItem?.Transaction?.Refund?.InsuranceType?.Name;
+                            debit.Vehicle = _actualItem?.Transaction?.Refund?.Vehicle?.Make + " " + " | " + // Make 
+                                                                                                            //Concating strings
+                                        _actualItem?.Transaction?.Refund?.Vehicle?.Model; // Model
+
+                            debit.Memo = _actualItem?.Transaction?.Refund?.MessageOnStatement; ;
+                            debit.Debit = _actualItem?.Amount;
+                            debit.Credit = (_actualItem?.Amount);
+                            debit.Debit = 0;
+                            debit.Balance = Balance;
+
+                        }
+
+
+
+
+
+
+                        accountStatement.Add(debit);
+
+                    }
+
+                    #region Excel Export Method
+
+                    string wwwPath = _env.WebRootPath;
+                    string contentPath = _env.ContentRootPath;
+                    string path = Path.Combine(contentPath, $"\\uploads\\{new DateTime().Ticks.ToString()}.xlsx");
+                    var serverUrl = this.HttpContext.Request.Host.ToString();
+                    var ransomeNameStr = new Random().Next(DateTime.Now.Second, 10000).ToString() +
+                        new DateTime().Ticks.ToString();
+                    var isHttps = this.HttpContext.Request.IsHttps;
+
+                    var serverPath = isHttps ? "https://" : "http://" + serverUrl + $"/uploads/{ransomeNameStr}.xlsx";
+                    accountStatement.ToExcel(contentPath + $"\\uploads\\{ransomeNameStr}.xlsx");
+
+                    page.ExcelFileUrl = serverPath;
+                    accountStatement = new List<AgentStatementDTO>();
+                    #endregion 
                 }
-                else
+                #endregion
+                var entries = ledgers.OrderBy(x => x.TransactionDate).GroupBy(x => x.TransactionId).Select(
+
+                    x => new
+                    {
+                        Key = x.Key,
+                        Value = x
+                    }
+                    ).ToList();
+
+
+                page = new PageConfig();
+                count = ((@params.ItemsPerPage > 10) || (@params.Page > 1)) ? @params.ItemsPerPage : 0;
+                page.TotalPages = entries.Count() / @params.ItemsPerPage + (entries.Count() % @params.ItemsPerPage > 0 ? 1 : 0);
+                var creditValueForDateGreaterThanParamsToDate = agent.Accounts.CreditLedgarEntries.Where(x => x.TransactionDate.Date > @params.from.ToDateTime().Date).Sum(x => x.Amount);
+                var debitValueForDateGreaterThanParamsToDate = agent.Accounts.DebitLedgarEntries.Where(x => x.TransactionDate.Date > @params.from.ToDateTime().Date).Sum(x => x.Amount);
+                var creditEntriesForDateGreaterThanParamsToDate = agent.Accounts.CreditLedgarEntries.Where(x => x.TransactionDate.Date > @params.from.ToDateTime().Date).ToList();
+                var debitEntriesForDateGreaterThanParamsToDate = agent.Accounts.DebitLedgarEntries.Where(x => x.TransactionDate.Date > @params.from.ToDateTime().Date).ToList();
+
+                var agentBalanceForDateOf = debitValueForDateGreaterThanParamsToDate + (-creditValueForDateGreaterThanParamsToDate);
+
+                decimal debitBalance = agentBalanceForDateOf;
+                // decimal creditBalance = 0;
+                var _value = (@params.Page - 1) * @params.ItemsPerPage;
+
+
+                var list = entries.ToList();
+
+
+                foreach (var item in list)
                 {
-                    debit.Num = count;
-                    debit.TransactionType = TransactionTypes.Refund;
-                
+                    count++;
+                    var isItemSalesInvoice = item.Value.All(x => x.Transaction.TransactionType == TransactionTypes.Invoice ||
+
+                    x.Transaction.TransactionType == TransactionTypes.Payment
+                        );
+                    var isItemPayment = item.Value.All(x => x.Transaction.TransactionType == TransactionTypes.Payment);
+                    var isItemRefund = item.Value.All(x => x.Transaction.TransactionType == TransactionTypes.Refund);
+                    var isOpeningBalance = item.Value.All(x => x.Transaction.TransactionType == TransactionTypes.OpeningBalance);
+
+                    AgentStatementDTO debit = new AgentStatementDTO();
+                    if (isItemSalesInvoice)
+                    {
+
+                        debit.Num = count;
+                        debit.TransactionType = TransactionTypes.Invoice;
+                        if (item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id) != null)
+                        {
+                            var _actualItem = item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id);
+                            debitBalance += _actualItem.Amount;
+                            debit.InvoiceDate = _actualItem?.Transaction?.SalesInvoice?.SalesInvoiceDate;
+                            debit.CustomerName = _actualItem?.Transaction?.SalesInvoice?.CustomerName;
+                            debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.SingleOrDefault().PolicyNumber;
+                            debit.PolicyType = _actualItem?.Transaction?.SalesInvoice?.PolicyType?.Name;
+                            debit.ServiceType = _actualItem?.Transaction?.SalesInvoice?.Service?.Name;
+                            debit.InsuranceType = _actualItem?.Transaction?.SalesInvoice?.InsuranceType?.Name;
+                            debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
+                                        SingleOrDefault().Vehicle?.Make + " " + " | " +
+                                        _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
+                                        SingleOrDefault().Vehicle?.Model;
+                            debit.BodyType = _actualItem?.Transaction?.SalesInvoice?.BodyType?.Name;
+                            debit.RefNo = _actualItem?.Transaction?.TransactionReferenceNumber;
+                            debit.Debit = item?.Value?.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id)?.Amount;
+                            debit.Credit = 0;
+                            debit.Balance = debitBalance;
+
+                        }
+                        else
+                        {
+                            var _actualItem = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id);
+                            debitBalance -= (item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id)?.Amount) ?? 0;
+
+                            debit.InvoiceDate = _actualItem?.Transaction?.SalesInvoice?.SalesInvoiceDate;
+                            debit.CustomerName = _actualItem?.Transaction?.SalesInvoice?.CustomerName;
+                            debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.SingleOrDefault()?.PolicyNumber;
+                            debit.PolicyType = _actualItem?.Transaction?.SalesInvoice?.PolicyType?.Name;
+                            debit.ServiceType = _actualItem?.Transaction?.SalesInvoice?.Service?.Name;
+                            debit.InsuranceType = _actualItem?.Transaction?.SalesInvoice?.InsuranceType?.Name;
+                            debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
+                                        SingleOrDefault().Vehicle?.Make + " " + " | " +
+                                        _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
+                                        SingleOrDefault().Vehicle?.Model;
+                            debit.BodyType = _actualItem?.Transaction?.SalesInvoice?.BodyType?.Name;
+                            debit.RefNo = _actualItem?.Transaction?.TransactionReferenceNumber;
+                            debit.Debit = _actualItem?.Amount;
+                            debit.Credit = (_actualItem?.Amount);
+                            debit.Debit = 0;
+                            debit.Balance = debitBalance;
+
+                        }
+                    }
+                    else if (isItemPayment)
+                    {
+                        debit.Num = count;
+                        debit.TransactionType = TransactionTypes.Payment;
+
+                        var _actualItem = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id);
+                        debitBalance += _actualItem.Amount;
+                        debit.Memo = _actualItem.Transaction?.Payment?.Memo;
+                        debit.InvoiceDate = _actualItem?.Transaction?.Payment?.PaymentDate;
+                        debit.RefNo = _actualItem?.Transaction?.Payment?.TransactionReferenceNumber;
+                        debit.Debit = _actualItem?.Amount;
+                        debit.Credit = (_actualItem?.Amount);
+                        debit.Debit = 0;
+                        debit.Balance = debitBalance;
+
+                    }
+                    else if (isOpeningBalance)
+                    {
+                        var _actualItem = item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id);
+                        debit.Num = count;
+                        debit.TransactionType = TransactionTypes.OpeningBalance;
+                        debit.Memo = "OPENING BALANCE";
+                        debit.HasOnlyMemo = true;
+                        debit.InvoiceDate = _actualItem.TransactionDate;
+                        debitBalance += (_actualItem?.Amount) ?? 0;
+                        debit.Debit = debitBalance;
+                        debit.Balance = debitBalance;
+                    }
+                    else
+                    {
+                        debit.Num = count;
+                        debit.TransactionType = TransactionTypes.Refund;
+
                         var _actualItem = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id);
                         debitBalance -= _actualItem.Amount;
                         debit.InvoiceDate = _actualItem?.Transaction?.Refund?.RefundDate;
@@ -325,30 +914,604 @@ namespace PanoramaBackend.Api.Controllers
                         debit.Debit = 0;
                         debit.Balance = debitBalance;
 
-                    
+                    }
+
+
+
+
+
+                    if (list.IndexOf(item) == 0)
+                    {
+                        var entry = new AgentStatementDTO();
+                        entry.TransactionType = TransactionTypes.OpeningBalance;
+                        entry.Memo = "Opening balance as balance for date before " + @params.from.ToDateTime().Date.ToShortDateString();
+                        entry.Balance = agentBalanceForDateOf;
+                        entry.Num = count;
+                        count++;
+                    }
+                    accountStatement.Add(debit);
+
                 }
 
-  
+                OtherConstants.isSuccessful = true;
+
+                page.Data.AddRange(accountStatement);
+                return constructResponse(page);
+
+            }
+
+            //Wo case jab no date only search query for custromer or policy
+            //0 0 1
+            else if (@params.from == null && @params.to == null && @params.SearchQuery != null)
+            {
+
+                string searchString = @params.SearchQuery;
+                #region Query
+                var ledgers = query.Where(
+         x =>
+
+         (x.CreditAccountId == agent.DefaultAccountId || x.DebitAccountId == agent.DefaultAccountId)
+
+         &&
+
+         (
+(
+
+            ((x.Transaction.SalesInvoice.CustomerName.Contains(searchString) || (x.Transaction.Refund.CustomerName.Contains(searchString)))
 
 
 
-                accountStatement.Add(debit);
+
+
+
+
+            ||
+
+
+            ((x.Transaction.SalesInvoice.SaleLineItem.SingleOrDefault().PolicyNumber.Contains(searchString) || ((x.Transaction.Refund.PolicyNumber.Contains(searchString)))))
+            )
+            )
+            )
+
+
+            )
+
+
+
+
+
+        .ToList();
+                #endregion
+                #region Excel Export
+                if (@params.RequestExcel != null)
+                {
+
+                    var groupedList = ledgers.OrderBy(x => x.TransactionDate).GroupBy(x => x.TransactionId).Select(
+
+               x => new
+               {
+                   Key = x.Key,
+                   Value = x
+               }
+               ).ToList();
+
+
+
+                    decimal Balance = (agent.Accounts.DebitLedgarEntries
+                        .Where(x => x.TransactionDate.Date > @params.from.ToDateTime().Date)
+                                    .Sum(x => x.Amount)) + (-(agent.Accounts.CreditLedgarEntries.
+                                    Where(x => x.TransactionDate.Date > @params.from.ToDateTime().Date).
+                                    Sum(x => x.Amount)));
+
+                    foreach (var item in groupedList)
+                    {
+                        count++;
+                        var isItemSalesInvoice = item.Value.All(x => x.Transaction.TransactionType == TransactionTypes.Invoice ||
+
+                        x.Transaction.TransactionType == TransactionTypes.Payment
+                            );
+                        var isItemPayment = item.Value.All(x => x.Transaction.TransactionType == TransactionTypes.Payment);
+                        var isItemRefund = item.Value.All(x => x.Transaction.TransactionType == TransactionTypes.Refund);
+                        var isOpeningBalance = item.Value.All(x => x.Transaction.TransactionType == TransactionTypes.OpeningBalance);
+
+                        AgentStatementDTO debit = new AgentStatementDTO();
+                        if (isItemSalesInvoice)
+                        {
+
+                            debit.Num = count;
+                            debit.TransactionType = TransactionTypes.Invoice;
+                            if (item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id) != null)
+                            {
+                                var _actualItem = item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id);
+                                Balance += _actualItem.Amount;
+                                debit.InvoiceDate = _actualItem?.Transaction?.SalesInvoice?.SalesInvoiceDate;
+                                debit.CustomerName = _actualItem?.Transaction?.SalesInvoice?.CustomerName;
+                                debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.SingleOrDefault().PolicyNumber;
+                                debit.PolicyType = _actualItem?.Transaction?.SalesInvoice?.PolicyType?.Name;
+                                debit.ServiceType = _actualItem?.Transaction?.SalesInvoice?.Service?.Name;
+                                debit.InsuranceType = _actualItem?.Transaction?.SalesInvoice?.InsuranceType?.Name;
+                                debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
+                                            SingleOrDefault().Vehicle?.Make + " " + " | " +
+                                            _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
+                                            SingleOrDefault().Vehicle?.Model;
+                                debit.BodyType = _actualItem?.Transaction?.SalesInvoice?.BodyType?.Name;
+                                debit.RefNo = _actualItem?.Transaction?.TransactionReferenceNumber;
+                                debit.Debit = item?.Value?.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id)?.Amount;
+                                debit.Credit = 0;
+                                debit.Balance = Balance;
+
+                            }
+                            else
+                            {
+                                var _actualItem = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id);
+                                Balance -= (item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id)?.Amount) ?? 0;
+
+                                debit.InvoiceDate = _actualItem?.Transaction?.SalesInvoice?.SalesInvoiceDate;
+                                debit.CustomerName = _actualItem?.Transaction?.SalesInvoice?.CustomerName;
+                                debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.SingleOrDefault()?.PolicyNumber;
+                                debit.PolicyType = _actualItem?.Transaction?.SalesInvoice?.PolicyType?.Name;
+                                debit.ServiceType = _actualItem?.Transaction?.SalesInvoice?.Service?.Name;
+                                debit.InsuranceType = _actualItem?.Transaction?.SalesInvoice?.InsuranceType?.Name;
+                                debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
+                                            SingleOrDefault().Vehicle?.Make + " " + " | " +
+                                            _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
+                                            SingleOrDefault().Vehicle?.Model;
+                                debit.BodyType = _actualItem?.Transaction?.SalesInvoice?.BodyType?.Name;
+                                debit.RefNo = _actualItem?.Transaction?.TransactionReferenceNumber;
+                                debit.Debit = _actualItem?.Amount;
+                                debit.Credit = (_actualItem?.Amount);
+                                debit.Debit = 0;
+                                debit.Balance = Balance;
+
+                            }
+                        }
+                        else if (isItemPayment)
+                        {
+                            debit.Num = count;
+                            debit.TransactionType = TransactionTypes.Payment;
+
+                            var _actualItem = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id);
+                            Balance += _actualItem.Amount;
+                            debit.Memo = _actualItem.Transaction?.Payment?.Memo;
+                            debit.InvoiceDate = _actualItem?.Transaction?.Payment?.PaymentDate;
+                            debit.RefNo = _actualItem?.Transaction?.Payment?.TransactionReferenceNumber;
+                            debit.Debit = _actualItem?.Amount;
+                            debit.Credit = (_actualItem?.Amount);
+                            debit.Debit = 0;
+                            debit.Balance = Balance;
+
+                        }
+                        else if (isOpeningBalance)
+                        {
+                            var _actualItem = item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id);
+                            debit.Num = count;
+                            debit.TransactionType = TransactionTypes.OpeningBalance;
+                            debit.Memo = "OPENING BALANCE";
+                            debit.HasOnlyMemo = true;
+                            debit.InvoiceDate = _actualItem.TransactionDate;
+                            Balance += (_actualItem?.Amount) ?? 0;
+                            debit.Debit = Balance;
+                            debit.Balance = Balance;
+                        }
+                        else
+                        {
+                            debit.Num = count;
+                            debit.TransactionType = TransactionTypes.Refund;
+
+                            var _actualItem = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id);
+                            Balance -= _actualItem.Amount;
+                            debit.InvoiceDate = _actualItem?.Transaction?.Refund?.RefundDate;
+                            debit.CustomerName = _actualItem?.Transaction?.Refund?.CustomerName;
+                            debit.PolicyNumber = _actualItem?.Transaction?.Refund?.PolicyNumber;
+                            debit.PolicyType = _actualItem?.Transaction?.Refund?.PolicyType?.Name;
+
+                            debit.InsuranceType = _actualItem?.Transaction?.Refund?.InsuranceType?.Name;
+                            debit.Vehicle = _actualItem?.Transaction?.Refund?.Vehicle?.Make + " " + " | " + // Make 
+                                                                                                            //Concating strings
+                                        _actualItem?.Transaction?.Refund?.Vehicle?.Model; // Model
+
+                            debit.Memo = _actualItem?.Transaction?.Refund?.MessageOnStatement; ;
+                            debit.Debit = _actualItem?.Amount;
+                            debit.Credit = (_actualItem?.Amount);
+                            debit.Debit = 0;
+                            debit.Balance = Balance;
+
+                        }
+
+
+
+
+
+
+                        accountStatement.Add(debit);
+
+                    }
+
+                    #region Excel Export Method
+
+                    string wwwPath = _env.WebRootPath;
+                    string contentPath = _env.ContentRootPath;
+                    string path = Path.Combine(contentPath, $"\\uploads\\{new DateTime().Ticks.ToString()}.xlsx");
+                    var serverUrl = this.HttpContext.Request.Host.ToString();
+                    var ransomeNameStr = new Random().Next(DateTime.Now.Second, 10000).ToString() +
+                        new DateTime().Ticks.ToString();
+                    var isHttps = this.HttpContext.Request.IsHttps;
+
+                    var serverPath = isHttps ? "https://" : "http://" + serverUrl + $"/uploads/{ransomeNameStr}.xlsx";
+                    accountStatement.ToExcel(contentPath + $"\\uploads\\{ransomeNameStr}.xlsx");
+
+                    page.ExcelFileUrl = serverPath;
+                    accountStatement = new List<AgentStatementDTO>();
+                    #endregion 
+                }
+                #endregion
+                var entries = ledgers.OrderBy(x => x.TransactionDate).GroupBy(x => x.TransactionId).Select(
+
+                    x => new
+                    {
+                        Key = x.Key,
+                        Value = x
+                    }
+                    ).ToList();
+
+
+
+                count = ((@params.ItemsPerPage > 10) || (@params.Page > 1)) ? @params.ItemsPerPage : 0;
+                page.TotalPages = entries.Count() / @params.ItemsPerPage + (entries.Count() % @params.ItemsPerPage > 0 ? 1 : 0);
+                decimal debitBalance = (query.Where(
+
+                    x => x.DebitAccountId == agent.DefaultAccountId
+                    && x.TransactionDate.Date < @params.from.ToDateTime().Date
+                    ).Sum(x => x.Amount)) - (query.Where(
+
+                    x => x.CreditAccountId == agent.DefaultAccountId
+                    && x.TransactionDate.Date < @params.from.ToDateTime().Date
+                    ).Sum(x => x.Amount));
+                page.TotalCount = entries.Count();
+                // decimal creditBalance = 0;
+                var _value = (@params.Page - 1) * @params.ItemsPerPage;
+
+
+                var list = entries.Skip((@params.Page - 1) * @params.ItemsPerPage).Take(@params.ItemsPerPage).ToList();
+                //var lastItem = list.Last();
+
+                foreach (var item in list)
+                {
+                    count++;
+                    var isItemSalesInvoice = item.Value.All(x => x.Transaction.TransactionType == TransactionTypes.Invoice ||
+
+                    x.Transaction.TransactionType == TransactionTypes.Payment
+                        );
+                    var isItemPayment = item.Value.All(x => x.Transaction.TransactionType == TransactionTypes.Payment);
+                    var isItemRefund = item.Value.All(x => x.Transaction.TransactionType == TransactionTypes.Refund);
+                    var isOpeningBalance = item.Value.All(x => x.Transaction.TransactionType == TransactionTypes.OpeningBalance);
+
+                    AgentStatementDTO debit = new AgentStatementDTO();
+                    if (isItemSalesInvoice)
+                    {
+
+                        debit.Num = count;
+                        debit.TransactionType = TransactionTypes.Invoice;
+                        if (item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id) != null)
+                        {
+                            var _actualItem = item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id);
+                            debitBalance += _actualItem.Amount;
+                            debit.InvoiceDate = _actualItem?.Transaction?.SalesInvoice?.SalesInvoiceDate;
+                            debit.CustomerName = _actualItem?.Transaction?.SalesInvoice?.CustomerName;
+                            debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.SingleOrDefault().PolicyNumber;
+                            debit.PolicyType = _actualItem?.Transaction?.SalesInvoice?.PolicyType?.Name;
+                            debit.ServiceType = _actualItem?.Transaction?.SalesInvoice?.Service?.Name;
+                            debit.InsuranceType = _actualItem?.Transaction?.SalesInvoice?.InsuranceType?.Name;
+                            debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
+                                        SingleOrDefault().Vehicle?.Make + " " + " | " +
+                                        _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
+                                        SingleOrDefault().Vehicle?.Model;
+                            debit.BodyType = _actualItem?.Transaction?.SalesInvoice?.BodyType?.Name;
+                            debit.RefNo = _actualItem?.Transaction?.TransactionReferenceNumber;
+                            debit.Debit = item?.Value?.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id)?.Amount;
+                            debit.Credit = 0;
+                            debit.Balance = debitBalance;
+
+                        }
+                        else
+                        {
+                            var _actualItem = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id);
+                            debitBalance -= (item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id)?.Amount) ?? 0;
+
+                            debit.InvoiceDate = _actualItem?.Transaction?.SalesInvoice?.SalesInvoiceDate;
+                            debit.CustomerName = _actualItem?.Transaction?.SalesInvoice?.CustomerName;
+                            debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.SingleOrDefault()?.PolicyNumber;
+                            debit.PolicyType = _actualItem?.Transaction?.SalesInvoice?.PolicyType?.Name;
+                            debit.ServiceType = _actualItem?.Transaction?.SalesInvoice?.Service?.Name;
+                            debit.InsuranceType = _actualItem?.Transaction?.SalesInvoice?.InsuranceType?.Name;
+                            debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
+                                        SingleOrDefault().Vehicle?.Make + " " + " | " +
+                                        _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
+                                        SingleOrDefault().Vehicle?.Model;
+                            debit.BodyType = _actualItem?.Transaction?.SalesInvoice?.BodyType?.Name;
+                            debit.RefNo = _actualItem?.Transaction?.TransactionReferenceNumber;
+                            debit.Debit = _actualItem?.Amount;
+                            debit.Credit = (_actualItem?.Amount);
+                            debit.Debit = 0;
+                            debit.Balance = debitBalance;
+
+                        }
+                    }
+                    else if (isItemPayment)
+                    {
+                        debit.Num = count;
+                        debit.TransactionType = TransactionTypes.Payment;
+
+                        var _actualItem = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id);
+                        debitBalance += _actualItem.Amount;
+                        debit.Memo = _actualItem.Transaction?.Payment?.Memo;
+                        debit.InvoiceDate = _actualItem?.Transaction?.Payment?.PaymentDate;
+                        debit.RefNo = _actualItem?.Transaction?.Payment?.TransactionReferenceNumber;
+                        debit.Debit = _actualItem?.Amount;
+                        debit.Credit = (_actualItem?.Amount);
+                        debit.Debit = 0;
+                        debit.Balance = debitBalance;
+
+                    }
+                    else if (isOpeningBalance)
+                    {
+                        var _actualItem = item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id);
+                        debit.Num = count;
+                        debit.TransactionType = TransactionTypes.OpeningBalance;
+                        debit.Memo = "OPENING BALANCE";
+                        debit.HasOnlyMemo = true;
+                        debit.InvoiceDate = _actualItem.TransactionDate;
+                        debitBalance += (_actualItem?.Amount) ?? 0;
+                        debit.Debit = debitBalance;
+                        debit.Balance = debitBalance;
+                    }
+                    else
+                    {
+                        debit.Num = count;
+                        debit.TransactionType = TransactionTypes.Refund;
+
+                        var _actualItem = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id);
+                        debitBalance -= _actualItem.Amount;
+                        debit.InvoiceDate = _actualItem?.Transaction?.Refund?.RefundDate;
+                        debit.CustomerName = _actualItem?.Transaction?.Refund?.CustomerName;
+                        debit.PolicyNumber = _actualItem?.Transaction?.Refund?.PolicyNumber;
+                        debit.PolicyType = _actualItem?.Transaction?.Refund?.PolicyType?.Name;
+
+                        debit.InsuranceType = _actualItem?.Transaction?.Refund?.InsuranceType?.Name;
+                        debit.Vehicle = _actualItem?.Transaction?.Refund?.Vehicle?.Make + " " + " | " + // Make 
+                                                                                                        //Concating strings
+                                    _actualItem?.Transaction?.Refund?.Vehicle?.Model; // Model
+
+                        debit.Memo = _actualItem?.Transaction?.Refund?.MessageOnStatement; ;
+                        debit.Debit = _actualItem?.Amount;
+                        debit.Credit = (_actualItem?.Amount);
+                        debit.Debit = 0;
+                        debit.Balance = debitBalance;
+
+                    }
+
+
+
+
+
+
+                    accountStatement.Add(debit);
+
+                }
+
+                OtherConstants.isSuccessful = true;
+                page.Data.AddRange(accountStatement);
+                return constructResponse(page);
+
+            }
+
+            //all
+            else
+            {
+
+                #region Query
+                var ledgers = query.Where(
+     x =>
+
+     (x.CreditAccountId == agent.DefaultAccountId || x.DebitAccountId == agent.DefaultAccountId)
+
+
+
+
+   )
+         .OrderBy(x => x.TransactionDate)
+                    .ToList();
+                #endregion
+
+                var entries = ledgers.GroupBy(x => x.TransactionId).Select(
+
+                    x => new
+                    {
+                        Key = x.Key,
+                        Value = x
+                    }
+                    ).ToList();
+
+
+                count = ((@params.ItemsPerPage > 10) || (@params.Page > 1)) ? @params.ItemsPerPage : 0;
+                page.TotalPages = entries.Count() / @params.ItemsPerPage + (entries.Count() % @params.ItemsPerPage > 0 ? 1 : 0);
+                var prevDebitBalance = _context.Set<LedgarEntries>().AsNoTracking().Where(x =>
+
+
+               (x.DebitAccountId == agent.DefaultAccountId)
+                &&
+              (x.TransactionDate.Date < @params.from.ToDateTime().Date)).Sum(x => x.Amount);
+
+                decimal debitBalance = 0;
+                page.TotalCount = entries.Count;
+                // decimal creditBalance = 0;
+
+
+                var list = entries.ToList();
+                //var lastItem = list.Last();`
+
+                foreach (var item in list)
+                {
+                    count++;
+                    var isItemSalesInvoice = item.Value.All(x => x.Transaction.TransactionType == TransactionTypes.Invoice
+                        );
+                    var isItemPayment = item.Value.All(x => x.Transaction.TransactionType == TransactionTypes.Payment);
+                    var isItemRefund = item.Value.All(x => x.Transaction.TransactionType == TransactionTypes.Refund);
+                    var isOpeningBalance = item.Value.All(x => x.Transaction.TransactionType == TransactionTypes.OpeningBalance);
+
+                    AgentStatementDTO debit = new AgentStatementDTO();
+                    if (isItemSalesInvoice)
+                    {
+
+                        debit.Num = count;
+                        debit.TransactionType = TransactionTypes.Invoice;
+                        if (item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id) != null)
+                        {
+                            var _actualItem = item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id);
+                            debitBalance += _actualItem.Amount;
+                            debit.InvoiceDate = _actualItem?.Transaction?.SalesInvoice?.SalesInvoiceDate;
+                            debit.CustomerName = _actualItem?.Transaction?.SalesInvoice?.CustomerName;
+                            debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.SingleOrDefault().PolicyNumber;
+                            debit.PolicyType = _actualItem?.Transaction?.SalesInvoice?.PolicyType?.Name;
+                            debit.ServiceType = _actualItem?.Transaction?.SalesInvoice?.Service?.Name;
+                            debit.InsuranceType = _actualItem?.Transaction?.SalesInvoice?.InsuranceType?.Name;
+                            debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
+                                        SingleOrDefault().Vehicle?.Make + " " + " | " +
+                                        _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
+                                        SingleOrDefault().Vehicle?.Model;
+                            debit.BodyType = _actualItem?.Transaction?.SalesInvoice?.BodyType?.Name;
+                            debit.RefNo = _actualItem?.Transaction?.TransactionReferenceNumber;
+                            debit.Debit = item?.Value?.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id)?.Amount;
+                            debit.Credit = 0;
+                            debit.Balance = debitBalance;
+
+                        }
+                        else
+                        {
+                            var _actualItem = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id);
+                            debitBalance -= (item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id)?.Amount) ?? 0;
+
+                            debit.InvoiceDate = _actualItem?.Transaction?.SalesInvoice?.SalesInvoiceDate;
+                            debit.CustomerName = _actualItem?.Transaction?.SalesInvoice?.CustomerName;
+                            debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.SingleOrDefault()?.PolicyNumber;
+                            debit.PolicyType = _actualItem?.Transaction?.SalesInvoice?.PolicyType?.Name;
+                            debit.ServiceType = _actualItem?.Transaction?.SalesInvoice?.Service?.Name;
+                            debit.InsuranceType = _actualItem?.Transaction?.SalesInvoice?.InsuranceType?.Name;
+                            debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
+                                        SingleOrDefault().Vehicle?.Make + " " + " | " +
+                                        _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
+                                        SingleOrDefault().Vehicle?.Model;
+                            debit.BodyType = _actualItem?.Transaction?.SalesInvoice?.BodyType?.Name;
+                            debit.RefNo = _actualItem?.Transaction?.TransactionReferenceNumber;
+                            debit.Debit = _actualItem?.Amount;
+                            debit.Credit = (_actualItem?.Amount);
+                            debit.Debit = 0;
+                            debit.Balance = debitBalance;
+
+                        }
+                    }
+                    else if (isItemPayment)
+                    {
+                        debit.Num = count;
+                        debit.TransactionType = TransactionTypes.Payment;
+
+                        var _actualItem = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id);
+                        debitBalance += _actualItem.Amount;
+                        debit.Memo = _actualItem.Transaction?.Payment?.Memo;
+                        debit.InvoiceDate = _actualItem?.Transaction?.Payment?.PaymentDate;
+                        debit.RefNo = _actualItem?.Transaction?.Payment?.TransactionReferenceNumber;
+                        debit.Debit = _actualItem?.Amount;
+                        debit.Credit = (_actualItem?.Amount);
+                        debit.Debit = 0;
+                        debit.Balance = debitBalance;
+
+                    }
+                    else if (isOpeningBalance)
+                    {
+                        var _actualItem = item.Value.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id);
+                        debit.Num = count;
+                        debit.TransactionType = TransactionTypes.OpeningBalance;
+                        debit.Memo = "OPENING BALANCE";
+                        debit.HasOnlyMemo = true;
+                        debit.InvoiceDate = _actualItem.TransactionDate;
+                        debitBalance += (_actualItem?.Amount) ?? 0;
+                        debit.Debit = debitBalance;
+                        debit.Balance = debitBalance;
+                    }
+                    else
+                    {
+                        debit.Num = count;
+                        debit.TransactionType = TransactionTypes.Refund;
+
+                        var _actualItem = item.Value.SingleOrDefault(x => x.CreditAccountId == agent.Accounts.Id);
+                        debitBalance -= _actualItem.Amount;
+                        debit.InvoiceDate = _actualItem?.Transaction?.Refund?.RefundDate;
+                        debit.CustomerName = _actualItem?.Transaction?.Refund?.CustomerName;
+                        debit.PolicyNumber = _actualItem?.Transaction?.Refund?.PolicyNumber;
+                        debit.PolicyType = _actualItem?.Transaction?.Refund?.PolicyType?.Name;
+
+                        debit.InsuranceType = _actualItem?.Transaction?.Refund?.InsuranceType?.Name;
+                        debit.Vehicle = _actualItem?.Transaction?.Refund?.Vehicle?.Make + " " + " | " + // Make 
+                                                                                                        //Concating strings
+                                    _actualItem?.Transaction?.Refund?.Vehicle?.Model; // Model
+
+                        debit.Memo = _actualItem?.Transaction?.Refund?.MessageOnStatement; ;
+                        debit.Debit = _actualItem?.Amount;
+                        debit.Credit = (_actualItem?.Amount);
+                        debit.Debit = 0;
+                        debit.Balance = debitBalance;
+
+
+                    }
+
+
+                    accountStatement.Add(debit);
+
+
+                }
+                var paginatedResult = accountStatement.Skip((@params.Page - 1) * @params.ItemsPerPage).Take(@params.ItemsPerPage).ToList();
+                // list = entries.Skip((@params.Page - 1) * @params.ItemsPerPage).Take(@params.ItemsPerPage).ToList();
+                OtherConstants.isSuccessful = true;
+                var render = await _engine.RenderViewToStringAsync("GetAgentPaginated", paginatedResult);
+                var doc = new HtmlToPdfDocument()
+                {
+                    GlobalSettings = {
+        ColorMode = ColorMode.Color,
+        Orientation = Orientation.Portrait,
+        PaperSize = PaperKind.A4Plus,
+    },
+                    Objects = {
+        new ObjectSettings() {
+            PagesCount = true,
+            HtmlContent = render,
+            WebSettings = { DefaultEncoding = "utf-8" },
+            HeaderSettings = { FontSize = 9, Right = "Page [page] of [toPage]", Line = true, Spacing = 2.812 }
+        }
+    }
+                };
+                byte[] pdf = _converter.Convert(doc);
+                string wwwPath = _env.WebRootPath;
+                string contentPath = _env.ContentRootPath;
+                System.IO.File.WriteAllBytes(contentPath+"\\Uploads\\test.pdf", pdf);
+
+
+          
+
+                page.Data.AddRange(paginatedResult);
+                page.TotalBalance = paginatedResult.Last().Balance;
+                return constructResponse(paginatedResult);
 
 
             }
 
-
-            OtherConstants.isSuccessful = true;
-            page.Data.AddRange(accountStatement);
-            return constructResponse(page);
-
-
-
-
         }
 
-
+   
         [AllowAnonymous]
+        [HttpGet("GetAgentWithBalancePaginatedAsync")]
+        public async Task<BaseResponse> GetAgentWithBalancePaginatedAsync([FromQuery] PaginationParams<int> @params) =>
+                         constructResponse(await _service.GetPaginatedAgentsWithBalance(@params));
+
         [HttpGet("Download")]
         public async Task<ActionResult> DownloadStatement(int agentId, DateTime from , DateTime to)
         {
@@ -373,7 +1536,7 @@ namespace PanoramaBackend.Api.Controllers
 
 
 
-     , x => (x.TransactionDate>=from && x.TransactionDate<=to ) && x.Transaction.UserDetailId == agentId)).GroupBy(x => x.TransactionId).Select(
+     , x => (x.TransactionDate >= from && x.TransactionDate <= to) && x.Transaction.UserDetailId == agentId)).GroupBy(x => x.TransactionId).Select(
 
          x => new
          {
@@ -465,16 +1628,16 @@ namespace PanoramaBackend.Api.Controllers
                     dateFrom = from.ToString("MMMM d, yyyy"),
                     dateTo = to.ToString("MMMM d, yyyy")
                 })); ;
-                
-           
+
+
                 var doc = new HtmlToPdfDocument()
-            {
-                GlobalSettings = {
+                {
+                    GlobalSettings = {
         ColorMode = ColorMode.Color,
         Orientation = Orientation.Portrait,
         PaperSize = PaperKind.A4Plus,
     },
-                Objects = {
+                    Objects = {
         new ObjectSettings() {
             PagesCount = true,
             HtmlContent = renderedHtml,
@@ -482,8 +1645,8 @@ namespace PanoramaBackend.Api.Controllers
             HeaderSettings = { FontSize = 9, Right = "Page [page] of [toPage]", Line = true, Spacing = 2.812 }
         }
     }
-            };
-            byte[] pdf = _converter.Convert(doc);
+                };
+                byte[] pdf = _converter.Convert(doc);
 
 
 

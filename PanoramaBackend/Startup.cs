@@ -41,6 +41,11 @@ using Microsoft.Extensions.FileProviders;
 using DinkToPdf.Contracts;
 using DinkToPdf;
 using PanoramaBackend.Services.Reports;
+using Wkhtmltopdf.NetCore;
+using Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace PanoramaBackend
 {
@@ -70,6 +75,17 @@ namespace PanoramaBackend
 
 
         {
+            UpdateableFileProvider fileProvider = new UpdateableFileProvider();
+            services.TryAddTransient<ITempDataProvider, SessionStateTempDataProvider>();
+            services.TryAddSingleton(fileProvider);
+            services.TryAddSingleton<IRazorViewEngine, RazorViewEngine>();
+            services.AddMvc().AddRazorRuntimeCompilation(delegate (MvcRazorRuntimeCompilationOptions options)
+            {
+                options.FileProviders.Add(fileProvider);
+            }).SetCompatibilityVersion(CompatibilityVersion.Latest);
+            services.TryAddTransient<IRazorViewToStringRenderer, RazorViewToStringRenderer>();
+            services.TryAddTransient<IGeneratePdf, GeneratePdf>();
+            
             services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
             services.AddCors();
 
@@ -182,8 +198,6 @@ namespace PanoramaBackend
             services.AddScoped<IPaymentAndBillingService, PaymentAndBillingService>(); services.AddScoped<IVehicleRepository, VehicleRepository>();
             services.AddScoped<IPreferredPaymentMethodRepository, PreferredPaymentMethodRepository>();
             services.AddScoped<IPreferredPaymentMethodService,PreferredPaymentMethodService>();
-           
-            
             services.AddScoped<IAttachmentRepository, AttachmentRepository>();
             services.AddScoped<IAttachmentsService, AttachmentsService>();
             services.AddScoped<ITermsRepository, TermsRepository>();
@@ -238,6 +252,9 @@ namespace PanoramaBackend
             services.AddScoped<IPayrollRepository, PayrollRepository>();
             services.AddScoped<IPayrollService,PayrollService>();
             services.AddScoped<ExpenseExcel>();
+            services.AddScoped<IVacationApplicationRepository, VacationApplicationRepository>();
+            services.AddScoped<IVacationApplicationService, VacationApplicationService>();
+
 
             //services.AddScoped<IElasticClient, ElasticClient>();
             //services.AddScoped<ICompanyRepo, CompanyRepo>();

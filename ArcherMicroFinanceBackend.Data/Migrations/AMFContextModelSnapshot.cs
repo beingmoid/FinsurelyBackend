@@ -4329,14 +4329,14 @@ namespace PanoramaBackend.Data.Migrations
                         new
                         {
                             Id = "a18be9c0-aa65-4af8-bd17-00bd9344e575",
-                            ConcurrencyStamp = "07c30cbd-6c3e-49c7-88e6-8427f98f5978",
+                            ConcurrencyStamp = "9c3d2021-9135-438f-8c12-f432f941b425",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
                             Id = "a18be9c0-aa65-4af8-bd17-00bd9344e678",
-                            ConcurrencyStamp = "413db89d-ecc1-4c36-995b-763bfd0c88dd",
+                            ConcurrencyStamp = "84e0123b-dd24-4ce6-8f83-c1b74640378a",
                             Name = "CompanyAdmin",
                             NormalizedName = "CompanyAdmin"
                         });
@@ -4411,13 +4411,13 @@ namespace PanoramaBackend.Data.Migrations
                         {
                             Id = "a18be9c0-aa65-4af8-bd17-00bd9344e575",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "7bd7d888-0908-4d3d-9e7d-15818b4f942f",
+                            ConcurrencyStamp = "bac081fb-2504-49ec-a824-4372b166c9f1",
                             Email = "admin@nukeslab.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "admin@nukeslab.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEEyQlx/p1C39HjhaeAmY6juNdD8SIamNtkKiJZBQSCwq98UH0uJwZxUZT6wF55HGog==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEM1x8pnrd2PHQZ9ZkOe6QEO3xBZ/w4gUCBsDRsbyPkT1GRcdy92xiSZB1xc+ogmVtw==",
                             PhoneNumber = "+923400064394",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
@@ -4635,6 +4635,73 @@ namespace PanoramaBackend.Data.Migrations
                     b.HasIndex("ExpenseAccountId");
 
                     b.ToTable("Payroll");
+                });
+
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.VacationApplication", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ApplicantName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("BranchId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreateUserId")
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<DateTime>("DateFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateTo")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("EditTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EditUserId")
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("JobTitle")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("Timestamp")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<int>("UserDetailId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("VacationDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("VacationTitle")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("UserDetailId");
+
+                    b.ToTable("VacationApplication");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -5170,6 +5237,21 @@ namespace PanoramaBackend.Data.Migrations
                     b.HasOne("PanoramBackend.Data.Entities.Accounts", "ExpenseAccount")
                         .WithMany("PayrollExpenseAccount")
                         .HasForeignKey("ExpenseAccountId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.VacationApplication", b =>
+                {
+                    b.HasOne("PanoramBackend.Data.Entities.Branch", "Branch")
+                        .WithMany("Vacations")
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("PanoramBackend.Data.Entities.UserDetails", "EmployeeDetails")
+                        .WithMany("Vacations")
+                        .HasForeignKey("UserDetailId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });

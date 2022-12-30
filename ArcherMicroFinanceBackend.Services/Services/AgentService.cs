@@ -8,25 +8,50 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using PanoramaBackend.Services;
+using PanoramBackend.Data;
+using Microsoft.EntityFrameworkCore;
+using static NukesLab.Core.Common.Constants;
 
+namespace PanoramaBackend.Services
+{
+    public class PaginationParams<TKey>
+
+    {
+        public TKey Id { get; set; }
+        public DateTime? from { get; set; }
+        public DateTime? to { get; set; }
+        public int? BranchId { get; set; }
+        public string? SearchQuery { get; set; }
+        public bool? RequestExcel { get; set; }
+        public bool? RequestPdf { get; set; }
+
+        private int itemsPerPage;
+        public int Page { get; set; }
+        public int ItemsPerPage { get; set; }
+
+    }
+}
 namespace PanoramBackend.Services.Services
 {
+
     public class AgentService : BaseService<UserDetails, int>, IAgentService
     {
         private readonly ITransactionRepository _transactionService;
         private ISalesInvoiceRepository _salesInvoiceService;
         private readonly ILedgerEntriesRepository _ledgerRepo;
         private readonly ILedgerEntriesService _ledger;
+        private readonly AMFContext _context;
 
         public AgentService(RequestScope scopeContext, IAgentRepository repo, ITransactionRepository transactionService,
             ILedgerEntriesRepository ledgerRepo,
            ILedgerEntriesService ledger,
-        ISalesInvoiceRepository salesInvoiceService) : base(scopeContext, repo)
+        ISalesInvoiceRepository salesInvoiceService,AMFContext context) : base(scopeContext, repo)
         {
             _transactionService = transactionService;
             _salesInvoiceService = salesInvoiceService;
             _ledgerRepo = ledgerRepo;
             _ledger = ledger;
+            _context=context;
             base.AddNavigation(x => x.Addresses, x => x.Attachments,x=>x.PaymentAndBilling,x=>x.SalesInvoicePersons,x=>x.Transactions);
         }
         protected override Task WhileInserting(IEnumerable<UserDetails> entities)
@@ -156,7 +181,37 @@ namespace PanoramBackend.Services.Services
 
             return companies.ToList();
         }
+        public async Task<PageConfig> GetPaginatedAgentsWithBalance(PaginationParams<int> @params)
+        {
+            var query = _context.Set<UserDetails>().AsNoTracking();
+            var page = new PageConfig();
+            var agentCounts = await query.CountAsync();
+            page.TotalCount = agentCounts;
+            //List<dynamic> _agents =
+            var agents =await query.Include(x => x.Accounts)
+                                .ThenInclude(x => x.CreditLedgarEntries)
+                                .Include(x => x.Accounts)
+                                .ThenInclude(x => x.DebitLedgarEntries)
+                                      .Where(x => x.IsAgent == true)
+                                      .Skip((@params.Page - 1) * @params.ItemsPerPage)
+                                      .Take((@params.ItemsPerPage))
+                                      .OrderBy(x => x.CreateTime.Value)
+                                            .ToListAsync();
 
+            foreach (var item in agents)
+            {
+                
+                var debit = item.Accounts.DebitLedgarEntries.Sum(x => x.Amount);
+                var credit = item.Accounts.CreditLedgarEntries.Sum(x => x.Amount);
+                item.OpenBalance = debit + (-credit);
+                item.Accounts = null;
+            }
+
+            page.Data.AddRange(agents);
+            OtherConstants.isSuccessful = true;
+            return page;
+
+        }
         
        
         public async Task<decimal> GetBalance(int Id)
@@ -170,6 +225,7 @@ namespace PanoramBackend.Services.Services
     public interface IAgentService : IBaseService<UserDetails, int>
     {
         Task<List<UserDetails>> GetAgentsWithBalance();
+        Task<PageConfig> GetPaginatedAgentsWithBalance(PaginationParams<int> @params);
         Task<decimal> GetBalance(int Id);
         
        
@@ -190,8 +246,12 @@ namespace PanoramBackend.Services.Services
         public string From { get; set; }
         public string To { get; set; }
         public int TotalPages { get; set; }
+
+        public int TotalCount { get; set; }
         public int CurrentPage { get; set; }
         public int PageSize { get; set; }
+        public string ExcelFileUrl { get; set; }
+        public string PdfFileUrl { get; set; }
         public decimal TotalBalance { get; set; }
         public List<dynamic> Data { get; set; }
 

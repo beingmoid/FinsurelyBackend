@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using PanoramBackend.Data.Repository;
 using System.Text.Json.Serialization;
 using System.Runtime.Serialization;
+using PanoramaBackend.Data.Entities;
 
 namespace PanoramBackend.Data.Entities
 {
@@ -105,6 +106,10 @@ namespace PanoramBackend.Data.Entities
         public virtual ICollection<TaskTodo> AssignedTask => _task ?? (_task = new List<TaskTodo>());
         private ICollection<TaskTodo> task;
         public virtual ICollection<TaskTodo> AssignedByTask => task ?? (task = new List<TaskTodo>());
+
+
+        private ICollection<VacationApplication> _applications;
+        public ICollection<VacationApplication> Vacations => _applications ?? (_applications = new List<VacationApplication>());
 
     }
     public class Address:BaseEntity<int>

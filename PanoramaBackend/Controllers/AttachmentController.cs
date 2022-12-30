@@ -31,7 +31,7 @@ namespace PanoramaBackend.Api.Controllers
             _fileUploader = fileUploader;
         }
 
-        public async Task<string> Upload(IList<IFormFile> files)
+        private async Task<string> Upload(IList<IFormFile> files)
         {
             string wwwPath = _env.WebRootPath;
             string contentPath = _env.ContentRootPath;

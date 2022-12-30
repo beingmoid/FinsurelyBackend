@@ -24,5 +24,8 @@ namespace PanoramBackend.Data.Entities
         private ICollection<Payroll> _paidToBranch;
         public ICollection<Payroll> PaidToBranch => _paidToBranch ?? (_paidToBranch = new List<Payroll>());
 
+        private ICollection<VacationApplication> _applications;
+        public ICollection<VacationApplication> Vacations => _applications ?? (_applications = new List<VacationApplication>());
+
     }
 }

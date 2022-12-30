@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using NPOI.HSSF.Record;
 using NukesLab.Core.Common;
 using NukesLab.Core.Repository;
 using PanoramaBackend.Data.Entities;
@@ -59,7 +60,8 @@ namespace PanoramBackend.Data
         {
 			//this.InitializeEntity<RCM>();
 			
-			this.InitializeEntity<AccountType>();
+			this.InitializeEntity<VacationApplication>();
+            this.InitializeEntity<AccountType>();
 			this.InitializeEntity<AccountDetailType>();
 			this.InitializeEntity<Accounts>();
 			this.InitializeEntity<Address>();
@@ -140,6 +142,8 @@ namespace PanoramBackend.Data
 			this.CreateRelation< Branch, Payroll>(x => x.PaidToBranch, x => x.Branch, x => x.BranchId);
 
 			this.CreateRelation<Accounts, Payroll>(x => x.PayrollExpenseAccount, x => x.ExpenseAccount, x => x.ExpenseAccountId);
+			this.CreateRelation<Branch, VacationApplication>(x => x.Vacations, x => x.Branch, x => x.BranchId);
+			this.CreateRelation<UserDetails, VacationApplication>(x => x.Vacations, x => x.EmployeeDetails, x => x.UserDetailId);
 
 
 

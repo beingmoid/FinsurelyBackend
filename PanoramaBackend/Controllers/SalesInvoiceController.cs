@@ -230,14 +230,14 @@ namespace PanoramaBackend.Api.Controllers
          OtherConstants.isSuccessful = true;
          return constructResponse(headers);
         }
-        public FileResult downloadFile(string filePath, string fileName)
-        {
-            IFileProvider provider = new PhysicalFileProvider(filePath);
-            IFileInfo fileInfo = provider.GetFileInfo(fileName);
-            var readStream = fileInfo.CreateReadStream();
-            var mimeType = "application/vnd.ms-excel";
-            return File(readStream, mimeType, fileName);
-        }
+        //public FileResult downloadFile(string filePath, string fileName)
+        //{
+        //    IFileProvider provider = new PhysicalFileProvider(filePath);
+        //    IFileInfo fileInfo = provider.GetFileInfo(fileName);
+        //    var readStream = fileInfo.CreateReadStream();
+        //    var mimeType = "application/vnd.ms-excel";
+        //    return File(readStream, mimeType, fileName);
+        //}
         [HttpPost("BulkUpload")]
         public async Task<BaseResponse> BulkUploadExcelFile([FromForm(Name = "file")] IFormFile file, string? salesDate)
         {

@@ -18,6 +18,7 @@ using PanoramaBackend.Services.Reports;
 using FluentExcel;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using PanoramaBackend.Services;
 
 namespace PanoramaBackend.Api.Controllers
 {
@@ -50,22 +51,6 @@ namespace PanoramaBackend.Api.Controllers
         }
 
 
-        [HttpGet("GetPaginated")]
-        public async Task<BaseResponse> GetPaginated([FromQuery] PaginationParams<int> @param)
-
-        { 
-           var data =  _context.Set<Expense>().Include(x => x.ExpenseCategory).Include(x=>x.Account).Include(x=>x.Branch);
-            int count = data.Count();
-            var total = count / param.ItemsPerPage + (count % param.ItemsPerPage > 0 ? 1 : 0);
-
-            var skipValue = (param.Page - 1) * param.ItemsPerPage;
-            var skips = await data.Skip(skipValue).Take(param.ItemsPerPage).ToListAsync();
-
-                   OtherConstants.isSuccessful = true;
-            OtherConstants.messageType = "Data fetched successfully";
-
-            return constructResponse(new { data=skips,totalPages= total,totalCount=data.Count() });
-        }
         [AllowAnonymous]
         [HttpPost("GetPaginatedWithSearch")]
 

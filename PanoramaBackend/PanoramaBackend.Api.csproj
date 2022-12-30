@@ -27,6 +27,7 @@
     <None Remove="DIHelper\EmailTemplates\statement.html" />
     <None Remove="EmailTemplates\EmailTemplateForVerifyAndReset.html" />
     <None Remove="Uploads\Test.xlsx" />
+    <None Remove="wkhtmltopdf\Windows\wkhtmltopdf.exe" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,6 +41,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Uploads\Test.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="wkhtmltopdf\Windows\wkhtmltopdf.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -89,6 +93,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Wkhtmltopdf.NetCore" Version="3.0.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -102,6 +107,7 @@
 
   <ItemGroup>
     <Folder Include="NewFolder\" />
+    <Folder Include="Views\Agent\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -122,6 +128,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Update="EmailTemplates\statementConfig.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Views\GetAgentPaginated.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

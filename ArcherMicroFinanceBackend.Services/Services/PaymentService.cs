@@ -181,7 +181,7 @@ namespace PanoramBackend.Services.Services
             var salesAgent = await _agentService.GetOne(Convert.ToInt32(payment.SalesAgentId));
             CreditLedgerEntry.CreditAccountId = salesAgent.DefaultAccountId; //Accounts Receviable Credits
             CreditLedgerEntry.TransactionDate = payment.PaymentDate;
-            CreditLedgerEntry.Amount = - payment.Amount;
+            CreditLedgerEntry.Amount =  payment.Amount;
             transaction.LedgarEntries.Add(CreditLedgerEntry);
            
             payment.Transactions.Add(transaction);
@@ -221,7 +221,7 @@ namespace PanoramBackend.Services.Services
             var salesAgent = await _agentService.GetOne(Convert.ToInt32(payment.SalesAgentId));
             CreditLedgerEntry.CreditAccountId = salesAgent.DefaultAccountId; //Accounts Receviable Credits
             CreditLedgerEntry.TransactionDate = newPayment.PaymentDate;
-            CreditLedgerEntry.Amount = - newPayment.Amount;
+            CreditLedgerEntry.Amount =  newPayment.Amount;
 
             
              _context.Set<LedgarEntries>().Update(DebitledgerEntry).State = EntityState.Modified;
@@ -339,11 +339,11 @@ namespace PanoramBackend.Services.Services
 
             DebitledgerEntry.DebitAccountId = insuranceCompany.DefaultAccountId; // Payable Debits 
             DebitledgerEntry.TransactionDate = payment.PaymentDate;
-            DebitledgerEntry.Amount = - payment.Amount;
+            DebitledgerEntry.Amount =  payment.Amount;
             transaction.LedgarEntries.Add(DebitledgerEntry);
 
             LedgarEntries CreditLedgerEntry = new LedgarEntries();
-            CreditLedgerEntry.Amount = - payment.Amount;
+            CreditLedgerEntry.Amount =  payment.Amount;
             CreditLedgerEntry.CreditAccountId = payment.CreditAccountId; //Cash Credits
             CreditLedgerEntry.TransactionDate = payment.PaymentDate;
             transaction.LedgarEntries.Add(CreditLedgerEntry);
@@ -376,7 +376,7 @@ namespace PanoramBackend.Services.Services
             transaction.Memo = newPayment.Memo;
             var insuranceCompany = await _insuranceCompanyService.GetOne(Convert.ToInt32(payment.InsuranceCompanyId));
             LedgarEntries CreditLedgerEntry = transaction.LedgarEntries.SingleOrDefault(x => x.CreditAccountId != null);
-            CreditLedgerEntry.Amount = - payment.Amount;
+            CreditLedgerEntry.Amount =  payment.Amount;
             CreditLedgerEntry.CreditAccountId = payment.CreditAccountId; //Cash Credits
             CreditLedgerEntry.TransactionDate = payment.PaymentDate;
             transaction.LedgarEntries.Add(CreditLedgerEntry);
@@ -385,7 +385,7 @@ namespace PanoramBackend.Services.Services
             LedgarEntries DebitledgerEntry = transaction.LedgarEntries.SingleOrDefault(x => x.DebitAccountId != null);
             DebitledgerEntry.DebitAccountId = insuranceCompany.DefaultAccountId; //Accounts Payable Debits
             DebitledgerEntry.TransactionDate = payment.PaymentDate;
-            DebitledgerEntry.Amount = - payment.Amount;
+            DebitledgerEntry.Amount = payment.Amount;
             transaction.LedgarEntries.Add(DebitledgerEntry);
 
 

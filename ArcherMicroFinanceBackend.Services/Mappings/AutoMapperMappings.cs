@@ -20,7 +20,8 @@ namespace PanoramBackend.Services.Mapper
 
 			this.CreateMap<Payroll>();
 
-			this.CreateMap<UserDetails>()
+            this.CreateMap<Announcement>();
+            this.CreateMap<UserDetails>()
 				.ForMember(x => x.Addresses, x => x.MapFrom(x => x.Addresses))
 				.ForMember(x => x.Attachments, x => x.MapFrom(x => x.Attachments))
 				.ForMember(x => x.PaymentAndBilling, x => x.MapFrom(x => x.PaymentAndBilling));
@@ -44,7 +45,7 @@ namespace PanoramBackend.Services.Mapper
 			this.CreateMap<Refund>();
 			this.CreateMap<SalesInvoice>();
 			this.CreateMap<Branch>();
-
+			this.CreateMap<VacationApplication>();
 			this.CreateMap<SaleLineItem>();
 			this.CreateMap<SalesInvoice>().ForMember(x => x.SaleLineItem, x => x.MapFrom(x => x.SaleLineItem))
 				.ForMember(x => x.Transactions, x => x.MapFrom(x => x.Transactions));
@@ -89,7 +90,7 @@ namespace PanoramBackend.Services.Mapper
 			this.CreateMap<Priority>();
 			this.CreateMap<Expense>();
 			this.CreateMap<ExpenseCategory>();
-
+			
 
 		}
     }
