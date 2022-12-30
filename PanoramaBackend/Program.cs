@@ -35,7 +35,6 @@ namespace PanoramaBackend
 
             })
             .UseStartup<Startup>();
-           // AppDomain.CurrentDomain.SetDynamicBase()
         });
                
     }
