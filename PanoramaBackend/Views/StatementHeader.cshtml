@@ -1,0 +1,161 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@using PanoramaBackend.Api.DIHelper
+@model StatementHeader
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statement</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@200;300;400;500&display=swap"
+          rel="stylesheet">
+</head>
+<body style="margin: 0; padding: 0 ; ">
+    <div style=" margin: 0;">
+        <div>
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin:auto;">
+                <tbody>
+
+                    <tr>
+                        <td style="    padding: 2rem 3rem;; width: 100%;">
+                            <div id="header">
+                                <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                                    <tbody>
+                                        <tr>
+                                            <td valign="top" width="50%">
+                                                <table role="presentation" cellspacing="0" cellpadding="0" border="0"
+                                                       width="100%">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>
+                                                                <img src="https://nukeslab.com/Finsurely/Group%201.png"
+                                                                     alt=""
+                                                                     style="width: 100%; max-width: 200px; height: auto; display: block;">
+                                                            </td>
+
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-family: 'Lexend Deca', sans-serif;font-style: normal;font-weight: 700;font-size: 18px;line-height: 21px;letter-spacing: 0.05em;color: #054085;padding: 0.5rem 0;">
+                                                                Agent Account Statement
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text-services"
+                                                                style="text-align: left; padding:0px;">
+                                                                <div dir="rtl">
+
+                                                                    <p style="margin:10px 0 0 0; font-family: 'IBM Plex Sans Arabic', sans-serif; font-style: normal;font-weight: 600;font-size: 14px;line-height: 18px;letter-spacing: 0.05em;color: #818E9B;">
+                                                                        رقم عبور توجيه البنك
+                                                                    </p>
+                                                                    <p style="margin:0 0 25px 0; font-family: 'Lexend Deca', sans-serif;font-style: normal;font-weight: 600;font-size: 14px;line-height: 18px;letter-spacing: 0.05em;color: #818E9B;">
+                                                                        Account TRN: @Model.AccountTRN
+                                                                    </p>
+
+
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="margin:10px 0 0 0; font-family: 'IBM Plex Sans Arabic', sans-serif; font-style: normal;font-weight: 600;font-size: 14px;line-height: 18px;letter-spacing: 0.05em;color: #818E9B;">
+                                                                اسم الشركة <br><span style="margin: 0.35rem 0;margin: 0; font-family: 'Lexend Deca', sans-serif;font-style: normal;font-weight: 600;font-size: 14px;line-height: 18px;letter-spacing: 0.05em;color: #818E9B;">
+                                                                    Agent Name /Broker Name/ Insurance Company Name: 
+                                                                </span>
+                                                            </td>
+                                                            <td style="margin: 0.35rem 0;margin: 0; font-family: 'Lexend Deca', sans-serif;font-style: normal;font-weight: 600;font-size: 14px;line-height: 18px;letter-spacing: 0.05em;color: #818E9B;">
+                                                                <br> @Model.AgentName
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td style="margin:10px 0 0 0; font-family: 'IBM Plex Sans Arabic', sans-serif; font-style: normal;font-weight: 600;font-size: 14px;line-height: 18px;letter-spacing: 0.05em;color: #818E9B;">
+                                                                عدد مربع P.O<br><span style="margin: 0.35rem 0;margin: 0; font-family: 'Lexend Deca', sans-serif;font-style: normal;font-weight: 600;font-size: 14px;line-height: 18px;letter-spacing: 0.05em;color: #818E9B;">
+                                                                    Phone Number:
+                                                                </span>
+                                                            </td>
+                                                            <td style="margin: 0.35rem 0;margin: 0; font-family: 'Lexend Deca', sans-serif;font-style: normal;font-weight: 600;font-size: 14px;line-height: 18px;letter-spacing: 0.05em;color: #818E9B;">
+                                                                <br> @Model.PhoneNumber
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="margin:10px 0 0 0; font-family: 'IBM Plex Sans Arabic', sans-serif; font-style: normal;font-weight: 600;font-size: 14px;line-height: 18px;letter-spacing: 0.05em;color: #818E9B;">
+                                                                الإمارة<br><span style="margin: 0.35rem 0;margin: 0; font-family: 'Lexend Deca', sans-serif;font-style: normal;font-weight: 600;font-size: 14px;line-height: 18px;letter-spacing: 0.05em;color: #818E9B;">
+                                                                    Emirates:
+                                                                </span>
+                                                            </td>
+                                                            <td style="margin: 0.35rem 0;margin: 0; font-family: 'Lexend Deca', sans-serif;font-style: normal;font-weight: 600;font-size: 14px;line-height: 18px;letter-spacing: 0.05em;color: #818E9B;">
+                                                                <br> @Model.Emirates
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="margin:10px 0 0 0; font-family: 'IBM Plex Sans Arabic', sans-serif; font-style: normal;font-weight: 600;font-size: 14px;line-height: 18px;letter-spacing: 0.05em;color: #818E9B;">
+                                                                دولة<br><span style="margin: 0.35rem 0;margin: 0; font-family: 'Lexend Deca', sans-serif;font-style: normal;font-weight: 600;font-size: 14px;line-height: 18px;letter-spacing: 0.05em;color: #818E9B;">
+                                                                    Country:
+                                                                </span>
+                                                            </td>
+                                                            <td style="margin: 0.35rem 0;margin: 0; font-family: 'Lexend Deca', sans-serif;font-style: normal;font-weight: 600;font-size: 14px;line-height: 18px;letter-spacing: 0.05em;color: #818E9B;">
+                                                                <br> @Model.Country
+                                                            </td>
+                                                        </tr>
+
+
+                                                    </tbody>
+                                                </table>
+                                            </td>
+
+                                            <td valign="top" width="50%">
+                                                <table role="presentation" cellspacing="0" cellpadding="0" border="0"
+                                                       width="100%">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="text-services"
+                                                                style="text-align: right; padding:0px;">
+                                                                <div>
+                                                                    <h3 style="letter-spacing: 0.05em;margin: 0; color: #054085;font-family: 'IBM Plex Sans Arabic', sans-serif;font-style: normal;font-weight: 700;font-size: 16px;line-height: 18px;">
+                                                                        كشف حساب
+                                                                    </h3>
+                                                                    <h3 style="letter-spacing: 0.05em;margin: 0; color: #054085;font-family: 'Lexend Deca', sans-serif;font-style: normal;font-weight: 700;font-size: 16px;line-height: 18px;">
+                                                                        Statement of account
+                                                                    </h3>
+                                                                    <p style="margin:35px 0 0 0; font-family: 'IBM Plex Sans Arabic', sans-serif; font-style: normal;font-weight: 600;font-size: 14px;line-height: 18px;letter-spacing: 0.05em;color: #818E9B;">
+                                                                        فترة
+                                                                    </p>
+                                                                    <p style="margin: 0.35rem 0;margin: 0; font-family: 'Lexend Deca', sans-serif;font-style: normal;font-weight: 600;font-size: 14px;line-height: 18px;letter-spacing: 0.05em;color: #818E9B;">
+                                                                        Period: @Model.StartDate - @Model.EndDate
+                                                                    </p>
+                                                    
+
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+
+</body>
+</html>

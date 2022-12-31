@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+
+    <header>
+        <h1 id="heading"></h1>
+    </header>
+
+
+<script>
+    window.onload = function (e) {
+        var urlStr = window.location.href;
+        console.log(urlStr);
+        var url = new URL(urlStr);
+        var c = url.searchParams.get('query');
+        document.getElementById('heading').innerHTML = c;
+    }
+
+</script>

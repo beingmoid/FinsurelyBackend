@@ -24,7 +24,7 @@ namespace PanoramaBackend.Services
         public string? SearchQuery { get; set; }
         public bool? RequestExcel { get; set; }
         public bool? RequestPdf { get; set; }
-
+        public bool RequestAllData { get; set; }
         private int itemsPerPage;
         public int Page { get; set; }
         public int ItemsPerPage { get; set; }

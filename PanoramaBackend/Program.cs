@@ -31,7 +31,7 @@ namespace PanoramaBackend
             {
 
           
-               webBuilder.UseUrls("http://192.168.100.163:5000/");
+       
 
             })
             .UseStartup<Startup>();
