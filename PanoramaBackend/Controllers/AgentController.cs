@@ -143,11 +143,7 @@ namespace PanoramaBackend.Api.Controllers
 
             //List<dynamic> accountStatement = new List<dynamic>();
             PageConfig page = new PageConfig();
-            //int count = 0;
-            //page.TotalPages = ledgers.ToList().Count / pageNo;
-            //page.CurrentPage = pageNo;
-            //page.PageSize = pageSize;
-            //decimal debitBalance = 0;
+
             return page;
 
         }
@@ -774,6 +770,7 @@ namespace PanoramaBackend.Api.Controllers
                     #endregion 
                 }
                 #endregion
+               
                 var entries = ledgers.OrderBy(x => x.TransactionDate).GroupBy(x => x.TransactionId).Select(
 
                     x => new
@@ -1472,23 +1469,39 @@ namespace PanoramaBackend.Api.Controllers
                 var paginatedResult = accountStatement.Skip((@params.Page - 1) * @params.ItemsPerPage).Take(@params.ItemsPerPage).ToList();
                 // list = entries.Skip((@params.Page - 1) * @params.ItemsPerPage).Take(@params.ItemsPerPage).ToList();
                 OtherConstants.isSuccessful = true;
-                var render = await _engine.RenderViewToStringAsync("GetAgentPaginated", accountStatement);
+                var statemenmtPDF = new AccountStatementPDF();
+                statemenmtPDF.Statement = accountStatement;
+                var render = await _engine.RenderViewToStringAsync("GetAgentPaginated", statemenmtPDF);
                 var doc = new HtmlToPdfDocument()
                 {
                     GlobalSettings = {
-        ColorMode = ColorMode.Color,
-        Orientation = Orientation.Portrait,
-        PaperSize = PaperKind.A4Plus,
-    },
+                        ColorMode = ColorMode.Color,
+                        Orientation = Orientation.Landscape,
+                        PaperSize = PaperKind.A4Plus,
+                    },
                     Objects = {
-        new ObjectSettings() {
-            PagesCount = true,
-            HtmlContent = render,
-           
-            WebSettings = { DefaultEncoding = "utf-8" },
-            HeaderSettings = { HtmUrl= "http://localhost:5000/Uploads/header.html?query=HelloWorLD" }
-        }
-    }
+                        new ObjectSettings() {
+                          
+                            PagesCount = true,
+                            HtmlContent = render,
+                            LoadSettings =  
+                            {
+                                JSDelay=10000,
+                                StopSlowScript=false,
+                           
+                            },
+                            WebSettings = { DefaultEncoding = "utf-8",
+                            LoadImages=true,
+                            EnableIntelligentShrinking=true,
+                            EnableJavascript=true,
+                            enablePlugins=true,
+                            PrintMediaType=true
+                            ,Background=true,
+                            
+                            },
+                            HeaderSettings = { HtmUrl = "http://localhost:5000/Uploads/header.html?query=HelloWorLD" }
+                        }
+                    }
                 };
                 byte[] pdf = _converter.Convert(doc);
                 string wwwPath = _env.WebRootPath;
@@ -1548,7 +1561,6 @@ namespace PanoramaBackend.Api.Controllers
         public string PhoneNumber { get; set; }
         public string Emirates { get; set; }
         public string Country { get; set; }
-
         public List<AgentStatementDTO> Statement { get; set; }
     }
 }

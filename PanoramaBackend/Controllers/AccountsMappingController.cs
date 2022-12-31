@@ -24,28 +24,7 @@ namespace PanoramaBackend.Api.Controllers
         {
             _service = service;
         }
+ 
       
-        //public async Task<BaseResponse> AccountsReceivableList()
-        //{
-        //    var result = (await _service.Get(x => x.AccountDetailTypeId == 1));
-        //    OtherConstants.isSuccessful = true;
-        //    OtherConstants.messageType = MessageType.Success;
-        //    return constructResponse(result);
-        //}
-        //public async Task<BaseResponse> AccountsPayableList()
-        //{
-        //    var result = (await _service.Get(x => x.AccountDetailTypeId == 41));
-        //    OtherConstants.isSuccessful = true;
-        //    OtherConstants.messageType = MessageType.Success;
-        //    return constructResponse(result);
-        //}
-
-        //public async Task<BaseResponse> ExpenseAccountsList()
-        //{
-        //    var result = (await _service.Get(x => x.AccountDetailTypeId == 41));
-        //    OtherConstants.isSuccessful = true;
-        //    OtherConstants.messageType = MessageType.Success;
-        //    return constructResponse(result);
-        //}
     }
 }

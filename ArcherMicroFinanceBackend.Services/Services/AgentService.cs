@@ -185,8 +185,9 @@ namespace PanoramBackend.Services.Services
         {
             var query = _context.Set<UserDetails>().AsNoTracking();
             var page = new PageConfig();
-            var agentCounts = await query.CountAsync();
+            var agentCounts = await query.CountAsync(x=>x.IsAgent==true);
             page.TotalCount = agentCounts;
+            page.TotalPages = agentCounts / @params.ItemsPerPage;
             //List<dynamic> _agents =
             var agents =await query.Include(x => x.Accounts)
                                 .ThenInclude(x => x.CreditLedgarEntries)
@@ -206,7 +207,7 @@ namespace PanoramBackend.Services.Services
                 item.OpenBalance = debit + (-credit);
                 item.Accounts = null;
             }
-
+            page.TotalBalance= agents.Sum(x=>x.OpenBalance)??0;
             page.Data.AddRange(agents);
             OtherConstants.isSuccessful = true;
             return page;
