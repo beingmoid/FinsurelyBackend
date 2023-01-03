@@ -16,7 +16,7 @@ namespace PanoramBackend.Services.Services
     {
         private readonly ITransactionService _transactionService;
 
-        public AccountsService(RequestScope scopeContext, IAccountsRepository repo ,ITransactionService transactionService) : base(scopeContext, repo,x=>x.CreditLedgarEntries,x=>x.DebitLedgarEntries,x=>x.SubAccounts,x=>x.Refunds,x=>x.UserDetail,x=>x.DepositPayments,x=>x.CreditPayment)
+        public AccountsService(RequestScope scopeContext, IAccountsRepository repo ,ITransactionService transactionService) : base(scopeContext, repo,x=>x.CreditLedgarEntries,x=>x.DebitLedgarEntries,x=>x.SubAccounts,x=>x.UserDetail,x=>x.DepositPayments,x=>x.CreditPayment)
         {
             _transactionService = transactionService;
           

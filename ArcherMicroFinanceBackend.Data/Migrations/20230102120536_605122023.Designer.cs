@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PanoramBackend.Data;
 
 namespace PanoramaBackend.Data.Migrations
 {
     [DbContext(typeof(AMFContext))]
-    partial class AMFContextModelSnapshot : ModelSnapshot
+    [Migration("20230102120536_605122023")]
+    partial class _605122023
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3520,9 +3522,6 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<int?>("InsuranceCompanyId")
                         .HasColumnType("int");
 
-                    b.Property<string>("InsuranceCompanyName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("InsuranceTypeId")
                         .HasColumnType("int");
 
@@ -4335,14 +4334,14 @@ namespace PanoramaBackend.Data.Migrations
                         new
                         {
                             Id = "a18be9c0-aa65-4af8-bd17-00bd9344e575",
-                            ConcurrencyStamp = "41ab2eef-1fca-4d22-9eeb-4125159af303",
+                            ConcurrencyStamp = "cbe16cad-0c8e-499d-8e5c-2135edacc0b5",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
                             Id = "a18be9c0-aa65-4af8-bd17-00bd9344e678",
-                            ConcurrencyStamp = "3dbe1e9c-cb04-49e6-a985-128d43839a08",
+                            ConcurrencyStamp = "4ac2c0fe-7e1c-489f-9fb8-b3dfb4f4bc13",
                             Name = "CompanyAdmin",
                             NormalizedName = "CompanyAdmin"
                         });
@@ -4417,13 +4416,13 @@ namespace PanoramaBackend.Data.Migrations
                         {
                             Id = "a18be9c0-aa65-4af8-bd17-00bd9344e575",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "97cbfa3a-32d7-4829-9251-3728c6fdfcca",
+                            ConcurrencyStamp = "fcfc7d10-7385-4c7c-b77f-3c08d4bdf523",
                             Email = "admin@nukeslab.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "admin@nukeslab.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKEKUiNGUY59Jx1UVK4YNvQQ/NfTX7ay7eBfWOL1y/Ix/KeVgo4+V5zFFIZhFH3hLQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEBEakDiSvAx/OweUkt6ieGJ8BXYQOc0YTA8go6JsCebAMqnBgqdWoPY744EEragvpw==",
                             PhoneNumber = "+923400064394",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",

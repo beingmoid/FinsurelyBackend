@@ -88,7 +88,7 @@ namespace PanoramBackend.Services.Services
                     .Add(cCreditLedger);
                 LedgarEntries Cdebitledger = transactionForCompany.LedgarEntries.SingleOrDefault(x => x.DebitAccountId != null);
                 Cdebitledger.TransactionDate = item.SalesInvoiceDate;
-                Cdebitledger.DebitAccountId = BuiltinAccounts.ExpenseAccount; //EX
+                Cdebitledger.DebitAccountId = BuiltinAccounts.AccountsPayable; //EX
                 Cdebitledger.Amount = (decimal)item.SaleLineItem.FirstOrDefault().Net;
                 _context.Set<Transaction>().Update(transactionForAgent);
                 _context.Set<Transaction>().Update(transactionForCompany);
@@ -167,10 +167,9 @@ namespace PanoramBackend.Services.Services
                 cCreditLedger.CreditAccountId = sales.InsuranceCompany?.DefaultAccountId; //AP
                 cCreditLedger.Amount = ((decimal)sales.SaleLineItem.FirstOrDefault().Net);
                 transactionForCompany.LedgarEntries
-                    .Add(cCreditLedger);
-                LedgarEntries Cdebitledger = new LedgarEntries();
+                    .Add(cCreditLedger);                LedgarEntries Cdebitledger = new LedgarEntries();
                 Cdebitledger.TransactionDate = sales.SalesInvoiceDate;
-                Cdebitledger.DebitAccountId = BuiltinAccounts.ExpenseAccount; //EX
+                Cdebitledger.DebitAccountId = BuiltinAccounts.AccountsPayable; //EX
                 Cdebitledger.Amount = (decimal)sales.SaleLineItem.FirstOrDefault().Net;
                 transactionForCompany.LedgarEntries.Add(Cdebitledger);
 

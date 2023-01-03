@@ -32,7 +32,7 @@ namespace PanoramaBackend.Api.Controllers
             .Include(x => x.InsuranceType)
             .Include(x => x.InsuranceCompany)
             .Include(x => x.Agent)
-            .Include(x => x.Account)
+    
             )).OrderBy(x=>x.RefundDate).ToList();
             OtherConstants.isSuccessful = true;
 

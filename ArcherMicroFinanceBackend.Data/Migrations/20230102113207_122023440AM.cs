@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PanoramaBackend.Data.Migrations
 {
-    public partial class _321321231321 : Migration
+    public partial class _122023440AM : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -986,18 +986,11 @@ namespace PanoramaBackend.Data.Migrations
                     MessageOnReceipt = table.Column<string>(nullable: true),
                     MessageOnStatement = table.Column<string>(nullable: true),
                     AmountForSalesAgent = table.Column<decimal>(nullable: false),
-                    AmountForBroker = table.Column<decimal>(nullable: false),
-                    AccountId = table.Column<int>(nullable: false)
+                    AmountForBroker = table.Column<decimal>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Refund", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Refund_Accounts_AccountId",
-                        column: x => x.AccountId,
-                        principalTable: "Accounts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Refund_UserDetails_AgentId",
                         column: x => x.AgentId,
@@ -1191,6 +1184,45 @@ namespace PanoramaBackend.Data.Migrations
                     table.ForeignKey(
                         name: "FK_Teams_UserDetails_ManagerId",
                         column: x => x.ManagerId,
+                        principalTable: "UserDetails",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "VacationApplication",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreateUserId = table.Column<string>(maxLength: 100, nullable: true),
+                    CreateTime = table.Column<DateTime>(nullable: true),
+                    EditUserId = table.Column<string>(maxLength: 100, nullable: true),
+                    EditTime = table.Column<DateTime>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    Timestamp = table.Column<byte[]>(rowVersion: true, nullable: true),
+                    UserDetailId = table.Column<int>(nullable: false),
+                    Description = table.Column<string>(nullable: true),
+                    ApplicantName = table.Column<string>(nullable: true),
+                    JobTitle = table.Column<string>(nullable: true),
+                    VacationTitle = table.Column<string>(nullable: true),
+                    VacationDescription = table.Column<string>(nullable: true),
+                    DateFrom = table.Column<DateTime>(nullable: false),
+                    DateTo = table.Column<DateTime>(nullable: false),
+                    BranchId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_VacationApplication", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_VacationApplication_Branch_BranchId",
+                        column: x => x.BranchId,
+                        principalTable: "Branch",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_VacationApplication_UserDetails_UserDetailId",
+                        column: x => x.UserDetailId,
                         principalTable: "UserDetails",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -1744,14 +1776,14 @@ namespace PanoramaBackend.Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "a18be9c0-aa65-4af8-bd17-00bd9344e575", "07c30cbd-6c3e-49c7-88e6-8427f98f5978", "Admin", "Admin" },
-                    { "a18be9c0-aa65-4af8-bd17-00bd9344e678", "413db89d-ecc1-4c36-995b-763bfd0c88dd", "CompanyAdmin", "CompanyAdmin" }
+                    { "a18be9c0-aa65-4af8-bd17-00bd9344e575", "7a2e4a24-8b16-4113-a99e-fbc93e01dc8d", "Admin", "Admin" },
+                    { "a18be9c0-aa65-4af8-bd17-00bd9344e678", "4aff202b-da43-4a63-ace8-4a621759f671", "CompanyAdmin", "CompanyAdmin" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "a18be9c0-aa65-4af8-bd17-00bd9344e575", 0, "7bd7d888-0908-4d3d-9e7d-15818b4f942f", "admin@nukeslab.com", true, false, null, "admin@nukeslab.com", "admin", "AQAAAAEAACcQAAAAEEyQlx/p1C39HjhaeAmY6juNdD8SIamNtkKiJZBQSCwq98UH0uJwZxUZT6wF55HGog==", "+923400064394", false, "", false, "moid" });
+                values: new object[] { "a18be9c0-aa65-4af8-bd17-00bd9344e575", 0, "824298b4-5f4e-43b1-a6fc-570c2373cf30", "admin@nukeslab.com", true, false, null, "admin@nukeslab.com", "admin", "AQAAAAEAACcQAAAAELLUsk5oEhKGrSAWQPELttm4RBqLBKA/ZyYXSKEm1yJrnsys6TW8CkBQ56xOENyP5g==", "+923400064394", false, "", false, "moid" });
 
             migrationBuilder.InsertData(
                 table: "BDType",
@@ -2316,11 +2348,6 @@ namespace PanoramaBackend.Data.Migrations
                 column: "SalesAgentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Refund_AccountId",
-                table: "Refund",
-                column: "AccountId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Refund_AgentId",
                 table: "Refund",
                 column: "AgentId");
@@ -2473,6 +2500,16 @@ namespace PanoramaBackend.Data.Migrations
                 filter: "[UserId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_VacationApplication_BranchId",
+                table: "VacationApplication",
+                column: "BranchId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VacationApplication_UserDetailId",
+                table: "VacationApplication",
+                column: "UserDetailId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_VacationPolicy_EmploymentDetailId",
                 table: "VacationPolicy",
                 column: "EmploymentDetailId");
@@ -2551,6 +2588,9 @@ namespace PanoramaBackend.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "TaskTodo");
+
+            migrationBuilder.DropTable(
+                name: "VacationApplication");
 
             migrationBuilder.DropTable(
                 name: "VacationPolicy");

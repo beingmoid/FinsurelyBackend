@@ -15,7 +15,7 @@ namespace PanoramaBackend.Services
         public static int RetainedEarning => 8;
         public static int OpeningBalanceEquity => 9;
         public static int RefundIncome => 100;
-        public static int ComissionIncome => 100;
+        public static int ComissionIncome => 200;
 
     }
 }

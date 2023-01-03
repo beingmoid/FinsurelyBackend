@@ -38,79 +38,30 @@
                     <!-- ------------3rd---------------------- -->
                     <tr>
                         <td>
-                            <div style="text-align: center; padding: 0 30px;">
-
-                                <h2 style="margin-top: 20px;font-family: 'Lexend Deca', sans-serif;font-style: normal;font-weight: 700;font-size: 20px;line-height: 30px;letter-spacing: 0.05em;color: #054085;">
-                                    Transactions
-                                </h2>
-
-                            </div>
+                            
                             <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                                 <tbody>
-                                    <tr style=" background:  #1F3563 !important ;color: #FFFFFF;font-family: 'Lexend Deca', sans-serif;font-style: normal;font-weight: 400;font-size: 13px;line-height: 15px;">
+                           
+                                    @foreach (var item in Model.Statement)
+                                    {
+                                <tr style="background: #F2F5F9;font-family: 'Lexend Deca', sans-serif;font-style: normal;font-weight: 400;font-size: 10px;line-height: 18px;color: #505050;">
 
-                                        <td style="padding:15px 0;text-align: center;">Invoice Date</td>
-                                        <td style="padding: 15px 0;">Customer Name</td>
-                                        <td style="padding: 15px 0;">Policy #</td>
-                                        <td style="padding: 15px 0;">Company Name</td>
-                                        <td style="padding: 15px 0;">Transaction Ref #</td>
-                                        <td style="padding: 15px 0;">Vehicle Type</td>
-                                        <td style="padding: 15px 0;">Insurance Type</td>
-                                        <td style="padding: 15px 0;">Debit</td>
-                                        <td style="padding: 15px 0;">Credit</td>
-                                        <td style="padding: 15px 0;">Balance</td>
+                                    <td style="padding:15px 0;text-align: center;">@item?.InvoiceDate?.ToShortDateString()</td>  
+                                     <td style="padding:15px 0;text-align: center;">@item?.TransactionType</td>
+                                    <td style="padding: 15px 0;">@item?.CustomerName</td>
+                                    <td style="padding: 15px 0;">@item?.PolicyNumber</td>
+                                    <td style="padding: 15px 0;">@item?.CompanyName</td>
+                                    <td style="padding: 15px 0;">@item?.TransactionRef</td>
+                                    <td style="padding: 15px 0;">@item?.Vehicle</td>
+                                    <td style="padding: 15px 0;">@item?.InsuranceType</td>
+                                    <td style="padding: 15px 0;">@item?.Debit</td>
+                                    <td style="padding: 15px 0;">@item?.Credit</td>
+                                    <td style="padding: 15px 0;">@item?.Balance</td>
 
-                                    </tr>
-                                    <tr style="background: #F2F5F9;font-family: 'Lexend Deca', sans-serif;font-style: normal;font-weight: 500;font-size: 11px;line-height: 12px;color: #505050;">
+                                </tr>
+                                    }
+                             
 
-                                        <td style="padding:15px 0;text-align: center;">Dec 29,2021</td>
-                                        <td style="padding: 15px 0;"></td>
-                                        <td style="padding: 15px 0;"></td>
-                                        <td style="padding: 15px 0;"></td>
-                                        <td style="padding: 15px 0;"></td>
-                                        <td style="padding: 15px 0;"></td>
-                                        <td style="padding: 15px 0;"></td>
-                                        <td style="padding: 15px 0;"></td>
-                                        <td style="padding: 15px 0;"></td>
-                                        <td style="padding: 15px 0;">0 AED</td>
-                                    </tr>
-                                    <tr style="background: #FFFFFF;font-family: 'Lexend Deca', sans-serif;font-style: normal;font-weight: 500;font-size: 11px;line-height: 12px;color: #505050;">
-                                        <td style="padding:15px 0;text-align: center;">Aug 1,2022</td>
-                                        <td style="padding: 15px 0;">LIWA TOURISM L L C</td>
-                                        <td style="padding: 15px 0;">40/9017/90/2022/23190</td>
-                                        <td style="padding: 15px 0;">AL WATHBA NATIONAL INSURANCE CO</td>
-                                        <td style="padding: 15px 0;">456465/56546-54878</td>
-                                        <td style="padding: 15px 0;">TOYOTA FORTUNER</td>
-                                        <td style="padding: 15px 0;">MOTOR THIRD PARTY</td>
-                                        <td style="padding: 15px 0;">380</td>
-                                        <td style="padding: 15px 0;">0.0100</td>
-                                        <td style="padding: 15px 0;">0 AED</td>
-                                    </tr>
-                                    <tr style="background: #F2F5F9;font-family: 'Lexend Deca', sans-serif;font-style: normal;font-weight: 500;font-size: 11px;line-height: 12px;color: #505050;">
-
-                                        <td style="padding:15px 0;text-align: center;">Dec 29,2021</td>
-                                        <td style="padding: 15px 0;"></td>
-                                        <td style="padding: 15px 0;"></td>
-                                        <td style="padding: 15px 0;"></td>
-                                        <td style="padding: 15px 0;"></td>
-                                        <td style="padding: 15px 0;"></td>
-                                        <td style="padding: 15px 0;"></td>
-                                        <td style="padding: 15px 0;"></td>
-                                        <td style="padding: 15px 0;"></td>
-                                        <td style="padding: 15px 0;">0 AED</td>
-                                    </tr>
-                                    <tr style="background: #FFFFFF;font-family: 'Lexend Deca', sans-serif;font-style: normal;font-weight: 500;font-size: 11px;line-height: 12px;color: #505050;">
-                                        <td style="padding:15px 0;text-align: center;">Aug 1,2022</td>
-                                        <td style="padding: 15px 0;">LIWA TOURISM L L C</td>
-                                        <td style="padding: 15px 0;">40/9017/90/2022/23190</td>
-                                        <td style="padding: 15px 0;">AL WATHBA NATIONAL INSURANCE CO</td>
-                                        <td style="padding: 15px 0;">456465/56546-54878</td>
-                                        <td style="padding: 15px 0;">TOYOTA FORTUNER</td>
-                                        <td style="padding: 15px 0;">MOTOR THIRD PARTY</td>
-                                        <td style="padding: 15px 0;">380</td>
-                                        <td style="padding: 15px 0;">0.0100</td>
-                                        <td style="padding: 15px 0;">0 AED</td>
-                                    </tr>
 
                                 </tbody>
                             </table>
@@ -141,7 +92,7 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td style="font-weight: 600;padding: 15px 15px 15px 0;  text-align: end;">158157.62</td>
+                            <td style="font-weight: 600;padding: 15px 15px 15px 0;  text-align: end;">@Model.Balance</td>
                         </tr>
 
                     </tbody>

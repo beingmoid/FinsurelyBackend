@@ -40,6 +40,7 @@ namespace PanoramaBackend.Api.Controllers
         private readonly AMFContext _context;
         private readonly IGeneratePdf _generatePDF;
         private readonly IRazorViewToStringRenderer _engine;
+        const string Port = "5000";
         public AgentController(RequestScope requestScope, IAgentService service, ILedgerEntriesService entriesService
             , ITransactionService tranService,
             AMFContext context,
@@ -191,7 +192,7 @@ namespace PanoramaBackend.Api.Controllers
                   .ThenInclude(x => x.Refund)
                       .Include(x => x.Transaction)
                       .ThenInclude(x => x.Refund)
-                               .ThenInclude(x => x.Account)
+                      
                                               .Include(x => x.Transaction)
                                                    .ThenInclude(x => x.Refund)
                                                           .ThenInclude(x => x.Vehicle)
@@ -384,7 +385,7 @@ namespace PanoramaBackend.Api.Controllers
 
                     }
 
-                    #region Excel Export Method
+                        #region Excel Export Method
 
                     string wwwPath = _env.WebRootPath;
                     string contentPath = _env.ContentRootPath;
@@ -413,7 +414,7 @@ namespace PanoramaBackend.Api.Controllers
 
 
                 page.TotalPages = entries.Count() / @params.ItemsPerPage + (entries.Count() % @params.ItemsPerPage > 0 ? 1 : 0);
-                var agentCurrentBalance = agent.Accounts.CreditLedgarEntries.Sum(x => x.Amount) + (-agent.Accounts.CreditLedgarEntries.Sum(x => x.Amount)
+                var agentCurrentBalance = agent.Accounts.DebitLedgarEntries.Sum(x => x.Amount) + (-agent.Accounts.CreditLedgarEntries.Sum(x => x.Amount)
 );
 
 
@@ -429,7 +430,7 @@ namespace PanoramaBackend.Api.Controllers
                 var _value = (@params.Page - 1) * @params.ItemsPerPage;
 
 
-                var list = entries.Skip((@params.Page - 1) * @params.ItemsPerPage).Take(@params.ItemsPerPage).ToList();
+                var list = entries.ToList();
                 //var lastItem = list.Last();
 
                 foreach (var item in list)
@@ -566,7 +567,67 @@ namespace PanoramaBackend.Api.Controllers
                 }
 
                 OtherConstants.isSuccessful = true;
-                page.Data.AddRange(accountStatement);
+                if (@params.RequestPdf != null)
+                {
+                    var serverUrl = this.HttpContext.Request.Host.ToString();
+                    var statemenmtPDF = new AccountStatementPDF();
+                    statemenmtPDF.AccountTRN = agent.Id.ToString() + "/" + agent.CreateTime?.ToBinary().ToString() + "/" + DateTime.Now.Ticks;
+                    statemenmtPDF.AgentName = agent.DisplayNameAs;
+                    statemenmtPDF.DateFrom = @params.from.ToDateTime().ToShortDateString();
+                    statemenmtPDF.DateTo = @params.to.ToDateTime().ToShortDateString();
+                    statemenmtPDF.Country = "United Arab Emirates";
+                    statemenmtPDF.Emirates = "Dubai";
+                    statemenmtPDF.Statement = accountStatement;
+                    var render = await _engine.RenderViewToStringAsync("GetAgentPaginated", statemenmtPDF);
+                    var doc = new HtmlToPdfDocument()
+                    {
+                        GlobalSettings = {
+                        ColorMode = ColorMode.Color,
+                        Orientation = Orientation.Landscape,
+                        PaperSize = PaperKind.A4Plus,
+                    },
+                        Objects = {
+                        new ObjectSettings() {
+
+                            PagesCount = true,
+                            HtmlContent = render,
+                            LoadSettings =
+                            {
+                                JSDelay=1000,
+                                StopSlowScript=false,
+
+                            },
+                            WebSettings = { DefaultEncoding = "utf-8",
+                            LoadImages=true,
+                            EnableIntelligentShrinking=true,
+                            EnableJavascript=true,
+                            enablePlugins=true,
+                            PrintMediaType=true
+                            ,Background=true,
+
+                            },
+                            HeaderSettings =
+                            {
+                                HtmUrl=$"http://{serverUrl}/header?id={agent.Id}&from={ statemenmtPDF.DateFrom }&to={statemenmtPDF.DateTo}&balance={debitBalance}"
+
+                            }
+
+                        }
+                    }
+                    };
+                    byte[] pdf = _converter.Convert(doc);
+                    string wwwPath = _env.WebRootPath;
+                    string contentPath = _env.ContentRootPath;
+                    var ransomeNameStr = new Random().Next(DateTime.Now.Second, 10000).ToString() +
+                    new DateTime().Ticks.ToString();
+
+                    var isHttps = this.HttpContext.Request.IsHttps;
+                    var serverPath = isHttps ? "https://" : "http://" + serverUrl + $"/uploads/{ransomeNameStr}.pdf";
+                    System.IO.File.WriteAllBytes(contentPath + $"\\Uploads\\{ransomeNameStr}.pdf", pdf);
+
+                    page.PdfFileUrl = serverPath;
+                }
+                page.Data.AddRange(accountStatement.Skip((@params.Page - 1) * @params.ItemsPerPage).Take(@params.ItemsPerPage).ToList());
                 return constructResponse(page);
 
 
@@ -932,8 +993,67 @@ namespace PanoramaBackend.Api.Controllers
                 }
 
                 OtherConstants.isSuccessful = true;
+                if (@params.RequestPdf != null)
+                {
+                    var serverUrl = this.HttpContext.Request.Host.ToString();
+                    var statemenmtPDF = new AccountStatementPDF();
+                    statemenmtPDF.AccountTRN = agent.Id.ToString() + "/" + agent.CreateTime?.ToBinary().ToString() + "/" + DateTime.Now.Ticks;
+                    statemenmtPDF.AgentName = agent.DisplayNameAs;
+                    statemenmtPDF.DateFrom = @params.from.ToDateTime().ToShortDateString();
+                    statemenmtPDF.DateTo = @params.to.ToDateTime().ToShortDateString();
+                    statemenmtPDF.Country = "United Arab Emirates";
+                    statemenmtPDF.Emirates = "Dubai";
+                    statemenmtPDF.Statement = accountStatement;
+                    var render = await _engine.RenderViewToStringAsync("GetAgentPaginated", statemenmtPDF);
+                    var doc = new HtmlToPdfDocument()
+                    {
+                        GlobalSettings = {
+                        ColorMode = ColorMode.Color,
+                        Orientation = Orientation.Landscape,
+                        PaperSize = PaperKind.A4Plus,
+                    },
+                        Objects = {
+                        new ObjectSettings() {
 
-                page.Data.AddRange(accountStatement);
+                            PagesCount = true,
+                            HtmlContent = render,
+                            LoadSettings =
+                            {
+                                JSDelay=1000,
+                                StopSlowScript=false,
+
+                            },
+                            WebSettings = { DefaultEncoding = "utf-8",
+                            LoadImages=true,
+                            EnableIntelligentShrinking=true,
+                            EnableJavascript=true,
+                            enablePlugins=true,
+                            PrintMediaType=true
+                            ,Background=true,
+
+                            },
+                            HeaderSettings =
+                            {
+                                HtmUrl=$"http://localhost:{Port}/header?id={agent.Id}&from={ statemenmtPDF.DateFrom }&to={statemenmtPDF.DateTo}&balance={debitBalance}"
+
+                            }
+
+                        }
+                    }
+                    };
+                    byte[] pdf = _converter.Convert(doc);
+                    string wwwPath = _env.WebRootPath;
+                    string contentPath = _env.ContentRootPath;
+                    var ransomeNameStr = new Random().Next(DateTime.Now.Second, 10000).ToString() +
+                    new DateTime().Ticks.ToString();
+
+                    var isHttps = this.HttpContext.Request.IsHttps;
+                    var serverPath = isHttps ? "https://" : "http://" + serverUrl + $"/uploads/{ransomeNameStr}.pdf";
+                    System.IO.File.WriteAllBytes(contentPath + $"\\Uploads\\{ransomeNameStr}.pdf", pdf);
+
+                    page.PdfFileUrl = serverPath;
+                }
+                page.Data.AddRange(accountStatement.Skip((@params.Page - 1) * @params.ItemsPerPage).Take(@params.ItemsPerPage).ToList());
                 return constructResponse(page);
 
             }
@@ -1143,6 +1263,8 @@ namespace PanoramaBackend.Api.Controllers
                     #endregion 
                 }
                 #endregion
+
+                #region Operation
                 var entries = ledgers.OrderBy(x => x.TransactionDate).GroupBy(x => x.TransactionId).Select(
 
                     x => new
@@ -1170,7 +1292,7 @@ namespace PanoramaBackend.Api.Controllers
                 var _value = (@params.Page - 1) * @params.ItemsPerPage;
 
 
-                var list = entries.Skip((@params.Page - 1) * @params.ItemsPerPage).Take(@params.ItemsPerPage).ToList();
+                var list = entries.ToList();
                 //var lastItem = list.Last();
 
                 foreach (var item in list)
@@ -1296,9 +1418,72 @@ namespace PanoramaBackend.Api.Controllers
                     accountStatement.Add(debit);
 
                 }
+                #endregion
+
+                if (@params.RequestPdf!=null)
+                {
+                    var serverUrl = this.HttpContext.Request.Host.ToString();
+                  
+                    var statemenmtPDF = new AccountStatementPDF();
+                    statemenmtPDF.AccountTRN = agent.Id.ToString() + "/" + agent.CreateTime?.ToBinary().ToString() + "/" + DateTime.Now.Ticks;
+                    statemenmtPDF.AgentName = agent.DisplayNameAs;
+                    statemenmtPDF.DateFrom = @params.from.ToDateTime().ToShortDateString();
+                    statemenmtPDF.DateTo = @params.to.ToDateTime().ToShortDateString();
+                    statemenmtPDF.Country = "United Arab Emirates";
+                    statemenmtPDF.Emirates = "Dubai";
+                    statemenmtPDF.Statement = accountStatement;
+                    var render = await _engine.RenderViewToStringAsync("GetAgentPaginated", statemenmtPDF);
+                    var doc = new HtmlToPdfDocument()
+                    {
+                        GlobalSettings = {
+                        ColorMode = ColorMode.Color,
+                        Orientation = Orientation.Landscape,
+                        PaperSize = PaperKind.A4Plus,
+                    },
+                        Objects = {
+                        new ObjectSettings() {
+
+                            PagesCount = true,
+                            HtmlContent = render,
+                            LoadSettings =
+                            {
+                                JSDelay=1000,
+                                StopSlowScript=false,
+
+                            },
+                            WebSettings = { DefaultEncoding = "utf-8",
+                            LoadImages=true,
+                            EnableIntelligentShrinking=true,
+                            EnableJavascript=true,
+                            enablePlugins=true,
+                            PrintMediaType=true
+                            ,Background=true,
+
+                            },
+                            HeaderSettings =
+                            {
+                                HtmUrl=$"http://{serverUrl}:{Port}/header?id={agent.Id}&from={ statemenmtPDF.DateFrom }&to={statemenmtPDF.DateTo}&balance={debitBalance}"
+
+                            }
+
+                        }
+                    }
+                    };
+                    byte[] pdf = _converter.Convert(doc);
+                    string wwwPath = _env.WebRootPath;
+                    string contentPath = _env.ContentRootPath;
+                    var ransomeNameStr = new Random().Next(DateTime.Now.Second, 10000).ToString() +
+                    new DateTime().Ticks.ToString();
+             
+                    var isHttps = this.HttpContext.Request.IsHttps;
+                    var serverPath = isHttps ? "https://" : "http://" + serverUrl + $"/uploads/{ransomeNameStr}.pdf";
+                    System.IO.File.WriteAllBytes(contentPath + $"\\Uploads\\{ransomeNameStr}.pdf", pdf);
+
+                    page.PdfFileUrl = serverPath;
+                }
 
                 OtherConstants.isSuccessful = true;
-                page.Data.AddRange(accountStatement);
+                page.Data.AddRange(accountStatement.Skip((@params.Page - 1) * @params.ItemsPerPage).Take(@params.ItemsPerPage).ToList());
                 return constructResponse(page);
 
             }
@@ -1341,7 +1526,7 @@ namespace PanoramaBackend.Api.Controllers
               (x.TransactionDate.Date < @params.from.ToDateTime().Date)).Sum(x => x.Amount);
 
                 decimal debitBalance = 0;
-                page.TotalCount = entries.Count;
+                page.TotalCount = entries.Count();
                 // decimal creditBalance = 0;
 
 
@@ -1469,48 +1654,7 @@ namespace PanoramaBackend.Api.Controllers
                 var paginatedResult = accountStatement.Skip((@params.Page - 1) * @params.ItemsPerPage).Take(@params.ItemsPerPage).ToList();
                 // list = entries.Skip((@params.Page - 1) * @params.ItemsPerPage).Take(@params.ItemsPerPage).ToList();
                 OtherConstants.isSuccessful = true;
-                var statemenmtPDF = new AccountStatementPDF();
-                statemenmtPDF.Statement = accountStatement;
-                var render = await _engine.RenderViewToStringAsync("GetAgentPaginated", statemenmtPDF);
-                var doc = new HtmlToPdfDocument()
-                {
-                    GlobalSettings = {
-                        ColorMode = ColorMode.Color,
-                        Orientation = Orientation.Landscape,
-                        PaperSize = PaperKind.A4Plus,
-                    },
-                    Objects = {
-                        new ObjectSettings() {
-                          
-                            PagesCount = true,
-                            HtmlContent = render,
-                            LoadSettings =  
-                            {
-                                JSDelay=10000,
-                                StopSlowScript=false,
-                           
-                            },
-                            WebSettings = { DefaultEncoding = "utf-8",
-                            LoadImages=true,
-                            EnableIntelligentShrinking=true,
-                            EnableJavascript=true,
-                            enablePlugins=true,
-                            PrintMediaType=true
-                            ,Background=true,
-                            
-                            },
-                            HeaderSettings = { HtmUrl = "http://localhost:5000/Uploads/header.html?query=HelloWorLD" }
-                        }
-                    }
-                };
-                byte[] pdf = _converter.Convert(doc);
-                string wwwPath = _env.WebRootPath;
-                string contentPath = _env.ContentRootPath;
-                System.IO.File.WriteAllBytes(contentPath+"\\Uploads\\test.pdf", pdf);
-
-
           
-
                 page.Data.AddRange(paginatedResult);
                 page.TotalBalance = paginatedResult.Last().Balance;
                 return constructResponse(page);
@@ -1561,6 +1705,7 @@ namespace PanoramaBackend.Api.Controllers
         public string PhoneNumber { get; set; }
         public string Emirates { get; set; }
         public string Country { get; set; }
+        public string Balance { get; set; }
         public List<AgentStatementDTO> Statement { get; set; }
     }
 }

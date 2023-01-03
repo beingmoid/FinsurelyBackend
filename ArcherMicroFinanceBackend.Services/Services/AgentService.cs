@@ -189,15 +189,26 @@ namespace PanoramBackend.Services.Services
             page.TotalCount = agentCounts;
             page.TotalPages = agentCounts / @params.ItemsPerPage;
             //List<dynamic> _agents =
-            var agents =await query.Include(x => x.Accounts)
+            var agents = @params.SearchQuery == null ? await query.Include(x => x.Accounts)
                                 .ThenInclude(x => x.CreditLedgarEntries)
                                 .Include(x => x.Accounts)
                                 .ThenInclude(x => x.DebitLedgarEntries)
                                       .Where(x => x.IsAgent == true)
                                       .Skip((@params.Page - 1) * @params.ItemsPerPage)
                                       .Take((@params.ItemsPerPage))
-                                      .OrderBy(x => x.CreateTime.Value)
+                                      .OrderByDescending(x => x.CreateTime.Value)
+                                            .ToListAsync()
+
+                          : await query.Include(x => x.Accounts)
+                                .ThenInclude(x => x.CreditLedgarEntries)
+                                .Include(x => x.Accounts)
+                                .ThenInclude(x => x.DebitLedgarEntries)
+                                      .Where(x => x.IsAgent == true && x.DisplayNameAs.Contains(@params.SearchQuery.ToString()))
+                                      .Skip((@params.Page - 1) * @params.ItemsPerPage)
+                                      .Take((@params.ItemsPerPage))
+                                      .OrderBy(x => x.DisplayNameAs)
                                             .ToListAsync();
+
 
             foreach (var item in agents)
             {

@@ -201,7 +201,7 @@ namespace PanoramBackend.Data
 			this.CreateRelation<PolicyType, SalesInvoice>(x => x.SalesInvoice, x => x.PolicyType, x => x.PolicyTypeId);
 			this.CreateRelation<Service, SalesInvoice>(x => x.SalesInvoice, x => x.Service, x => x.ServiceId);
 			this.CreateRelation<Expense, Transaction>(x => x.Transactions, x => x.Expense, x => x.ExpenseId);
-            this.CreateRelation<Accounts,Refund>(x => x.Refunds, x => x.Account, x => x.AccountId);
+ 
 			
 
         }
@@ -1023,6 +1023,7 @@ namespace PanoramBackend.Data
 								new Accounts() { Id = 7, AccountDetailTypeId = 41, Name = "VAT Payable", Description = "Liablity" },
 								new Accounts() { Id = 8, AccountDetailTypeId = 81, Name = "Retained Earning", Description = "Owner's Equity" },
 									new Accounts() { Id = 9, AccountDetailTypeId = 81, Name = "Opening Balance Equity", Description = "Owner's Equity" },
+									new Accounts() { Id = 100, AccountDetailTypeId = 45, Name = "Refund Income Account", Description = "Refund Income Collector" },
 
 			});
 

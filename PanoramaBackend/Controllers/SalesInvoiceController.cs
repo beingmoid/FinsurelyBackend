@@ -30,14 +30,21 @@ using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json.Linq;
 using NLog;
 using PanoramBackend.Data.Repository;
+using Microsoft.AspNetCore.Hosting;
+using PanoramBackend.Data;
+using PanoramaBackend.Services;
+using FluentExcel;
 
 namespace PanoramaBackend.Api.Controllers
 {
 
-    public class SalesInvoiceController : BaseController<SalesInvoice,int>
+    public class SalesInvoiceController : BaseController<SalesInvoice, int>
     {
         private readonly ISalesInvoiceService _service;
+        private readonly AMFContext _context;
         private readonly IFileUploader _fileUploader;
+        private readonly IWebHostEnvironment _env;
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IDocumentService _docService;
 
         private readonly IServiceProvider _serviceProvider;
@@ -45,24 +52,28 @@ namespace PanoramaBackend.Api.Controllers
         //private readonly IElasticClient _elasticClient;
         private readonly ISalesInvoiceRepository _salesRepo;
 
-//        public string GetElasticsearchBulkJsonFromJson(string jsonStringWithArrayOfObjects, string firstParameterNameOfObjectInJsonStringArrayOfObjects)
-//        {
-//            return @"{ ""index"":{ } } 
-//" + jsonStringWithArrayOfObjects.Substring(1, jsonStringWithArrayOfObjects.Length - 2).Replace(@",{""" + firstParameterNameOfObjectInJsonStringArrayOfObjects + @"""", @" 
-//{ ""index"":{ } } 
-//{""" + firstParameterNameOfObjectInJsonStringArrayOfObjects + @"""") + @"
-//";
-//        }
-        public SalesInvoiceController(RequestScope requestScope,ISalesInvoiceService service,
+        //        public string GetElasticsearchBulkJsonFromJson(string jsonStringWithArrayOfObjects, string firstParameterNameOfObjectInJsonStringArrayOfObjects)
+        //        {
+        //            return @"{ ""index"":{ } } 
+        //" + jsonStringWithArrayOfObjects.Substring(1, jsonStringWithArrayOfObjects.Length - 2).Replace(@",{""" + firstParameterNameOfObjectInJsonStringArrayOfObjects + @"""", @" 
+        //{ ""index"":{ } } 
+        //{""" + firstParameterNameOfObjectInJsonStringArrayOfObjects + @"""") + @"
+        //";
+        //        }
+        public SalesInvoiceController(RequestScope requestScope, ISalesInvoiceService service,
                    IFileUploader fileUploader,
                    IServiceProvider serviceProvider,
                    ISalesInvoiceRepository salesRepo,
+                   IWebHostEnvironment webHostEnvironment,
+                   AMFContext context,
                    //IElasticClient elasticClient,
-                   IDocumentService docService)    
-            :base(requestScope,service)
+                   IDocumentService docService)
+            : base(requestScope, service)
         {
             _service = service;
+            _context = context;
             _fileUploader = fileUploader;
+            _env = webHostEnvironment;
             _docService = docService;
             _serviceProvider = serviceProvider;
             //_elasticClient = elasticClient;
@@ -72,7 +83,7 @@ namespace PanoramaBackend.Api.Controllers
         [HttpGet("GetPaginated")]
         public async Task<BaseResponse> GetPaginated(int page, int pageSize)
         {
-            var data = (await this._service.Get(x => x 
+            var data = (await this._service.Get(x => x
             .Include(x => x.SalesInvoicePerson)
             //Sales Agent
             .Include(x => x.PaymentMethod)
@@ -86,11 +97,11 @@ namespace PanoramaBackend.Api.Controllers
             .Include(x => x.Branch)
             )).ToList();
             //Insurance Company
-            
+
             if (data != null)
             {
-                var response = new { data = data.Skip((page-1) * pageSize).Take(pageSize).ToList(), totalRows = data.Count };
-         
+                var response = new { data = data.Skip((page - 1) * pageSize).Take(pageSize).ToList(), totalRows = data.Count };
+
                 OtherConstants.isSuccessful = true;
                 return constructResponse(response);
             }
@@ -121,9 +132,9 @@ namespace PanoramaBackend.Api.Controllers
             .Include(x => x.InsuranceCompany)
             .Include(x => x.Branch)
             )).ToList();
-            
-                
-         
+
+
+
                 var pool = new SingleNodeConnectionPool(new Uri("http://localhost:9200/"));
 
                 var connectionSettings =
@@ -133,9 +144,9 @@ namespace PanoramaBackend.Api.Controllers
                         resolver => resolver.NamingStrategy = new SnakeCaseNamingStrategy()
                     ));
                 connectionSettings.EnableApiVersioningHeader(true);
-   
-        
-            
+
+
+
                 connectionSettings.EnableApiVersioningHeader(true);
                 var client = new ElasticClient(connectionSettings);
                 var jobjs = new List<string>();
@@ -145,20 +156,20 @@ namespace PanoramaBackend.Api.Controllers
                     var j = JsonConvert.SerializeObject(x);
                     jobjs.Add(j);
                 });
-              //var res=  this.transmitBulkData(jobjs, "sales", "SalesInvocie", client, DateTime.Now, messages);
-           
+                //var res=  this.transmitBulkData(jobjs, "sales", "SalesInvocie", client, DateTime.Now, messages);
+
                 return constructResponse(null);
             }
-       
-      
 
-                 catch (Exception ex)
+
+
+            catch (Exception ex)
             {
-     
+
                 return constructResponse(ex);
-      
+
             }
-      
+
 
 
         }
@@ -180,7 +191,7 @@ namespace PanoramaBackend.Api.Controllers
             )); //Insurance Company
 
 
-            
+
             OtherConstants.isSuccessful = true;
             OtherConstants.messageType = MessageType.Success;
             return constructResponse(sales);
@@ -208,7 +219,7 @@ namespace PanoramaBackend.Api.Controllers
                         BlobFileName = blob.BlobFileName,
                         BlobURI = blob.BlobURI
                     };
-                  var result=  (await _docService.Insert(new[] { doc }));
+                    var result = (await _docService.Insert(new[] { doc }));
                     //var headers = _service.GetExcelColumnHeader(blob.BlobURI);
                     OtherConstants.isSuccessful = result.Success;
                     return constructResponse(result.Entities.FirstOrDefault());
@@ -225,10 +236,10 @@ namespace PanoramaBackend.Api.Controllers
         [HttpGet("GetColumnHeader")]
         public BaseResponse GetColumnHeader(string fileUrl)
         {
-        
-         var headers = _service.GetExcelColumnHeader(fileUrl);
-         OtherConstants.isSuccessful = true;
-         return constructResponse(headers);
+
+            var headers = _service.GetExcelColumnHeader(fileUrl);
+            OtherConstants.isSuccessful = true;
+            return constructResponse(headers);
         }
         //public FileResult downloadFile(string filePath, string fileName)
         //{
@@ -241,46 +252,27 @@ namespace PanoramaBackend.Api.Controllers
         [HttpPost("BulkUpload")]
         public async Task<BaseResponse> BulkUploadExcelFile([FromForm(Name = "file")] IFormFile file, string? salesDate)
         {
+            string wwwPath = _env.WebRootPath;
+            string contentPath = _env.ContentRootPath;
+
+
             if (file != null)
             {
-
+                var filename = Path.GetFileName(file.FileName);
+                var filePath = contentPath + $"\\uploads\\{new DateTime().Ticks.ToString()}" + filename;
                 var ms = new MemoryStream();
+
 
                 file.CopyTo(ms);
                 var fileBytes = ms.ToArray();
-                string s = Convert.ToBase64String(fileBytes);
-                var blob = await _fileUploader.UploadFileAsync(file.FileName, fileBytes, "lym-files");
-                var doc = new Documents()
-                {
-                    BlobFileName = blob.BlobFileName,
-                    BlobURI = blob.BlobURI
-                };
-                var filesPath = Directory.GetCurrentDirectory() + "/Uploads/Test.xlsx";
-                ms.Close();
-
-                var result = (await _docService.Insert(new[] { doc }));
-                ////var headers = _service.GetExcelColumnHeader(blob.BlobURI);
-                //if (!System.IO.Directory.Exists(filesPath))
-                //{
-                //    Directory.CreateDirectory(filesPath);
-                //}
-
-                //var filename = Path.GetFileName(file.FileName);
-                //var filePath = Path.Combine(filesPath, filename);
-
-                //if (System.IO.File.Exists(filePath))
-                //{
-                //    System.IO.File.Delete(filePath);
-                //}
-
-                //var stream = new FileStream(filePath, FileMode.CreateNew);
-
-                //    await file.CopyToAsync(stream);
 
 
-                BlobServiceClient blobServiceClient = new BlobServiceClient(Blobs.ConnectionString);
-                BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient("lym-files");
-                BlobClient blobClient = containerClient.GetBlobClient(doc.BlobFileName);
+                var stream = new FileStream(filePath, FileMode.CreateNew);
+
+                await file.CopyToAsync(stream);
+
+
+
 
                 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
@@ -294,7 +286,7 @@ namespace PanoramaBackend.Api.Controllers
                 List<SalesInvoice> RejectedList = new List<SalesInvoice>();
                 ExcelPackage.LicenseContext = LicenseContext.Commercial;
 
-                using (var stream = await blobClient.OpenReadAsync(new BlobOpenReadOptions(true)))
+                //using (var stream = file.OpenReadStream())
                 using (ExcelPackage package = new ExcelPackage(stream))
                 {
 
@@ -302,13 +294,8 @@ namespace PanoramaBackend.Api.Controllers
                     ExcelWorksheet worksheet = package.Workbook.Worksheets.First();
                     int rowCount = worksheet.Dimension.Rows;
                     int ColCount = worksheet.Dimension.Columns;
-
-
-
-                    
-                    //char[] charsToTrim = { '*', ' ', '\'' };
                     int col = 1;
-                    
+
 
                     for (int row = 2; row <= rowCount; row++)
                     {
@@ -368,7 +355,7 @@ namespace PanoramaBackend.Api.Controllers
 
 
                         isPolicyType = PolicyType != null ? Policy?.FirstOrDefault(x => x.Name == PolicyType) != null : false;
-      
+
                         isVehicle = Vehicles != null ? Vehicles?.FirstOrDefault(x => x.Make == Make && x.Model == Model) != null : false;
                         isBodyType = Body != null ? Body?.FirstOrDefault(x => x.Name == BodyType) != null : false;
                         isService = Service != null ? Services?.FirstOrDefault(x => x.Name == Service) != null : false;
@@ -459,9 +446,9 @@ namespace PanoramaBackend.Api.Controllers
                         {
                             sales.InsuranceCompanyId = InsuranceCompanies.FirstOrDefault(x => x.DisplayNameAs == InsuranceCompany).Id;
                         }
-                       
 
-                              sales.SalesInvoiceDate = DateTime.FromOADate(Convert.ToDouble(SalesDate));
+
+                        sales.SalesInvoiceDate = DateTime.FromOADate(Convert.ToDouble(SalesDate));
                         sales.UnderWritter = Underwritter;
                         sales.Notes = Notes;
 
@@ -474,13 +461,13 @@ namespace PanoramaBackend.Api.Controllers
                         double PriceWithoutvat = (double)saleLine.PremiumPrice / 1.05;
                         double commisionRate = (double)PriceWithoutvat * (double)com;
                         var VAT = (double)saleLine.PremiumPrice - (double)PriceWithoutvat;
-                
+
                         saleLine.ActualComission = (decimal)commisionRate;
                         saleLine.VAT = (decimal)VAT;
                         saleLine.SalesPrice = SalesPrice;
-                        saleLine.Net = (decimal) ( (PriceWithoutvat - commisionRate) + VAT);
+                        saleLine.Net = (decimal)((PriceWithoutvat - commisionRate) + VAT);
                         var cultureInfo = new CultureInfo("en-AE");
-                
+
                         sales.SaleLineItem.Add(saleLine);
 
                         if (sales.SalesInvoicePersonId != null && sales.BodyTypeId != null &&
@@ -494,20 +481,20 @@ namespace PanoramaBackend.Api.Controllers
                             ListToInsert.Add(sales);
                             isRowRejected = false;
                             var status = await _service.Insert(new[] { sales });
-                           
+
                         }
                         else
                         {
-                            RejectedList.Add(sales??new SalesInvoice());
+                            RejectedList.Add(sales ?? new SalesInvoice());
                             isRowRejected = true;
-                        
+
                         }
                         col = 1;
 
-                   
-                      
+
+
                     }
-              
+
                 }
 
 
@@ -528,6 +515,144 @@ namespace PanoramaBackend.Api.Controllers
             return constructResponse(await _service.UpdateAsync(id, entity));
         }
 
+        [AllowAnonymous]
+        [HttpPost("SalesSearch")]
+        public async Task<BaseResponse> SalesSearch([FromBody] PaginationParams<int> data)
+        {
+            var page = new PageConfig();
+
+            var query = _context.Set<SalesInvoice>()
+             .Include(x => x.SalesInvoicePerson)
+            //Sales Agent
+            .Include(x => x.PaymentMethod)
+            .Include(x => x.SaleLineItem)
+
+                                    .ThenInclude(x => x.Vehicle)
+                                      .Include(x => x.PolicyType)
+            .Include(x => x.Service)
+            .Include(x => x.BodyType)
+            .Include(x => x.InsuranceCompany)
+            .Include(x => x.Branch);
+
+            List<SalesInvoice> queryData = new List<SalesInvoice>();
+
+            if (data.SearchQuery!=null && (data.from==null || data.to==null) && data.BranchId==null )
+            {
+                queryData = await query.Where(x =>
+
+
+                (x.SaleLineItem.SingleOrDefault().PolicyNumber.Contains(data.SearchQuery))
+
+                ||
+                (x.CustomerName.Contains(data.SearchQuery))
+                ||
+                (x.InsuranceCompanyName.Contains(data.SearchQuery))
+                ||
+                (x.InsuranceType.Name.Contains(data.SearchQuery))
+
+                ).ToListAsync();
+                page.TotalCount = queryData.Count();
+                
+            }
+            else if (data.SearchQuery!=null && (data.from !=null && data.to!=null) && data.BranchId!=null)
+            {
+                queryData = await query.Where(x =>
+
+                (
+                (x.SalesInvoiceDate.Date>=data.from.ToDateTime().Date) 
+                
+                &&
+                
+                (x.SalesInvoiceDate.Date<= data.to.ToDateTime().Date)
+                )
+                &&
+                (x.BranchId==data.BranchId)
+
+                &&
+
+            (   (x.SaleLineItem.SingleOrDefault().PolicyNumber.Contains(data.SearchQuery))
+
+               ||
+               (x.CustomerName.Contains(data.SearchQuery))
+               ||
+               (x.InsuranceCompanyName.Contains(data.SearchQuery))
+               ||
+               (x.InsuranceType.Name.Contains(data.SearchQuery)))
+
+               ).ToListAsync();
+                page.TotalCount = queryData.Count();
+            }
+            else if(data.SearchQuery==null && (data.from != null && data.to != null) && data.BranchId==null )
+            {
+                queryData = await query.Where(x =>
+
+                (
+                (x.SalesInvoiceDate.Date >= data.from.ToDateTime().Date)
+
+                &&
+
+                (x.SalesInvoiceDate.Date <= data.to.ToDateTime().Date)
+                )).ToListAsync();
+
+                page.TotalCount = queryData.Count();
+            }
+            else
+            {
+
+                queryData = await query.ToListAsync();
+
+                page.TotalCount = queryData.Count();
+            }
+
+            if (data.RequestExcel!=null)
+            {
+                List<SalesInvoiceReport> report = new List<SalesInvoiceReport>();
+                foreach (var item in queryData)
+                {
+                    var salesInvoiceReport = new SalesInvoiceReport();
+
+                    salesInvoiceReport.Date = item.SalesInvoiceDate.Date.ToShortDateString();
+                    salesInvoiceReport.PolicyNumber = item.SaleLineItem.SingleOrDefault().PolicyNumber;
+                    salesInvoiceReport.CustomerName = item.CustomerName;
+                    salesInvoiceReport.InsuranceBroker = item.InsuranceCompany.DisplayNameAs;
+                    salesInvoiceReport.InsuranceCompany = item.InsuranceCompanyName;
+                    salesInvoiceReport.SalesAgent = item.SalesInvoicePerson.DisplayNameAs;
+                    salesInvoiceReport.Branch = item.Branch.BranchName;
+                    salesInvoiceReport.Vehicle = item.SaleLineItem.SingleOrDefault().Vehicle.Make + item.SaleLineItem.SingleOrDefault().Vehicle.Model;
+                    salesInvoiceReport.UnderWritter = item.UnderWritter;
+                    salesInvoiceReport.Gross = item.SaleLineItem.SingleOrDefault().Gross.ToString();
+                    salesInvoiceReport.VAT = item.SaleLineItem.SingleOrDefault().VAT.ToString();
+                    salesInvoiceReport.NET = item.SaleLineItem.SingleOrDefault().Net.ToString();
+                    salesInvoiceReport.Commission = item.SaleLineItem.SingleOrDefault().Commission.ToString() + "%";
+
+                    report.Add(salesInvoiceReport);
+                }
+
+                #region Excel Export Method
+
+                string wwwPath = _env.WebRootPath;
+                string contentPath = _env.ContentRootPath;
+                string path = Path.Combine(contentPath, $"\\uploads\\salesReport{new DateTime().Ticks.ToString()}.xlsx");
+                var serverUrl = this.HttpContext.Request.Host.ToString();
+                var ransomeNameStr = new Random().Next(DateTime.Now.Second, 10000).ToString() +
+                    new DateTime().Ticks.ToString();
+                var isHttps = this.HttpContext.Request.IsHttps;
+
+                var serverPath = isHttps ? "https://" : "http://" + serverUrl + $"/uploads/{ransomeNameStr}.xlsx";
+                report.ToExcel(contentPath + $"\\uploads\\{ransomeNameStr}.xlsx");
+
+                page.ExcelFileUrl = serverPath;
+
+#endregion
+            }
+
+           var finalSales = queryData.OrderByDescending(x=>x.CreateTime).Skip(((data.Page - 1) * data.ItemsPerPage)).Take(data.ItemsPerPage).ToList();
+            page.Data.AddRange(finalSales);
+
+            OtherConstants.isSuccessful = true;
+            return constructResponse(page);
+            
+        }
         //public async Task Search([FromBody] PaginationParams<int> data)
         //{
             
@@ -536,6 +661,26 @@ namespace PanoramaBackend.Api.Controllers
         //{
 
         //}
+
+    }
+
+    public class SalesInvoiceReport
+    {
+
+        public string Date { get; set; }
+        public string PolicyNumber { get; set; }
+        public string CustomerName { get; set; }
+        public string InsuranceCompany { get; set; }
+        public string InsuranceBroker { get; set; }
+        public string SalesAgent { get; set; }
+        public string Branch { get; set; }
+        public string Vehicle { get; set; }
+        public string UnderWritter { get; set; }
+        public string Gross { get; set; }
+        public string VAT { get; set; }
+        public string NET  { get; set; }
+        public string Commission { get; set; }
+
 
     }
 }

@@ -14,8 +14,7 @@ namespace PanoramBackend.Data.Entities
         public string BranchAddress { get; set; }
      
         private ICollection<SalesInvoice> _sales;
-        [IgnoreDataMember]
-        [JsonIgnore]
+
         public ICollection<SalesInvoice> Sales => _sales ?? (_sales = new List<SalesInvoice>());
 
         private ICollection<Expense> _expenseByBranch;

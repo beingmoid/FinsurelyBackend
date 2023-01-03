@@ -11,6 +11,7 @@ namespace PanoramBackend.Data.Entities
     {
         public string CustomerName { get; set; }
         public string ChassisNumber { get; set; }
+        public string InsuranceCompanyName { get; set; }
         public int? CustomerDetailId { get; set; }
         public UserDetails CustomerDetails { get; set; }
         public DateTime SalesInvoiceDate { get; set; }

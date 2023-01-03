@@ -347,7 +347,14 @@ namespace PanoramaBackend
 
         public void Configure(IApplicationBuilder app)
         {
-          
+            app.UseCors(x => x
+        .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowAnyOrigin()
+                .SetIsOriginAllowed(origin => true) // allow any origin
+                .DisallowCredentials()
+
+); // allow credentials
             ServiceActivator.Configure(app.ApplicationServices);
             ExpenseExcel.ConfigureExcel();
             if (_env.IsDevelopment())
@@ -377,14 +384,7 @@ namespace PanoramaBackend
                 RequestPath = "/uploads"
             });
             app.UseRouting();
-            app.UseCors(x => x
-                  .AllowAnyMethod()
-                          .AllowAnyHeader()
-                          .AllowAnyOrigin()
-                          .SetIsOriginAllowed(origin => true) // allow any origin
-                          .DisallowCredentials()
 
-); // allow credentials
             
             app.UseMiddleware<ExceptionMiddleware>();
  

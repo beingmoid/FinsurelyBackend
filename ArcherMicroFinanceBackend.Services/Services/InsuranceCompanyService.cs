@@ -95,35 +95,27 @@ namespace PanoramBackend.Services.Services
                 if (paymentAndBilling?.OpeningBalance != null)
                 {
                     var transaction = new Transaction();
-
-                    //Creation Of Sales Invoice
-                    SalesInvoice sales = new SalesInvoice();
-                    sales.SalesInvoiceDate = DateTime.Now;
-                    sales.InsuranceCompanyId = item.Id;
-                    sales.Total = paymentAndBilling.OpeningBalance;
-                    sales.PaymentStatus = PaymentStatus.Unpaid;
-                    await _salesInvoiceService.Insert(new[] { sales });
-                    //Saving Invoice
-                    var result = await _salesInvoiceService.SaveChanges();
                     //Making Transaction
                     transaction.Memo = "Opening Balance";
                     transaction.TransactionDate = (DateTime)paymentAndBilling?.Asof;
                     transaction.UserDetailId = item.Id;
-                    transaction.SalesInvoiceId = sales.Id;
-                    transaction.TransactionType = TransactionTypes.InsuranceCredit;
+    
+                    transaction.TransactionType = TransactionTypes.OpeningBalance;
                     //Recording Transaction In Ledger
                     LedgarEntries ledgar = new LedgarEntries();
                     ledgar.TransactionDate = (DateTime)paymentAndBilling?.Asof;
-                    ledgar.DebitAccountId = item.DefaultAccountId;
+                    ledgar.DebitAccountId = BuiltinAccounts.AccountsPayable;
                     ledgar.Amount = (decimal)paymentAndBilling?.OpeningBalance;
                     transaction.LedgarEntries.Add(ledgar);
+
+
                     var creditTransaction = new Transaction();
                     creditTransaction.TransactionDate = (DateTime)paymentAndBilling?.Asof;
                     creditTransaction.Memo = "Opening Balance";
                     LedgarEntries creditEntry = new LedgarEntries();
                     creditEntry.TransactionDate = (DateTime)paymentAndBilling?.Asof;
                     creditEntry.Amount = (decimal)paymentAndBilling?.OpeningBalance;
-                    creditEntry.CreditAccountId = BuiltinAccounts.AccountsPayable;
+                    creditEntry.CreditAccountId = item.DefaultAccountId;;
                     transaction.LedgarEntries.Add(creditEntry);
                     await _transactionService.Insert(new[] { transaction });
 

@@ -35,8 +35,8 @@ namespace PanoramBackend.Services.Mapper
 				.ForMember(x => x.DepositPayments, x => x.MapFrom(x => x.DepositPayments)).ReverseMap()
 				.ForMember(x => x.AccountDetailType, x => x.MapFrom(x => x.AccountDetailType)).ReverseMap()
 				.ForMember(x => x.SubAccounts, x => x.MapFrom(x => x.SubAccounts)).ReverseMap()
-				.ForMember(x => x.UserDetail, x => x.MapFrom(x => x.UserDetail)).ReverseMap()
-				.ForMember(x => x.Refunds, x => x.MapFrom(x => x.Refunds)).ReverseMap();
+				.ForMember(x => x.UserDetail, x => x.MapFrom(x => x.UserDetail)).ReverseMap();
+			
 			this.CreateMap<AccountDetailType>();
 			this.CreateMap<AccountType>();
 			this.CreateMap<LedgarEntries>();

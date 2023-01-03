@@ -19,7 +19,6 @@ namespace PanoramBackend.Data.Entities
         public PolicyType PolicyType { get; set; }
         public string CompanyName { get; set; }
         public string CustomerName { get; set; }
-
         public string PolicyNumber { get; set; }
         public int? InsuranceTypeId { get; set; }
         public InsuranceType InsuranceType { get; set; }
@@ -29,8 +28,7 @@ namespace PanoramBackend.Data.Entities
         public string MessageOnStatement { get; set; }
         public decimal AmountForSalesAgent { get; set; }
         public decimal AmountForBroker { get; set; }
-        public int AccountId { get; set; }
-        public Accounts Account { get; set; }
+
         private ICollection<Transaction> _Transaction;
         public ICollection<Transaction> Transactions => _Transaction ?? (_Transaction = new List<Transaction>());
     }

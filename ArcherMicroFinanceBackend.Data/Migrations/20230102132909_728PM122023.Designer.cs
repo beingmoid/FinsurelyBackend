@@ -10,8 +10,8 @@ using PanoramBackend.Data;
 namespace PanoramaBackend.Data.Migrations
 {
     [DbContext(typeof(AMFContext))]
-    [Migration("20221229223750_12292022")]
-    partial class _12292022
+    [Migration("20230102132909_728PM122023")]
+    partial class _728PM122023
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -1814,6 +1814,14 @@ namespace PanoramaBackend.Data.Migrations
                             Description = "Owner's Equity",
                             IsDeleted = false,
                             Name = "Opening Balance Equity"
+                        },
+                        new
+                        {
+                            Id = 100,
+                            AccountDetailTypeId = 45,
+                            Description = "Refund Income Collector",
+                            IsDeleted = false,
+                            Name = "Refund Income Account"
                         });
                 });
 
@@ -3319,9 +3327,6 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("AccountId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("AgentId")
                         .HasColumnType("int");
 
@@ -3386,8 +3391,6 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AccountId");
 
                     b.HasIndex("AgentId");
 
@@ -3518,6 +3521,9 @@ namespace PanoramaBackend.Data.Migrations
 
                     b.Property<int?>("InsuranceCompanyId")
                         .HasColumnType("int");
+
+                    b.Property<string>("InsuranceCompanyName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("InsuranceTypeId")
                         .HasColumnType("int");
@@ -4331,14 +4337,14 @@ namespace PanoramaBackend.Data.Migrations
                         new
                         {
                             Id = "a18be9c0-aa65-4af8-bd17-00bd9344e575",
-                            ConcurrencyStamp = "9c3d2021-9135-438f-8c12-f432f941b425",
+                            ConcurrencyStamp = "41ab2eef-1fca-4d22-9eeb-4125159af303",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
                             Id = "a18be9c0-aa65-4af8-bd17-00bd9344e678",
-                            ConcurrencyStamp = "84e0123b-dd24-4ce6-8f83-c1b74640378a",
+                            ConcurrencyStamp = "3dbe1e9c-cb04-49e6-a985-128d43839a08",
                             Name = "CompanyAdmin",
                             NormalizedName = "CompanyAdmin"
                         });
@@ -4413,13 +4419,13 @@ namespace PanoramaBackend.Data.Migrations
                         {
                             Id = "a18be9c0-aa65-4af8-bd17-00bd9344e575",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "bac081fb-2504-49ec-a824-4372b166c9f1",
+                            ConcurrencyStamp = "97cbfa3a-32d7-4829-9251-3728c6fdfcca",
                             Email = "admin@nukeslab.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "admin@nukeslab.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEM1x8pnrd2PHQZ9ZkOe6QEO3xBZ/w4gUCBsDRsbyPkT1GRcdy92xiSZB1xc+ogmVtw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEKEKUiNGUY59Jx1UVK4YNvQQ/NfTX7ay7eBfWOL1y/Ix/KeVgo4+V5zFFIZhFH3hLQ==",
                             PhoneNumber = "+923400064394",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
@@ -5009,12 +5015,6 @@ namespace PanoramaBackend.Data.Migrations
 
             modelBuilder.Entity("PanoramBackend.Data.Entities.Refund", b =>
                 {
-                    b.HasOne("PanoramBackend.Data.Entities.Accounts", "Account")
-                        .WithMany("Refunds")
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("PanoramBackend.Data.Entities.UserDetails", "Agent")
                         .WithMany("AgentRefunds")
                         .HasForeignKey("AgentId")
