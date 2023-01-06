@@ -28,7 +28,7 @@ namespace PanoramaBackend.Api.Controllers
         public override async Task<BaseResponse> Get()
         {
             var response = (await _service.Get(x => x.Include(x => x.Vehicle)
-            .Include(x => x.PolicyType)
+  
             .Include(x => x.InsuranceType)
             .Include(x => x.InsuranceCompany)
             .Include(x => x.Agent)

@@ -15,8 +15,7 @@ namespace PanoramBackend.Data.Entities
         public DateTime RefundDate { get; set; }
         //public int PaymentMethodId { get; set; }
         //public PaymentMethod PaymentMethod { get; set; }
-        public int? PolicyTypeId { get; set; }
-        public PolicyType PolicyType { get; set; }
+
         public string CompanyName { get; set; }
         public string CustomerName { get; set; }
         public string PolicyNumber { get; set; }

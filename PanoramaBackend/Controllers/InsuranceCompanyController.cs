@@ -419,7 +419,7 @@ namespace PanoramaBackend.Api.Controllers
                     debit.InvoiceDate = _actualItem?.Transaction?.Refund?.RefundDate;
                     debit.CustomerName = _actualItem?.Transaction?.Refund?.CustomerName;
                     debit.PolicyNumber = _actualItem?.Transaction?.Refund?.PolicyNumber;
-                    debit.PolicyType = _actualItem?.Transaction?.Refund?.PolicyType?.Name;
+        
                     //debit.RefNo = _actualItem?.Transaction?.Refund?.;
 
                     debit.InsuranceType = _actualItem?.Transaction?.Refund?.InsuranceType?.Name;

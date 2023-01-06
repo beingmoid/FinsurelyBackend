@@ -255,25 +255,6 @@ namespace PanoramaBackend.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PolicyType",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CreateUserId = table.Column<string>(nullable: true),
-                    CreateTime = table.Column<DateTime>(nullable: true),
-                    EditUserId = table.Column<string>(nullable: true),
-                    EditTime = table.Column<DateTime>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    Timestamp = table.Column<byte[]>(nullable: true),
-                    Name = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PolicyType", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "PreferredPaymentMethod",
                 columns: table => new
                 {
@@ -957,7 +938,6 @@ namespace PanoramaBackend.Data.Migrations
                     AgentId = table.Column<int>(nullable: true),
                     InsuranceCompanyId = table.Column<int>(nullable: true),
                     RefundDate = table.Column<DateTime>(nullable: false),
-                    PolicyTypeId = table.Column<int>(nullable: true),
                     CompanyName = table.Column<string>(nullable: true),
                     CustomerName = table.Column<string>(nullable: true),
                     PolicyNumber = table.Column<string>(nullable: true),
@@ -987,12 +967,6 @@ namespace PanoramaBackend.Data.Migrations
                         name: "FK_Refund_InsuranceType_InsuranceTypeId",
                         column: x => x.InsuranceTypeId,
                         principalTable: "InsuranceType",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Refund_PolicyType_PolicyTypeId",
-                        column: x => x.PolicyTypeId,
-                        principalTable: "PolicyType",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -1028,8 +1002,7 @@ namespace PanoramaBackend.Data.Migrations
                     UnderWritter = table.Column<string>(nullable: true),
                     PaymentMethodId = table.Column<int>(nullable: true),
                     Notes = table.Column<string>(nullable: true),
-                    Total = table.Column<decimal>(nullable: true),
-                    PolicyTypeId = table.Column<int>(nullable: true)
+                    Total = table.Column<decimal>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1068,12 +1041,6 @@ namespace PanoramaBackend.Data.Migrations
                         name: "FK_SalesInvoice_PaymentMethod_PaymentMethodId",
                         column: x => x.PaymentMethodId,
                         principalTable: "PaymentMethod",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_SalesInvoice_PolicyType_PolicyTypeId",
-                        column: x => x.PolicyTypeId,
-                        principalTable: "PolicyType",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -1747,14 +1714,14 @@ namespace PanoramaBackend.Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "a18be9c0-aa65-4af8-bd17-00bd9344e575", "d5453d92-8bda-4d07-9334-866afb0700fd", "Admin", "Admin" },
-                    { "a18be9c0-aa65-4af8-bd17-00bd9344e678", "2f2b411d-6d13-41be-8dc4-f035fb8f0038", "CompanyAdmin", "CompanyAdmin" }
+                    { "a18be9c0-aa65-4af8-bd17-00bd9344e575", "99be1c15-1d84-42b8-9bb1-f63b9f63705b", "Admin", "Admin" },
+                    { "a18be9c0-aa65-4af8-bd17-00bd9344e678", "0df817e5-350d-455c-b87b-8bfe9cd21c66", "CompanyAdmin", "CompanyAdmin" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "a18be9c0-aa65-4af8-bd17-00bd9344e575", 0, "49e669a4-628e-4611-abe1-ba28d95bba1c", "admin@nukeslab.com", true, false, null, "admin@nukeslab.com", "admin", "AQAAAAEAACcQAAAAEJVSutxMCIwAAM4t7tnTu/0sJLbyx+eYK7VzNUkbHwtyZEuYcI8dgHnUkPOqxFEd4A==", "+923400064394", false, "", false, "moid" });
+                values: new object[] { "a18be9c0-aa65-4af8-bd17-00bd9344e575", 0, "229addaa-b317-4a3a-bcd2-1884a460753a", "admin@nukeslab.com", true, false, null, "admin@nukeslab.com", "admin", "AQAAAAEAACcQAAAAECi8vBnVupW/7vDw1SvoJHwL7a8LUk6Y/V21VV34VhHmZB38wF9GGq8JDud72Izycw==", "+923400064394", false, "", false, "moid" });
 
             migrationBuilder.InsertData(
                 table: "BDType",
@@ -1776,18 +1743,9 @@ namespace PanoramaBackend.Data.Migrations
                 values: new object[,]
                 {
                     { 1, null, null, null, null, false, "Cash" },
-                    { 2, null, null, null, null, false, "Cheque" },
                     { 3, null, null, null, null, false, "Debit Card" },
+                    { 2, null, null, null, null, false, "Cheque" },
                     { 4, null, null, null, null, false, "Credit Card" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "PolicyType",
-                columns: new[] { "Id", "CreateTime", "CreateUserId", "EditTime", "EditUserId", "IsDeleted", "Name", "Timestamp" },
-                values: new object[,]
-                {
-                    { 2, null, null, null, null, false, "Life Insurance", null },
-                    { 1, null, null, null, null, false, "Motor Insurance", null }
                 });
 
             migrationBuilder.InsertData(
@@ -1806,9 +1764,9 @@ namespace PanoramaBackend.Data.Migrations
                 columns: new[] { "Id", "CreateTime", "CreateUserId", "EditTime", "EditUserId", "IsDeleted", "Name" },
                 values: new object[,]
                 {
-                    { 3, null, null, null, null, false, "high" },
+                    { 1, null, null, null, null, false, "low" },
                     { 2, null, null, null, null, false, "medium" },
-                    { 1, null, null, null, null, false, "low" }
+                    { 3, null, null, null, null, false, "high" }
                 });
 
             migrationBuilder.InsertData(
@@ -1816,9 +1774,9 @@ namespace PanoramaBackend.Data.Migrations
                 columns: new[] { "Id", "CreateTime", "CreateUserId", "EditTime", "EditUserId", "IsDeleted", "Name" },
                 values: new object[,]
                 {
+                    { 3, null, null, null, null, false, "pending" },
                     { 2, null, null, null, null, false, "inprocess" },
-                    { 1, null, null, null, null, false, "completed" },
-                    { 3, null, null, null, null, false, "pending" }
+                    { 1, null, null, null, null, false, "completed" }
                 });
 
             migrationBuilder.InsertData(
@@ -1826,10 +1784,10 @@ namespace PanoramaBackend.Data.Migrations
                 columns: new[] { "Id", "CreateTime", "CreateUserId", "EditTime", "EditUserId", "IsDeleted", "Text" },
                 values: new object[,]
                 {
-                    { 1, null, null, null, null, false, "Due on recipt" },
                     { 2, null, null, null, null, false, "Net 15" },
                     { 3, null, null, null, null, false, "Net 30" },
-                    { 4, null, null, null, null, false, "Net 60" }
+                    { 4, null, null, null, null, false, "Net 60" },
+                    { 1, null, null, null, null, false, "Due on recipt" }
                 });
 
             migrationBuilder.InsertData(
@@ -2335,11 +2293,6 @@ namespace PanoramaBackend.Data.Migrations
                 column: "InsuranceTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Refund_PolicyTypeId",
-                table: "Refund",
-                column: "PolicyTypeId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Refund_VehilcleId",
                 table: "Refund",
                 column: "VehilcleId");
@@ -2383,11 +2336,6 @@ namespace PanoramaBackend.Data.Migrations
                 name: "IX_SalesInvoice_PaymentMethodId",
                 table: "SalesInvoice",
                 column: "PaymentMethodId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SalesInvoice_PolicyTypeId",
-                table: "SalesInvoice",
-                column: "PolicyTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SalesInvoice_SalesInvoicePersonId",
@@ -2627,9 +2575,6 @@ namespace PanoramaBackend.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "PaymentMethod");
-
-            migrationBuilder.DropTable(
-                name: "PolicyType");
 
             migrationBuilder.DropTable(
                 name: "Teams");

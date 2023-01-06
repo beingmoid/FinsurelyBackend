@@ -1238,22 +1238,7 @@ namespace PanoramBackend.Data
 
 			};
 			modelBuilder.Entity<BDType>().HasData(bdTypes.ToArray());
-			var policyTypes = new List<PolicyType>()
-			{
-				new PolicyType()
-			{
-				Id=1,
-				Name="Motor Insurance",
 
-			},      new PolicyType()
-			{
-				Id=2,
-				Name="Life Insurance",
-
-			}
-
-			};
-			modelBuilder.Entity<PolicyType>().HasData(policyTypes.ToArray());
 		}
 
 		private void SeedStaticData(ModelBuilder modelBuilder)

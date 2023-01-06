@@ -507,11 +507,6 @@ namespace PanoramaBackend.Api.Controllers
         //}
 
 
-        public override async Task<BaseResponse> Put(int id, [FromBody] SalesInvoice entity)
-        {
-            return constructResponse(await _service.UpdateAsync(id, entity));
-        }
-
         [AllowAnonymous]
         [HttpPost("SalesSearch")]
         public async Task<BaseResponse> SalesSearch([FromBody] PaginationParams<int> data)
