@@ -35,8 +35,7 @@ namespace PanoramBackend.Data.Entities
         public PaymentMethod PaymentMethod { get; set; }
         public string Notes { get; set; }
         public decimal? Total { get; set; }
-        public InvoiceType InvoiceType { get; set; }
-        public PaymentStatus? PaymentStatus { get; set; }
+
         private ICollection<SaleLineItem> _SaleLineItem;
         //[IgnoreDataMember]
         //[JsonIgnore]
@@ -90,7 +89,6 @@ namespace PanoramBackend.Data.Entities
         public decimal? Gross { get; set; }
         public decimal? VAT { get; set; }
         public decimal? Commission { get; set; }
-        public decimal? PremiumPrice { get; set; }
         public decimal? CommisionRate { get; set; }
         public decimal? Net { get; set; }
         public decimal? SalesPrice { get; set; }

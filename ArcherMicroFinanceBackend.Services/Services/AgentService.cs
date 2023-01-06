@@ -81,7 +81,7 @@ namespace PanoramBackend.Services.Services
                  SalesInvoice sales = new SalesInvoice();
                 sales.SalesInvoiceDate = DateTime.Now;
                 sales.SalesInvoicePersonId = item.Id;
-                sales.PaymentStatus = PaymentStatus.Unpaid;
+     
                 sales.Total = paymentAndBilling.OpeningBalance;
                  await  _salesInvoiceService.Insert(new[] { sales });
                     //Saving Invoice
@@ -135,7 +135,7 @@ namespace PanoramBackend.Services.Services
                     SalesInvoice sales = new SalesInvoice();
                     sales.SalesInvoiceDate = DateTime.Now;
                     sales.SalesInvoicePersonId = item.Id;
-                    sales.PaymentStatus = PaymentStatus.Unpaid;
+                    
                     sales.Total = paymentAndBilling.OpeningBalance;
                     await _salesInvoiceService.Insert(new[] { sales });
                     //Saving Invoice
@@ -161,6 +161,8 @@ namespace PanoramBackend.Services.Services
                     await _transactionService.SaveChanges();
 
                 }
+
+
             }
 
         }

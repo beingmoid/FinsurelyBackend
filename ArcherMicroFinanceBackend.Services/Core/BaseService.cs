@@ -234,9 +234,18 @@ namespace PanoramBackend.Services.Core
             }
             else
             {
-                var result = await this.Repository.Update(id, dbEntity) & await this.Repository.SaveChanges();
-                await this.OnUpdated(new[] { dbEntity });
-                return (dbEntity,result);
+                try
+                {
+                    var result = await this.Repository.Update(id, dbEntity) & await this.Repository.SaveChanges();
+                    await this.OnUpdated(new[] { dbEntity });
+                    return (dbEntity, result);
+                }
+                catch (Exception ex)
+                {
+
+                    throw;
+                }
+    
             }
           
       

@@ -126,21 +126,24 @@ namespace PanoramBackend.Services.Services
 
         public async Task<List<UserDetails>> GetCompaniesWithBalance()
         {
-               
-            var companies = await _repo.GetCompaniesWithBalance();
+
+
+            var companies = (await this.Get()).ToList();
             var ledger = (await _ledger.Get()).ToList();
             foreach (var item in companies)
             {
-             
-                var credit = ledger.Where(x => x.DebitAccountId == item.DefaultAccountId).Sum(x => x.Amount);
-                item.OpenBalance = credit;
+                var debit = ledger.Where(x => x.DebitAccountId == item.DefaultAccountId).Sum(x => x.Amount);
+                var credit = ledger.Where(x => x.CreditAccountId == item.DefaultAccountId).Sum(x => x.Amount);
+                item.OpenBalance = debit + credit;
 
-            } 
+            }
 
 
 
-                return companies.ToList();
+            return companies.ToList();
+
         }
+
 
         public async Task<decimal> GetBalance(int Id)
         {

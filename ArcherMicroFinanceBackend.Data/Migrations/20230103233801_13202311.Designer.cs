@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PanoramBackend.Data;
 
 namespace PanoramaBackend.Data.Migrations
 {
     [DbContext(typeof(AMFContext))]
-    partial class AMFContextModelSnapshot : ModelSnapshot
+    [Migration("20230103233801_13202311")]
+    partial class _13202311
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

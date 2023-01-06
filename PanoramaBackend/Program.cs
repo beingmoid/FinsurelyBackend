@@ -30,8 +30,9 @@ namespace PanoramaBackend
             webBuilder.ConfigureKestrel(serverOptions =>
             {
 
-          
-       
+             //  webBuilder.UseUrls("http://192.168.100.163:5001");
+
+
 
             })
             .UseStartup<Startup>();
