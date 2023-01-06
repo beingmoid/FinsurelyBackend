@@ -107,8 +107,8 @@ namespace PanoramBackend.Data
 			this.InitializeEntity<Branch>();
 			this.InitializeEntity<Payment>();
 			this.InitializeEntity<BodyType>();
-			this.InitializeEntity<PolicyType>();
-			this.InitializeEntity<Service>();
+			//this.InitializeEntity<PolicyType>();
+			//this.InitializeEntity<Service>();
 			this.InitializeEntity<Refund>();
 			this.InitializeEntity<Expense>();
 			this.InitializeEntity<Announcement>();
@@ -198,8 +198,8 @@ namespace PanoramBackend.Data
 			this.CreateRelation<Documents, Reconcilation>(x => x.ReconcilationInsuranceCompany, x => x.Documents, x => x.DocumentId);
 			this.CreateRelation<Branch, SalesInvoice>(x => x.Sales, x => x.Branch, x => x.BranchId);
 			this.CreateRelation<BodyType, SalesInvoice>(x => x.SalesInvoice, x => x.BodyType, x => x.BodyTypeId);
-			this.CreateRelation<PolicyType, SalesInvoice>(x => x.SalesInvoice, x => x.PolicyType, x => x.PolicyTypeId);
-			this.CreateRelation<Service, SalesInvoice>(x => x.SalesInvoice, x => x.Service, x => x.ServiceId);
+
+
 			this.CreateRelation<Expense, Transaction>(x => x.Transactions, x => x.Expense, x => x.ExpenseId);
  
 			

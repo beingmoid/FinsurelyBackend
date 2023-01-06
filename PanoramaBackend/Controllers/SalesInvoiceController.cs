@@ -88,8 +88,6 @@ namespace PanoramaBackend.Api.Controllers
             //Sales Agent
             .Include(x => x.PaymentMethod)
 
-            .Include(x => x.PolicyType)
-            .Include(x => x.Service)
             .Include(x => x.BodyType)
                  .Include(x => x.SaleLineItem)
                                     .ThenInclude(x => x.Vehicle)
@@ -124,8 +122,7 @@ namespace PanoramaBackend.Api.Controllers
             //Sales Agent
             .Include(x => x.PaymentMethod)
 
-            .Include(x => x.PolicyType)
-            .Include(x => x.Service)
+
             .Include(x => x.BodyType)
                  .Include(x => x.SaleLineItem)
                                     .ThenInclude(x => x.Vehicle)
@@ -183,8 +180,8 @@ namespace PanoramaBackend.Api.Controllers
             .Include(x => x.SaleLineItem)
 
                                     .ThenInclude(x => x.Vehicle)
-                                      .Include(x => x.PolicyType)
-            .Include(x => x.Service)
+                       
+
             .Include(x => x.BodyType)
             .Include(x => x.InsuranceCompany)
             .Include(x => x.Branch)
@@ -528,8 +525,8 @@ namespace PanoramaBackend.Api.Controllers
             .Include(x => x.SaleLineItem)
 
                                     .ThenInclude(x => x.Vehicle)
-                                      .Include(x => x.PolicyType)
-            .Include(x => x.Service)
+                        
+
             .Include(x => x.BodyType)
             .Include(x => x.InsuranceCompany)
             .Include(x => x.Branch);

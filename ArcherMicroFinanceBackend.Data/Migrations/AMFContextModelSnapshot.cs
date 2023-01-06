@@ -3086,17 +3086,13 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreateUserId")
-                        .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EditUserId")
-                        .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -3105,9 +3101,7 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("Timestamp")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
+                        .HasColumnType("varbinary(max)");
 
                     b.HasKey("Id");
 
@@ -3541,9 +3535,6 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<int?>("SalesInvoicePersonId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ServiceId")
-                        .HasColumnType("int");
-
                     b.Property<byte[]>("Timestamp")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
@@ -3573,51 +3564,7 @@ namespace PanoramaBackend.Data.Migrations
 
                     b.HasIndex("SalesInvoicePersonId");
 
-                    b.HasIndex("ServiceId");
-
                     b.ToTable("SalesInvoice");
-                });
-
-            modelBuilder.Entity("PanoramBackend.Data.Entities.Service", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime?>("CreateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreateUserId")
-                        .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<DateTime?>("EditTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EditUserId")
-                        .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("PolicyTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<byte[]>("Timestamp")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Service");
                 });
 
             modelBuilder.Entity("PanoramBackend.Data.Entities.StaffOffBoarding", b =>
@@ -4326,14 +4273,14 @@ namespace PanoramaBackend.Data.Migrations
                         new
                         {
                             Id = "a18be9c0-aa65-4af8-bd17-00bd9344e575",
-                            ConcurrencyStamp = "431011e3-f1ce-4958-aa9e-938ee91464c0",
+                            ConcurrencyStamp = "d5453d92-8bda-4d07-9334-866afb0700fd",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
                             Id = "a18be9c0-aa65-4af8-bd17-00bd9344e678",
-                            ConcurrencyStamp = "6ab5309e-1f62-4ae8-987c-ea83c12d8554",
+                            ConcurrencyStamp = "2f2b411d-6d13-41be-8dc4-f035fb8f0038",
                             Name = "CompanyAdmin",
                             NormalizedName = "CompanyAdmin"
                         });
@@ -4408,13 +4355,13 @@ namespace PanoramaBackend.Data.Migrations
                         {
                             Id = "a18be9c0-aa65-4af8-bd17-00bd9344e575",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "0374b5e4-7d20-4209-a488-197ad2ab6073",
+                            ConcurrencyStamp = "49e669a4-628e-4611-abe1-ba28d95bba1c",
                             Email = "admin@nukeslab.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "admin@nukeslab.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEL9OULB0KXHcyWzUlTftQ/QgJ3u/JLC6/HmZFujJ9q91dRQJlgvSJsVJCpHZmkHAyQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJVSutxMCIwAAM4t7tnTu/0sJLbyx+eYK7VzNUkbHwtyZEuYcI8dgHnUkPOqxFEd4A==",
                             PhoneNumber = "+923400064394",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
@@ -5076,19 +5023,13 @@ namespace PanoramaBackend.Data.Migrations
                         .HasForeignKey("PaymentMethodId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("PanoramBackend.Data.Entities.PolicyType", "PolicyType")
+                    b.HasOne("PanoramBackend.Data.Entities.PolicyType", null)
                         .WithMany("SalesInvoice")
-                        .HasForeignKey("PolicyTypeId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("PolicyTypeId");
 
                     b.HasOne("PanoramBackend.Data.Entities.UserDetails", "SalesInvoicePerson")
                         .WithMany("SalesInvoicePersons")
                         .HasForeignKey("SalesInvoicePersonId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("PanoramBackend.Data.Entities.Service", "Service")
-                        .WithMany("SalesInvoice")
-                        .HasForeignKey("ServiceId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 

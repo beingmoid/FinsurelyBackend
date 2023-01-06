@@ -143,10 +143,8 @@ namespace PanoramaBackend.Api.Controllers
                   .ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.InsuranceType)
        .Include(x => x.Transaction)
                   .ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.Branch)
-           .Include(x => x.Transaction)
-                  .ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.Service)
-       .Include(x => x.Transaction)
-                  .ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.PolicyType)
+
+
        .Include(x => x.Transaction)
                   .ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.BodyType)
 
@@ -162,10 +160,10 @@ namespace PanoramaBackend.Api.Controllers
                                                           .ThenInclude(x => x.Vehicle)
                    .Include(x => x.Transaction)
                                                    .ThenInclude(x => x.Refund)
-                                                          .ThenInclude(x => x.PolicyType)
+                                 
                                                           .Include(x => x.Transaction)
                                                    .ThenInclude(x => x.Refund)
-                                                          .ThenInclude(x => x.PolicyType)
+                  
                                                                     .Include(x => x.Transaction)
                                                    .ThenInclude(x => x.Refund)
 
@@ -346,8 +344,7 @@ namespace PanoramaBackend.Api.Controllers
                     debit.InvoiceDate = _actualItem?.Transaction?.SalesInvoice?.SalesInvoiceDate;
                     debit.CustomerName = _actualItem?.Transaction?.SalesInvoice?.CustomerName;
                     debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.SingleOrDefault()?.PolicyNumber;
-                    debit.PolicyType = _actualItem?.Transaction?.SalesInvoice?.PolicyType?.Name;
-                    debit.ServiceType = _actualItem?.Transaction?.SalesInvoice?.Service?.Name;
+
                     debit.InsuranceType = _actualItem?.Transaction?.SalesInvoice?.InsuranceType?.Name;
                     debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
                                 SingleOrDefault().Vehicle?.Make + " " + " | " +

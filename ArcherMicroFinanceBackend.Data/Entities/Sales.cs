@@ -18,11 +18,6 @@ namespace PanoramBackend.Data.Entities
         public int? SalesInvoicePersonId { get; set; }
         public int? BodyTypeId { get; set; }
         public BodyType BodyType { get; set; }
-        public int? PolicyTypeId { get; set; }
-        public PolicyType PolicyType { get; set; }
-
-        public int? ServiceId { get; set; }
-        public Service Service { get; set; }
         public UserDetails SalesInvoicePerson { get; set; }
         public int? InsuranceCompanyId { get; set; }
         public UserDetails InsuranceCompany { get; set; }

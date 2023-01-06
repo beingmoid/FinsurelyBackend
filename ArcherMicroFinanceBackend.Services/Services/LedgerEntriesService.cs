@@ -27,9 +27,9 @@ namespace PanoramBackend.Services.Services
             var ledger = (await this.Get(x => x.Include(x => x.DebitAccount)
            .Include(x => x.Transaction).ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.CustomerDetails)
            .Include(x => x.Transaction).ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.SaleLineItem).ThenInclude(x => x.Vehicle)
-           .Include(x => x.Transaction).ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.Service)
+      
            .Include(x => x.Transaction).ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.BodyType)
-           .Include(x => x.Transaction).ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.PolicyType)
+      
             .Include(x => x.Transaction).ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.InsuranceType)
              .Include(x => x.Transaction).ThenInclude(x => x.Payment)
              .Include(x=>x.Transaction).ThenInclude(x=>x.Refund).ThenInclude(x => x.Vehicle)
@@ -127,8 +127,7 @@ namespace PanoramBackend.Services.Services
                     {
                         entry.Name = saleLineItem?.SalesInvoice?.CustomerDetails.DisplayNameAs;
                         entry.Bodytype = saleLineItem.SalesInvoice?.BodyType?.Name;
-                        entry.PolicyType=saleLineItem.SalesInvoice?.PolicyType?.Name;
-                        entry.Service = saleLineItem.SalesInvoice?.Service.Name;
+      
                         entry.InsuranceType=saleLineItem.SalesInvoice.InsuranceType.Name;
                         entry.PolicyNumber = saleLineItem?.PolicyNumber;
                         entry.Vehicle = saleLineItem?.Vehicle?.Make + " | " + saleLineItem?.Vehicle?.Model;
