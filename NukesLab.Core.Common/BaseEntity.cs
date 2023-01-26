@@ -26,17 +26,19 @@ namespace NukesLab.Core.Common
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public virtual TKey Id { get; set; }
 
-
-		public string CreateUserId { get;  set; }
-		public DateTime? CreateTime { get;  set; }
-
+        [JsonIgnore]
+        public string CreateUserId { get;  set; }
+        [JsonIgnore]
+        public DateTime? CreateTime { get;  set; }
+        [JsonIgnore]
         public string EditUserId { get;  set; }
-		public DateTime? EditTime { get;  set; }
+        [JsonIgnore]
+        public DateTime? EditTime { get;  set; }
 
 		[JsonIgnore]
 		public bool IsDeleted { get; set; }
-		[JsonIgnore]
-		public byte[] Timestamp { get; set; }
+
+        public byte[] Timestamp { get; set; }
 		[NotMapped]
 		[JsonIgnore]
 		public bool IsNew => (this.Id == null) ? false : this.Id.Equals(default(TKey));

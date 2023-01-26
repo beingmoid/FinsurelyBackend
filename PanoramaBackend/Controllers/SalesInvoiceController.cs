@@ -199,6 +199,12 @@ namespace PanoramaBackend.Api.Controllers
         //    var sales = _salesRepo.Get(x=>x.)
         //}
 
+        public async override Task<BaseResponse> Put(int id, [FromBody] SalesInvoice entity)
+        {
+            _context.Set<SalesInvoice>().Update(entity).State=EntityState.Modified;
+            OtherConstants.isSuccessful = _context.SaveChanges() > 0;
+            return constructResponse(entity);
+        }
         [HttpPost("UploadExcel")]
         public async Task<BaseResponse> UploadExcel([FromForm(Name = "file")] IFormFile file)
         {

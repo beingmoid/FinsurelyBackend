@@ -172,7 +172,7 @@ namespace PanoramBackend.Data
           
                 this._requestScope.Entry(entity).Property("EditUserId").CurrentValue = _requestScope.GetService<IUserProvider>().UserId;
                 this._requestScope.Entry(entity).Property("EditTime").CurrentValue = DateTime.Now;
-
+				
 
             //TEntity dbEntity = await _requestScope.FindAsync<TEntity>(entity.Id);
             return  _requestScope.Update(entity).State == EntityState.Modified;

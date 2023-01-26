@@ -4216,14 +4216,14 @@ namespace PanoramaBackend.Data.Migrations
                         new
                         {
                             Id = "a18be9c0-aa65-4af8-bd17-00bd9344e575",
-                            ConcurrencyStamp = "99be1c15-1d84-42b8-9bb1-f63b9f63705b",
+                            ConcurrencyStamp = "6a372f80-4215-429f-8dd8-98a08cb66546",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
                             Id = "a18be9c0-aa65-4af8-bd17-00bd9344e678",
-                            ConcurrencyStamp = "0df817e5-350d-455c-b87b-8bfe9cd21c66",
+                            ConcurrencyStamp = "2150399b-b9a2-4627-bc81-9cc3795a7830",
                             Name = "CompanyAdmin",
                             NormalizedName = "CompanyAdmin"
                         });
@@ -4298,13 +4298,13 @@ namespace PanoramaBackend.Data.Migrations
                         {
                             Id = "a18be9c0-aa65-4af8-bd17-00bd9344e575",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "229addaa-b317-4a3a-bcd2-1884a460753a",
+                            ConcurrencyStamp = "3e6d46c2-72d5-493d-80ab-4926012d097b",
                             Email = "admin@nukeslab.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "admin@nukeslab.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAECi8vBnVupW/7vDw1SvoJHwL7a8LUk6Y/V21VV34VhHmZB38wF9GGq8JDud72Izycw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEPx7srXf+g9TFGaOQBTANT2ZzSXNH32VKmIUzOCWRzviKHmU4m74i/e5xoM+0ISSfg==",
                             PhoneNumber = "+923400064394",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",

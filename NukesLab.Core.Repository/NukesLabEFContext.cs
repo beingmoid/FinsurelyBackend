@@ -8,6 +8,7 @@ using NukesLab.Core.Common;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using EntityFramework.Exceptions.SqlServer;
 
 namespace NukesLab.Core.Repository
 {
@@ -49,8 +50,11 @@ namespace NukesLab.Core.Repository
 		{
 			optionsBuilder.UseSqlServer(ConnectionStrings.PortalConnectionString);
             optionsBuilder.UseInternalServiceProvider(serviceProvider);
+            optionsBuilder.UseExceptionProcessor();
             optionsBuilder.EnableDetailedErrors(true);
-			base.OnConfiguring(optionsBuilder);
+            optionsBuilder.EnableSensitiveDataLogging(true);
+
+            base.OnConfiguring(optionsBuilder);
 		}
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
@@ -89,14 +93,16 @@ namespace NukesLab.Core.Repository
 		.HasMaxLength(100).HasColumnName("EditUserId");
 
 
-            //entityTypeBuilder
-            //    .Property(o => o.AuditEntries<TEntity>.CreateTime)
-            //    .HasValueGenerator<CurrentTimeGener~tor>();
+			//entityTypeBuilder
+			//    .Property(o => o.AuditEntries<TEntity>.CreateTime)
+			//    .HasValueGenerator<CurrentTimeGener~tor>();
 
 
-            entityTypeBuilder
+			entityTypeBuilder
 				.Property(o => o.Timestamp)
-				.IsRowVersion();
+				.IsRowVersion()
+				.IsConcurrencyToken(true)
+				.ValueGeneratedOnAddOrUpdate();
 
 			return entityTypeBuilder;
 		}

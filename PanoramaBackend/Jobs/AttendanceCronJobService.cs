@@ -27,7 +27,7 @@ namespace PanoramaBackend.Api.Jobs
             Console.WriteLine("Starting Attendance Cron Job!");
             await Task.Delay(60000, stoppingToken); //1 Minute delay
             do
-            {
+                {
                 var now = DateTime.Now;
                 var nextrun = _schedule.GetNextOccurrence(now);
                 if (now > _nextRun)

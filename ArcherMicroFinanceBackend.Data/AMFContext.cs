@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NPOI.HSSF.Record;
 using NukesLab.Core.Common;
 using NukesLab.Core.Repository;
@@ -9,6 +10,7 @@ using PanoramBackend.Data.Repository;
 using PanoramBackend.Services.Data.DTOs;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using Transaction = PanoramBackend.Data.Entities.Transaction;
 
@@ -38,16 +40,27 @@ namespace PanoramBackend.Data
 			InitializeEntities();
             SeedStaticData(modelBuilder);
             SeedTestingData(modelBuilder);
-            //foreach (var item in modelBuilder.Model.GetEntityTypes())
-            //{
-            //    var p = item.FindPrimaryKey().Properties.FirstOrDefault(i => i.ValueGenerated != Microsoft.EntityFrameworkCore.Metadata.ValueGenerated.Never);
-            //    if (p != null)
-            //    {
-            //        p.ValueGenerated = Microsoft.EntityFrameworkCore.Metadata.ValueGenerated.Never;
-            //    }
+			//foreach (var item in modelBuilder.Model.GetEntityTypes())
+			//{
+			//    var p = item.FindPrimaryKey().Properties.FirstOrDefault(i => i.ValueGenerated != Microsoft.EntityFrameworkCore.Metadata.ValueGenerated.Never);
+			//    if (p != null)
+			//    {
+			//        p.ValueGenerated = Microsoft.EntityFrameworkCore.Metadata.ValueGenerated.Never;
+			//    }
 
-            //}
-            //_modelBuilder.Entry(entity).Reference(x => x.CreatedBy).IsModified = false;
+			//}
+			//_modelBuilder.Entry(entity).Reference(x => x.CreatedBy).IsModified = false;
+
+			//foreach (var item in modelBuilder.Model.GetEntityTypes())
+			//{
+			//	var p = item.FindPrimaryKey().Properties.FirstOrDefault(i => i.ValueGenerated != Microsoft.EntityFrameworkCore.Metadata.ValueGenerated.Never);
+			//	if (p != null)
+			//	{
+			//		p.ValueGenerated = Microsoft.EntityFrameworkCore.Metadata.ValueGenerated.Never;
+			//	}
+
+   //         }
+		
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -70,7 +83,8 @@ namespace PanoramBackend.Data
 			this.InitializeEntity<PreferredPaymentMethod>();
 			this.InitializeEntity<Terms>();
 			this.InitializeEntity<PaymentMethod>();
-			this.InitializeEntity<SalesInvoice>();
+			this.InitializeEntity<SalesInvoice>()
+				;
 			this.InitializeEntity<SaleLineItem>();
 			this.InitializeEntity<InsuranceType>();
 			this.InitializeEntity<Vehicle>();

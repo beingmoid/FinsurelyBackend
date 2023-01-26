@@ -14,6 +14,11 @@ using System.Net;
 using OfficeOpenXml;
 using PanoramBackend.Data;
 using static NukesLab.Core.Common.Constants;
+using Z.EntityFramework.Plus;
+using Microsoft.Data.SqlClient;
+using EntityFramework.Exceptions.Common;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Stripe;
 
 namespace PanoramBackend.Services.Services
 {
@@ -23,9 +28,15 @@ namespace PanoramBackend.Services.Services
         private readonly ILedgerEntriesService ledgerEntriesService;
         private readonly ILedgerEntriesRepository ledgerEntriesRepository;
         private readonly ISalesInvoiceRepository _salesRepo;
+        private readonly IAgentService _agentService;
         private readonly AMFContext _context;
 
-        public SalesInvoiceService(RequestScope scopeContext, ISalesInvoiceRepository salesRepo, AMFContext context, ISalesInvoiceRepository repo, ITransactionService transactionService, ILedgerEntriesService ledgerEntriesService, ILedgerEntriesRepository ledgerEntriesRepository)
+        public SalesInvoiceService(RequestScope scopeContext, ISalesInvoiceRepository salesRepo, 
+            
+            AMFContext context, ISalesInvoiceRepository repo, ITransactionService transactionService, 
+            ILedgerEntriesService ledgerEntriesService, 
+            ILedgerEntriesRepository ledgerEntriesRepository,
+            IAgentService agentService)
             : base(scopeContext, repo)
         {
             _transactionService = transactionService;
@@ -33,29 +44,11 @@ namespace PanoramBackend.Services.Services
             this.ledgerEntriesService = ledgerEntriesService;
             this.ledgerEntriesRepository = ledgerEntriesRepository;
             _salesRepo = salesRepo;
-
+            _agentService = agentService;
             _context = context;
         }
 
-        protected async override Task WhileUpdating(IEnumerable<SalesInvoice> entities)
-        {
-
-            var newEntry = entities.FirstOrDefault();
-
-
-         
-
-                var sales = (await this.Get(x => x
-
-                .Include(x => x.SalesInvoicePerson).ThenInclude(x => x.Transactions).ThenInclude(x => x.LedgarEntries)
-                     .Include(x => x.InsuranceCompany).ThenInclude(x => x.Transactions).ThenInclude(x => x.LedgarEntries)
-                , x => x.Id == newEntry.Id)).SingleOrDefault();
-
-
-
-
-            
-        }
+     
           
 
 
@@ -153,128 +146,124 @@ namespace PanoramBackend.Services.Services
             }
         }
 
-//        public async Task<bool> UpdateAsync(int id, SalesInvoice entity)
-//        {
-//            foreach (var item in new[] { entity })
-//            {
-//                ////item.IsSupplier = true;
-//                //item.Total = item.SaleLineItem.Sum(x=>x.Total);
-             
-//                var sales = (await this.Get(x => x.Include(x => x.CustomerDetails).Include(x => x.SalesInvoicePerson).Include(x => x.SaleLineItem).Include(x => x.InsuranceCompany)
-        
-//                .Include(x => x.SalesInvoicePerson).ThenInclude(x => x.Transactions).ThenInclude(x => x.LedgarEntries)
-//                     .Include(x => x.InsuranceCompany).ThenInclude(x => x.Transactions).ThenInclude(x => x.LedgarEntries)
-//                , x => x.Id == item.Id)).SingleOrDefault();
+        public async Task<bool> UpdateAsync(int id, SalesInvoice entity)
+       {
+          
+            _context.Entry(entity).State = EntityState.Modified;
 
-//                if (item.SalesInvoicePersonId != sales.SalesInvoicePersonId)
-//                {
-//                    var transactionForAgent = sales.SalesInvoicePerson.Transactions.FirstOrDefault(x => x.UserDetailId == sales.SalesInvoicePersonId);
-//                    //transaction.Memo = "Opening Balance";
-//                    transactionForAgent.TransactionDate = item.SalesInvoiceDate;
-//                    transactionForAgent.UserDetailId = item.SalesInvoicePersonId;
-//                    transactionForAgent.SalesInvoiceId = sales.Id;
-//                    transactionForAgent.TransactionType = TransactionTypes.Invoice;
+            foreach (SaleLineItem child in entity.SaleLineItem)
+            {
+                _context.Entry(child).State = child.Id == 0 ? EntityState.Added : EntityState.Modified;
+            }
 
-//                    try
-//                    {
-//                        var newSaleAgent = (await _context.Set<UserDetails>().AsNoTracking().Where(x => x.Id == item.SalesInvoicePersonId).ToListAsync()).SingleOrDefault();
-//                        //Recording Transaction In Ledger
-//                        LedgarEntries Debitledgar = transactionForAgent.LedgarEntries.SingleOrDefault(x => x.DebitAccountId != null);
-//                        Debitledgar.TransactionDate = sales.SalesInvoiceDate;
-//                        Debitledgar.DebitAccountId = newSaleAgent.DefaultAccountId; //(A/R)
-//                        Debitledgar.Amount = (decimal)item.SaleLineItem.FirstOrDefault().SalesPrice;
-
-//                        var credit_ledger = transactionForAgent.LedgarEntries.SingleOrDefault(x => x.CreditAccountId != null);
-//                        credit_ledger.TransactionDate = item.SalesInvoiceDate;
-//                        credit_ledger.CreditAccountId = BuiltinAccounts.SalesAccount; //(Income)
-//                        credit_ledger.Amount = (decimal)item.SaleLineItem.FirstOrDefault().SalesPrice;
-
-//                        _context.Set<Transaction>().Update(transactionForAgent);
-//                        await _context.SaveChangesAsync();
-//                    }
-//                    catch (Exception ex)
-//                    {
-
-//                        throw ex;
-//                    }
-
-//                }
-//                if (item.InsuranceCompanyId != sales.InsuranceCompanyId)
-//                {
-//                    var transactionForCompany = sales.InsuranceCompany.Transactions.SingleOrDefault(x => x.UserDetailId == sales.InsuranceCompanyId);
-
-//                    transactionForCompany.TransactionDate = item.SalesInvoiceDate;
-//                    transactionForCompany.UserDetailId = item.InsuranceCompanyId;
-//                    transactionForCompany.SalesInvoiceId = sales.Id;
-//                    transactionForCompany.TransactionType = TransactionTypes.InsuranceCredit;
-
-//                    var newSaleAgent = await _context.Set<UserDetails>().AsNoTracking().SingleOrDefaultAsync(x => x.Id == item.InsuranceCompanyId);
-//                    var cCreditLedger = transactionForCompany.LedgarEntries.SingleOrDefault(x => x.CreditAccountId != null);
-//                    cCreditLedger.TransactionDate = item.SalesInvoiceDate;
-//                    cCreditLedger.CreditAccountId = item.InsuranceCompany?.DefaultAccountId; //AP
-//                    cCreditLedger.Amount = ((decimal)item.SaleLineItem.FirstOrDefault().Net);
-//                    transactionForCompany.LedgarEntries
-//                        .Add(cCreditLedger);
-//                    LedgarEntries Cdebitledger = transactionForCompany.LedgarEntries.SingleOrDefault(x => x.DebitAccountId != null);
-//                    Cdebitledger.TransactionDate = item.SalesInvoiceDate;
-//                    Cdebitledger.DebitAccountId = BuiltinAccounts.AccountsPayable; //EX
-//                    Cdebitledger.Amount = (decimal)item.SaleLineItem.FirstOrDefault().Net;
-//                    _context.Set<Transaction>().Update(transactionForCompany);
-//                    await _context.SaveChangesAsync();
-//                }
-//            }
-
-//                var _sales =  _context.Set<SalesInvoice>().SingleOrDefault(x => x.Id == id);
-
-//            //this.Map(entity, sales);
-//            var entry =_context.Entry(_sales);
-//            entry.CurrentValues.SetValues(entity);
-//            var result =  _context.SaveChanges() > 0;
-//            if(result)
-//            {
-////                var Agent = _context.Set<UserDetails>().FirstOrDefault(x=>x.Id==entity.SalesInvoicePersonId);
-////                var Broker = _context.Set<UserDetails>().FirstOrDefault(x => x.Id == entity.InsuranceCompanyId);
-////                var transaction = await _transactionService.Get(x=>x.Include(x=>x.LedgarEntries),x => x.SalesInvoiceId == entity.Id);
-////                var AgentTran = transaction.SingleOrDefault(x => x.TransactionType == TransactionTypes.Invoice)
-////;
-////                var CompanTran = transaction.SingleOrDefault(x => x.TransactionType == TransactionTypes.InsuranceCredit);
-
-////                var AgentDebitLedgar = AgentTran.LedgarEntries.SingleOrDefault(x => x.DebitAccountId != null);
-////                var AgentCreditLedgar = AgentTran.LedgarEntries.SingleOrDefault(x => x.CreditAccountId != null);
-
-////                AgentDebitLedgar.DebitAccountId = Agent.DefaultAccountId;
-////                AgentDebitLedgar.Amount = (decimal) entity.SaleLineItem.SingleOrDefault().SalesPrice;
-////                AgentCreditLedgar.Amount = (decimal)entity.SaleLineItem.SingleOrDefault().SalesPrice;
-       
-////                var BrokerDebitLedgar = AgentTran.LedgarEntries.SingleOrDefault(x => x.DebitAccountId != null);
-
-////                var BrokerCreditLedgar = AgentTran.LedgarEntries.SingleOrDefault(x => x.CreditAccountId != null);
+            try
+            {
+                return await _context.SaveChangesAsync()>0;
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (! (await this.GetOne(id)!=null))
+                {
+                    return false;
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            //var dbEntity = await this.Repository.GetOne(id);
+            //dbEntity.SaleLineItem.Clear();
+            //this.Map(entity, dbEntity);
+            //var result = await _salesRepo.UpdateAsync(dbEntity);
 
 
-////                BrokerCreditLedgar.CreditAccountId = Broker.DefaultAccountId;
-////                BrokerCreditLedgar.Amount = (decimal)entity.SaleLineItem.SingleOrDefault().SalesPrice;
-////                BrokerDebitLedgar.Amount = (decimal)entity.SaleLineItem.SingleOrDefault().SalesPrice;
+            //try
+            //{
 
-////                _context.Set<Transaction>();
-////                _context.Update(AgentTran);
-////                _context.Update(CompanTran);
-////                _context.SaveChanges();
-//                OtherConstants.isSuccessful = true;
-//                return true;
-//            }
-//            else
-//            {
-//                OtherConstants.isSuccessful = false;
-//                return false;
-//            }
+            // //   var result = await this.Repository.SaveChanges();
+            //    if (result)
+            //    {
 
+            //        OtherConstants.isSuccessful = true;
+            //        return true;
+            //    }
+            //    else
+            //    {
+            //        OtherConstants.isSuccessful = false;
+            //        return false;
+            //    }
+            //}
+            //catch (DbUpdateConcurrencyException ex)
+            //{
+            //    foreach (var entry in ex.Entries)
+            //    {
+            //        if (entry.Entity is SalesInvoice)
+            //        {
+            //            var proposedValues = entry.CurrentValues;
+            //            var databaseValues = entry.GetDatabaseValues();
 
-//            }
-        
+            //            foreach (var property in proposedValues.Properties)
+            //            {
+            //                var proposedValue = proposedValues[property];
+            //                var databaseValue = databaseValues[property];
+
+            //                // TODO: decide which value should be written to database
+            //                // proposedValues[property] = <value to be saved>;
+            //            }
+
+            //            // Refresh original values to bypass next concurrency check
+            //            entry.OriginalValues.SetValues(databaseValues);
+            //            await Repository.SaveChanges();
+            //        }
+            //        else
+            //        {
+            //            throw new NotSupportedException(
+            //                "Don't know how to handle concurrency conflicts for "
+            //                + entry.Metadata.Name);
+
+            //        }
+            //    }
+            //    return false;
+            //}
+            //catch (UniqueConstraintException ex)
+            //{
+            //    throw ex;
+            //}
+            //catch (CannotInsertNullException ex)
+            //{
+            //    throw ex;
+            //}
+            //catch (MaxLengthExceededException ex)
+            //{
+            //    throw ex;
+            //}
+            //catch (ReferenceConstraintException ex)
+            //{
+            //    throw ex;
+            //}
+            //catch (NumericOverflowException ex)
+            //{
+            //    throw ex;
+            //}
+
+            //catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
+            //{
+            //    throw ex;
+            //}
+            //catch(Exception ex)
+            //{
+            //    throw ex;
+            //}
 
 
 
-        //transactionForAgent.LedgarEntries.Add(taxEntry);
+
+
+        }
+
+
+
+
 
 
 
@@ -284,9 +273,10 @@ namespace PanoramBackend.Services.Services
 
 
     }
-        public interface ISalesInvoiceService : IBaseService<SalesInvoice, int>
+    public interface ISalesInvoiceService : IBaseService<SalesInvoice, int>
         {
              List<string> GetExcelColumnHeader(string path);
+        Task<bool> UpdateAsync(int id, SalesInvoice entity);
 
         }
     

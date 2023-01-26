@@ -47,8 +47,7 @@ namespace PanoramBackend.Services.Mapper
 			this.CreateMap<Branch>();
 			this.CreateMap<VacationApplication>();
 			this.CreateMap<SaleLineItem>();
-			this.CreateMap<SalesInvoice>().ForMember(x => x.SaleLineItem, x => x.MapFrom(x => x.SaleLineItem))
-				.ForMember(x => x.Transactions, x => x.MapFrom(x => x.Transactions));
+			this.CreateMap<SalesInvoice>();
 			
 			this.CreateMap<Transaction,LedgarEntries >().ForMember(x => x.Transaction,x=>x.MapFrom(x=>x.LedgarEntries))
 					.ForMember(x=>x.Transaction,x=>x.MapFrom(x=>x.LedgarEntries));

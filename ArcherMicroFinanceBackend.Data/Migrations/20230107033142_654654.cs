@@ -1714,14 +1714,14 @@ namespace PanoramaBackend.Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "a18be9c0-aa65-4af8-bd17-00bd9344e575", "99be1c15-1d84-42b8-9bb1-f63b9f63705b", "Admin", "Admin" },
-                    { "a18be9c0-aa65-4af8-bd17-00bd9344e678", "0df817e5-350d-455c-b87b-8bfe9cd21c66", "CompanyAdmin", "CompanyAdmin" }
+                    { "a18be9c0-aa65-4af8-bd17-00bd9344e575", "6a372f80-4215-429f-8dd8-98a08cb66546", "Admin", "Admin" },
+                    { "a18be9c0-aa65-4af8-bd17-00bd9344e678", "2150399b-b9a2-4627-bc81-9cc3795a7830", "CompanyAdmin", "CompanyAdmin" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "a18be9c0-aa65-4af8-bd17-00bd9344e575", 0, "229addaa-b317-4a3a-bcd2-1884a460753a", "admin@nukeslab.com", true, false, null, "admin@nukeslab.com", "admin", "AQAAAAEAACcQAAAAECi8vBnVupW/7vDw1SvoJHwL7a8LUk6Y/V21VV34VhHmZB38wF9GGq8JDud72Izycw==", "+923400064394", false, "", false, "moid" });
+                values: new object[] { "a18be9c0-aa65-4af8-bd17-00bd9344e575", 0, "3e6d46c2-72d5-493d-80ab-4926012d097b", "admin@nukeslab.com", true, false, null, "admin@nukeslab.com", "admin", "AQAAAAEAACcQAAAAEPx7srXf+g9TFGaOQBTANT2ZzSXNH32VKmIUzOCWRzviKHmU4m74i/e5xoM+0ISSfg==", "+923400064394", false, "", false, "moid" });
 
             migrationBuilder.InsertData(
                 table: "BDType",
