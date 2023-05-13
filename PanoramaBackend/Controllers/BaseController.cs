@@ -5,7 +5,7 @@ using Nest;
 using NukesLab.Core.Api;
 using NukesLab.Core.Common;
 using NukesLab.Core.Repository;
-using PanoramBackend.Services.Core;
+using PanoramaBackend.Services.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;

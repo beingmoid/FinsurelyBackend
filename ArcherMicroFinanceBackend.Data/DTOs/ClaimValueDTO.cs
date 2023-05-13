@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace PanoramBackend.Services.Data.DTOs
+namespace PanoramaBackend.Services.Data.DTOs
 {
     public class ClaimValueDTO
     {

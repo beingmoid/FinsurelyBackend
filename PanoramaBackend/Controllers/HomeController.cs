@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PanoramBackend.Data;
-using PanoramBackend.Data.Entities;
+using PanoramaBackend.Data;
+using PanoramaBackend.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

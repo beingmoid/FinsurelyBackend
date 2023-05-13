@@ -1,5 +1,5 @@
-﻿using PanoramBackend.Data;
-using PanoramBackend.Data.Entities;
+﻿using PanoramaBackend.Data;
+using PanoramaBackend.Data.Entities;
 using NukesLab.Core.Repository;
 using System;
 using System.Collections.Generic;
@@ -7,9 +7,9 @@ using System.Text;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
-namespace PanoramBackend.Data.Repository
+namespace PanoramaBackend.Data.Repository
 {
-    public class BranchRepository : EFRepository<Branch, int>, IBranchRepository
+    public class BranchRepository : EFRepository<Branch, Guid>, IBranchRepository
     {
         public BranchRepository(AMFContext requestScope) : base(requestScope)
         {
@@ -17,7 +17,7 @@ namespace PanoramBackend.Data.Repository
         }
 
     }
-    public interface IBranchRepository : IEFRepository<Branch, int>
+    public interface IBranchRepository : IEFRepository<Branch, Guid>
     {
 
     }

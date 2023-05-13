@@ -1,5 +1,5 @@
-﻿using PanoramBackend.Services.Data.DTOs;
-using PanoramBackend.Services.Core;
+﻿using PanoramaBackend.Services.Data.DTOs;
+using PanoramaBackend.Services.Core;
 using AutoMapper;
 
 using Microsoft.AspNetCore.Hosting;
@@ -16,15 +16,15 @@ using System.Text;
 using System.Threading.Tasks;
 using static NukesLab.Core.Common.Constants;
 using Microsoft.EntityFrameworkCore;
-using PanoramBackend.Data.Repository;
-using PanoramBackend.Data.Entities;
+using PanoramaBackend.Data.Repository;
+using PanoramaBackend.Data.Entities;
 using NukesLab.Core.Common;
 using Microsoft.AspNetCore.Http;
-using PanoramBackend.Data;
+using PanoramaBackend.Data;
 using System.Threading;
 using System.Security.Principal;
 
-namespace PanoramBackend.Services.Services
+namespace PanoramaBackend.Services.Services
 {
     public class AuthService : BaseService, IAuthService
     {
@@ -71,7 +71,7 @@ namespace PanoramBackend.Services.Services
                     var userRoles = await _userManager.GetRolesAsync(user);
                     var claims = new List<Claim>()
                     {
-                        new Claim("UserId", user.Id),
+                        new Claim("UserId", user.Id.ToString()),
                         new Claim("UserName",user.UserName),
                         new Claim("Role", userRoles.FirstOrDefault())
                     };
@@ -88,7 +88,7 @@ namespace PanoramBackend.Services.Services
                     {
                         RefreshToken = refreshToken,
                         RefreshTokenExpiryTime = DateTime.Now.AddDays(10),
-                        UserId = user.Id,
+                        UserId = user.Id.ToString(),
                         //CreateUserId = user.Id,
 
                     };
@@ -110,7 +110,7 @@ namespace PanoramBackend.Services.Services
                         AccessToken = accessToken,
                         PhoneNumber = user.PhoneNumber,
                         Login = user.Email,
-                        AccountDetails = user.UserDetails 
+                        AccountDetails = user.UserDetails.SingleOrDefault() 
                     };
                    
                 }
@@ -341,7 +341,7 @@ namespace PanoramBackend.Services.Services
             foreach (var item in rolesList)
             {
                 RoleDTO role = new RoleDTO();
-                role.Id = item.Id;
+                role.Id = item.Id.ToString();
                 role.RoleName = item.Name;
                 var usersList = await _userManager.GetUsersInRoleAsync(item.Name);
                 role.NoOfUsers = usersList.Count();
@@ -357,9 +357,9 @@ namespace PanoramBackend.Services.Services
             //var _loginRepo = _serviceProvider.GetRequiredService<ILoginsRepo>();
             var user = _userManager.Users.Include(x=>x.UserDetails).SingleOrDefault(x=>x.Id==Utils.GetUserId(_serviceProvider));
             var mappedTeamMember = new TeamMemberDTO() {
-                Id = user.Id,
+                Id = user.Id.ToString(),
                 Role = (await _userManager.GetRolesAsync(user)).FirstOrDefault(),
-                    UserDetails=user.UserDetails
+                    UserDetails=user.UserDetails.SingleOrDefault()
                 
         };
             //var loginDetails = _loginRepo.Get().IgnoreQueryFilters().OrderByDescending(p => p.CreatedDate);

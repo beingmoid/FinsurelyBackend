@@ -2,7 +2,7 @@
 using System.Net;
 using System.Runtime.Serialization;
 
-namespace PanoramBackend.Services.Services
+namespace PanoramaBackend.Services.Services
 {
 	public class ServiceException : Exception
 	{

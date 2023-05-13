@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace PanoramBackend.Data.CatalogDb
+namespace PanoramaBackend.Data.CatalogDb
 {
     public class Tenants:BaseEntity<byte[]>
     {

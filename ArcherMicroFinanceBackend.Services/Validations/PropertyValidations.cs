@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using NukesLab.Core.Common;
 using Microsoft.Extensions.DependencyInjection;
-using PanoramBackend.Data;
+using PanoramaBackend.Data;
 
-namespace PanoramBackend.Services.Validations
+namespace PanoramaBackend.Services.Validations
 {
 	public class PropertyValidations<TEntity, TProperty> : IPropertyValidation<TEntity>
 		where TEntity : class, IBaseEntity, new()

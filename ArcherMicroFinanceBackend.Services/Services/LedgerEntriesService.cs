@@ -1,6 +1,6 @@
-﻿using PanoramBackend.Data.Entities;
-using PanoramBackend.Data.Repository;
-using PanoramBackend.Services.Core;
+﻿using PanoramaBackend.Data.Entities;
+using PanoramaBackend.Data.Repository;
+using PanoramaBackend.Services.Core;
 using NukesLab.Core.Repository;
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ using System.Linq;
 using static NukesLab.Core.Common.Constants;
 using System.Globalization;
 
-namespace PanoramBackend.Services.Services
+namespace PanoramaBackend.Services.Services
 {
     public class LedgerEntriesService : BaseService<LedgarEntries, int>, ILedgerEntriesService
     {
@@ -26,7 +26,7 @@ namespace PanoramBackend.Services.Services
         {
             var ledger = (await this.Get(x => x.Include(x => x.DebitAccount)
            .Include(x => x.Transaction).ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.CustomerDetails)
-           .Include(x => x.Transaction).ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.SaleLineItem).ThenInclude(x => x.Vehicle)
+           .Include(x => x.Transaction).ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.Vehicle)
       
            .Include(x => x.Transaction).ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.BodyType)
       
@@ -95,7 +95,7 @@ namespace PanoramBackend.Services.Services
 
                     entry.Memo = item.Transaction.Memo;
                     entry.TransactionType = Convert.ToInt32(item.Transaction?.TransactionType.Value);
-                    var saleLineItem = item.Transaction?.SalesInvoice.SaleLineItem.SingleOrDefault();
+                    var saleLineItem = item.Transaction?.SalesInvoice;
 
                     entry.AccountName = item.CreditAccount.Name;
                     entry.Amount =  isCredit? (-item.Amount):(item.Amount);
@@ -116,8 +116,8 @@ namespace PanoramBackend.Services.Services
                 }
                 else
                 {
-                    var saleLineItem = item.Transaction?.SalesInvoice.SaleLineItem.SingleOrDefault();
-                    
+                    var saleLineItem = item.Transaction?.SalesInvoice;
+
                     entry.AccountName = item.DebitAccount.Name;
                     entry.Amount = isDebit ? (-item.Amount) : (item.Amount);
                     entry.Debit = isDebit ? (-item.Amount) : (item.Amount);
@@ -125,10 +125,10 @@ namespace PanoramBackend.Services.Services
                     entry.Balance = balance;
                     if (saleLineItem != null)
                     {
-                        entry.Name = saleLineItem?.SalesInvoice?.CustomerDetails.DisplayNameAs;
-                        entry.Bodytype = saleLineItem.SalesInvoice?.BodyType?.Name;
+                        entry.Name = saleLineItem?.CustomerName;
+                        entry.Bodytype = saleLineItem?.BodyType?.Name;
       
-                        entry.InsuranceType=saleLineItem.SalesInvoice.InsuranceType.Name;
+                        entry.InsuranceType=saleLineItem.InsuranceType.Name;
                         entry.PolicyNumber = saleLineItem?.PolicyNumber;
                         entry.Vehicle = saleLineItem?.Vehicle?.Make + " | " + saleLineItem?.Vehicle?.Model;
                     }
@@ -159,7 +159,7 @@ namespace PanoramBackend.Services.Services
         {
             var ledger = (await this.Get(x => x.Include(x => x.DebitAccount)
            .Include(x => x.Transaction).ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.CustomerDetails)
-           .Include(x => x.Transaction).ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.SaleLineItem).ThenInclude(x => x.Vehicle)
+           .Include(x => x.Transaction).ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.Vehicle)
             .Include(x => x.Transaction).ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.InsuranceType)
              .Include(x => x.Transaction).ThenInclude(x => x.Payment)
            .Include(x => x.CreditAccount), x => (x.DebitAccountId == accountId || x.CreditAccountId == accountId) && ((x.TransactionDate.Date >= from.Date) && (x.TransactionDate.Date <= to.Date))
@@ -192,7 +192,7 @@ namespace PanoramBackend.Services.Services
 
                     entry.Memo = item.Transaction.Memo;
                     entry.TransactionType = Convert.ToInt32(item.Transaction.TransactionType.Value);
-                    var saleLineItem = item.Transaction?.SalesInvoice?.SaleLineItem?.SingleOrDefault();
+                    var saleLineItem = item.Transaction?.SalesInvoice;
 
                     entry.AccountName = item.DebitAccount.Description;
                     entry.Amount = item.Amount;
@@ -274,7 +274,7 @@ namespace PanoramBackend.Services.Services
 
             var ledger = (await this.Get(x => x.Include(x => x.DebitAccount)
            .Include(x => x.Transaction).ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.CustomerDetails)
-           .Include(x => x.Transaction).ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.SaleLineItem).ThenInclude(x => x.Vehicle)
+           .Include(x => x.Transaction).ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.Vehicle)
             .Include(x => x.Transaction).ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.InsuranceType)
              .Include(x => x.Transaction).ThenInclude(x => x.Payment)
            .Include(x => x.CreditAccount), x => (x.DebitAccountId == accountId || x.CreditAccountId == accountId) && ((x.TransactionDate.Date >= StartDate.Date) && (x.TransactionDate.Date <= EndDate.Date))
@@ -311,7 +311,7 @@ namespace PanoramBackend.Services.Services
 
                     entry.Memo = item.Transaction.Memo;
                     entry.TransactionType = Convert.ToInt32(item.Transaction.TransactionType.Value);
-                    var saleLineItem = item.Transaction?.SalesInvoice?.SaleLineItem?.SingleOrDefault();
+                    var saleLineItem = item.Transaction?.SalesInvoice;
 
                     entry.AccountName = item.DebitAccount.Description;
                     entry.Amount = item.Amount;
@@ -365,7 +365,7 @@ namespace PanoramBackend.Services.Services
 
             var ledger = (await this.Get(x => x.Include(x => x.DebitAccount)
            .Include(x => x.Transaction).ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.CustomerDetails)
-           .Include(x => x.Transaction).ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.SaleLineItem).ThenInclude(x => x.Vehicle)
+           .Include(x => x.Transaction).ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.Vehicle)
             .Include(x => x.Transaction).ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.InsuranceType)
              .Include(x => x.Transaction).ThenInclude(x => x.Payment)
            .Include(x => x.CreditAccount), x => (x.DebitAccountId == accountId || x.CreditAccountId == accountId) && ( ( (x.TransactionDate.Date >= StartDate.Date) && (x.TransactionDate.Date <= EndDate.Date) ) || ( ((x.Transaction.SalesInvoice.SalesInvoiceDate >= StartDate.Date) && (x.Transaction.SalesInvoice.SalesInvoiceDate <= EndDate.Date)  )) ) 
@@ -406,7 +406,7 @@ namespace PanoramBackend.Services.Services
 
                 entry.Memo = item.Transaction.Memo;
                 entry.TransactionType = Convert.ToInt32(item.Transaction.TransactionType.Value);
-                var saleLineItem = item.Transaction?.SalesInvoice?.SaleLineItem.SingleOrDefault();
+                var saleLineItem = item.Transaction?.SalesInvoice;
 
                 entry.AccountName = item.DebitAccount.Description;
                 entry.Amount = item.Amount;

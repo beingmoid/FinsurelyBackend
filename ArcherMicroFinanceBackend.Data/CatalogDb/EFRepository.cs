@@ -14,7 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
-namespace PanoramBackend.Data.CatalogDb.Repos
+namespace PanoramaBackend.Data.CatalogDb.Repos
 {
 	public class EFRepository<TEntity, TKey> : EFRepository<CatalogDbContext, TEntity, TKey>
 		where TEntity : class, IBaseEntity<TKey>, new()
@@ -324,7 +324,7 @@ namespace PanoramBackend.Data.CatalogDb.Repos
 				var validationContext = new ValidationContext(entity);
 				Validator.ValidateObject(entity, validationContext, true);
 			}
-			var markedAsDeleted = changeTracker.Entries<IBaseEntity>().Where(x => x.Entity.IsDeleted);
+			var markedAsDeleted = changeTracker.Entries<IBaseEntity>().Where(x => x.Entity.IsDeleted??false);
 
 			foreach (EntityEntry<IBaseEntity> item in markedAsDeleted)
 			{

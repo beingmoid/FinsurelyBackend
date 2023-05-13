@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using NukesLab.Core.Api;
 using NukesLab.Core.Repository;
 using PanoramaBackend.Controllers;
-using PanoramBackend.Data.Entities;
-using PanoramBackend.Services.Services;
+using PanoramaBackend.Data.Entities;
+using PanoramaBackend.Services.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +32,7 @@ namespace PanoramaBackend.Api.Controllers
                .ThenInclude(x => x.Terms)
              .Include(x => x.PaymentAndBilling)
               .ThenInclude(x => x.PreferredPaymentMethod)
-              .Include(x => x.UserDetail)
+
               .Include(x => x.SalesInvoicePersons).ThenInclude(x => x.Transactions),
               x => x.Id == id
              )).SingleOrDefault();

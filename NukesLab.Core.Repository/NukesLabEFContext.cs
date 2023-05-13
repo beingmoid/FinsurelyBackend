@@ -14,9 +14,10 @@ namespace NukesLab.Core.Repository
 {
 
 
-    public  class NukesLabEFContext<TUser,TRole> : IdentityDbContext<TUser,TRole,string>
-		where TUser : IdentityUser
-		where TRole :IdentityRole
+    public  class NukesLabEFContext<TUser,TRole> : IdentityDbContext<TUser,TRole,Guid>
+		where TUser : IdentityUser<Guid>
+		where TRole :IdentityRole<Guid>
+	
 	{
         private readonly IRequestInfo _requestInfo;
         private readonly IServiceProvider serviceProvider;
@@ -66,12 +67,12 @@ namespace NukesLab.Core.Repository
 			//SeedStaticData(modelBuilder);
 			//SeedTestingData(modelBuilder);
 		}
-	
-        //protected abstract void InitializeEntities();
 
-        //protected abstract void SeedStaticData(ModelBuilder modelBuilder);
+		//protected abstract void InitializeEntities();
 
-        //protected abstract void SeedTestingData(ModelBuilder modelBuilder);
+		//protected abstract void SeedStaticData(ModelBuilder modelBuilder);
+
+		//protected abstract void SeedTestingData(ModelBuilder modelBuilder);
 
 		protected EntityTypeBuilder<TEntity> InitializeEntity<TEntity>()
 			where TEntity : class, IBaseEntity
@@ -81,16 +82,16 @@ namespace NukesLab.Core.Repository
 			//CreateRelation<TEntity,AuditEntries<TEntity>>(x=>~.AuditEntries<TEntity>,x=>x.)
 
 			entityTypeBuilder
-				.HasQueryFilter(o => !o.IsDeleted);
+				.HasQueryFilter(o => !(o.IsDeleted??false));
 
 
 
 			entityTypeBuilder
 				.Property(o => o.CreateUserId)
-				.HasMaxLength(100).HasColumnName("CreateUserId");
+			.HasColumnName("CreateUserId");
 			entityTypeBuilder
-		.Property(o => o.EditUserId)
-		.HasMaxLength(100).HasColumnName("EditUserId");
+		.Property(o => o.EditUserId).
+		HasColumnName("EditUserId");
 
 
 			//entityTypeBuilder

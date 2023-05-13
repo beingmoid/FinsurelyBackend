@@ -1,9 +1,11 @@
-﻿using NukesLab.Core.Common;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using NukesLab.Core.Common;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace PanoramBackend.Data.Entities
+namespace PanoramaBackend.Data.Entities
 {
     public class Reconcilation:BaseEntity<int>
     {
@@ -18,15 +20,17 @@ namespace PanoramBackend.Data.Entities
         public int NoOfSalesMissing { get; set; }
         public int? InsuranceCompanyId { get; set; }
         public UserDetails InsuranceCompany { get; set; }
-        private ICollection<Corrections> _corrections;
-        public ICollection<Corrections> Corrections => _corrections ?? (_corrections = new List<Corrections>());
+        private ICollection<CompanyInformation> _corrections;
+        public ICollection<CompanyInformation> Corrections => _corrections ?? (_corrections = new List<CompanyInformation>());
     }
-    public class Corrections:BaseEntity<int>
+    public class CompanyInformation:BaseEntity<int>
     {
         public int ReconcilationReportId { get; set; }
         public Reconcilation Reconcilation { get; set; }
         public int? TempId { get; set; }
+        [Column(TypeName = "nvarchar(100)")]
         public string Name { get; set; }
+        [Column(TypeName = "nvarchar(1200)")]
         public string Description { get; set; }
 
 

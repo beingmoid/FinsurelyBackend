@@ -1,9 +1,11 @@
-﻿using NukesLab.Core.Common;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using NukesLab.Core.Common;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace PanoramBackend.Data.Entities
+namespace PanoramaBackend.Data.Entities
 {
     public class Payment:BaseEntity<int>
     {
@@ -11,11 +13,14 @@ namespace PanoramBackend.Data.Entities
         public UserDetails SalesAgent { get; set; }
         public int? InsuranceCompanyId { get; set; }
         public UserDetails InsuranceCompany { get; set; }
+        [Column(TypeName = "nvarchar(100)")]
         public string Memo { get; set; }
+        [Column(TypeName = "nvarchar(100)")]
         public string Email { get; set; }
         public DateTime PaymentDate { get; set; }
         public int PaymentMethodId { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
+        [Column(TypeName = "nvarchar(100)")]
         public string TransactionReferenceNumber { get; set; }
         public int? DepositAccountId { get; set; }
         public Accounts DepositAccount { get; set; }

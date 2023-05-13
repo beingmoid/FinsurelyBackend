@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace PanoramBackend.Data.CatalogDb
+namespace PanoramaBackend.Data.CatalogDb
 {
     public partial class Servers : BaseEntity<int>
 

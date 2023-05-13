@@ -14,7 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
-namespace PanoramBackend.Data
+namespace PanoramaBackend.Data
 {
 	public class EFRepository<TEntity, TKey> : EFRepository<AMFContext, TEntity, TKey>
 		where TEntity : class, IBaseEntity<TKey>, new()
@@ -48,7 +48,7 @@ namespace PanoramBackend.Data
 		}
 
 
-		protected virtual IQueryable<TEntity> Query => _baseQuery;
+		protected virtual IQueryable<TEntity> Query => _baseQuery.AsNoTracking();
 			
 
 		private IQueryable<TEntity> ApplyPredicates(IQueryable<TEntity> query, params Expression<Func<TEntity, bool>>[] predicates)
@@ -309,7 +309,7 @@ namespace PanoramBackend.Data
 			var changeTracker = _requestScope.ChangeTracker;
 			changeTracker.DetectChanges();
 
-			var markedAsDeleted = changeTracker.Entries<IBaseEntity>().Where(x => x.Entity.IsDeleted);
+			var markedAsDeleted = changeTracker.Entries<IBaseEntity>().Where(x => x.Entity.IsDeleted ?? false);
 
 			foreach (EntityEntry<IBaseEntity> item in markedAsDeleted)
 			{

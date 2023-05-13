@@ -1,15 +1,15 @@
 ﻿
 
-using PanoramBackend.Data;
-using PanoramBackend.Data.Entities;
+using PanoramaBackend.Data;
+using PanoramaBackend.Data.Entities;
 using NukesLab.Core.Repository;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using EntityFrameworkCore.Cacheable;
-namespace PanoramBackend.Data.Repository
+
+namespace PanoramaBackend.Data.Repository
 {
     public class AccountsRepository : EFRepository<Accounts, int>, IAccountsRepository
     {
@@ -19,7 +19,7 @@ namespace PanoramBackend.Data.Repository
         }
         protected override IQueryable<Accounts> Query => base.Query.Include(x=>  x.AccountDetailType).ThenInclude(x => x.AccountType)
             .Include(x => x.CreditLedgarEntries)
-            .Include(x => x.DebitLedgarEntries).Cacheable(TimeSpan.FromHours(24))
+            .Include(x => x.DebitLedgarEntries)
             ;
     }
     public interface IAccountsRepository : IEFRepository<Accounts, int>

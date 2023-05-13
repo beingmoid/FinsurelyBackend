@@ -7,7 +7,7 @@
 //using System.Text;
 //using static NukesLab.Core.Common.Constants;
 
-//namespace PanoramBackend.Services
+//namespace PanoramaBackend.Services
 //{
 //    public class TokenService : ITokenService
 //    {

@@ -3,15 +3,15 @@ using Microsoft.AspNetCore.Mvc;
 using NukesLab.Core.Api;
 using NukesLab.Core.Repository;
 using PanoramaBackend.Controllers;
-using PanoramBackend.Data.Entities;
-using PanoramBackend.Services.Services;
+using PanoramaBackend.Data.Entities;
+using PanoramaBackend.Services.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using static NukesLab.Core.Common.Constants;
-using PanoramBackend.Services;
+using PanoramaBackend.Services;
 using System.IO;
 using OfficeOpenXml;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,11 +29,16 @@ using Nest.JsonNetSerializer;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json.Linq;
 using NLog;
-using PanoramBackend.Data.Repository;
+using PanoramaBackend.Data.Repository;
 using Microsoft.AspNetCore.Hosting;
-using PanoramBackend.Data;
+using PanoramaBackend.Data;
 using PanoramaBackend.Services;
 using FluentExcel;
+using System.Linq.Expressions;
+using Azure.AI.FormRecognizer.Models;
+using Azure.AI.FormRecognizer;
+using Azure;
+using Azure.AI.FormRecognizer.DocumentAnalysis;
 
 namespace PanoramaBackend.Api.Controllers
 {
@@ -78,6 +83,38 @@ namespace PanoramaBackend.Api.Controllers
             _serviceProvider = serviceProvider;
             //_elasticClient = elasticClient;
             _salesRepo = salesRepo;
+        } 
+        [HttpPost("process")]
+        public async Task<BaseResponse> Process(IFormFile file)
+        {
+            string connectionString = "DefaultEndpointsProtocol=https;AccountName=insurancebrokersblob;AccountKey=fGdVMwRZ1W4Q3Q4o7qbWlIi/E815G14cg/rguE57fgmdh2FKLcJf0zJj4wxupggIb9xyLhoeoKUU+ASt9gRtiA==;EndpointSuffix=core.windows.net";
+            string containerName = "policyuploads";
+            string blobName = file.FileName;
+
+            // Upload file to Azure Blob Storage
+            BlobServiceClient blobServiceClient = new BlobServiceClient(connectionString);
+            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
+            BlobClient blobClient = containerClient.GetBlobClient(blobName);
+
+            await blobClient.UploadAsync(file.OpenReadStream(), true);
+
+            // Process file with Azure Form Recognizer
+            string endpoint = "https://qouteafnan.cognitiveservices.azure.com/";
+            string apiKey = "d6fa3875c5544c1eb906178a45ed90bc";
+
+            DocumentAnalysisClientOptions options = new DocumentAnalysisClientOptions(DocumentAnalysisClientOptions.ServiceVersion.V2022_08_31);
+
+            DocumentAnalysisClient client = new DocumentAnalysisClient(new Uri(endpoint),
+                new AzureKeyCredential(apiKey)
+);
+            string modelId = "CustomModel";
+            AnalyzeDocumentOperation operation = await client.
+                AnalyzeDocumentFromUriAsync(WaitUntil.Completed, modelId, blobClient.Uri);
+            AnalyzeResult result = operation.Value;
+            List<KeyValuePair<string, DocumentField>> keyValuePair = new List<KeyValuePair<string, DocumentField>>();
+       
+            return constructResponse(new {result= result.Documents.ToList(),url = blobClient.Uri.ToString()});
+
         }
 
         [HttpGet("GetPaginated")]
@@ -89,8 +126,8 @@ namespace PanoramaBackend.Api.Controllers
             .Include(x => x.PaymentMethod)
 
             .Include(x => x.BodyType)
-                 .Include(x => x.SaleLineItem)
-                                    .ThenInclude(x => x.Vehicle)
+         
+            .Include(x => x.Vehicle)
             .Include(x => x.InsuranceCompany)
             .Include(x => x.Branch)
             )).ToList();
@@ -111,75 +148,17 @@ namespace PanoramaBackend.Api.Controllers
             }
 
         }
-        [AllowAnonymous]
-        [HttpGet("ElasticSearch")]
-        public async Task<BaseResponse> BulkUploadToElasticSearch()
-        {
-            try
-            {
-                var documents = (await this._service.Get(x => x.Include(x => x.CustomerDetails) //Customer
-            .Include(x => x.SalesInvoicePerson)
-            //Sales Agent
-            .Include(x => x.PaymentMethod)
-
-
-            .Include(x => x.BodyType)
-                 .Include(x => x.SaleLineItem)
-                                    .ThenInclude(x => x.Vehicle)
-            .Include(x => x.InsuranceCompany)
-            .Include(x => x.Branch)
-            )).ToList();
-
-
-
-                var pool = new SingleNodeConnectionPool(new Uri("http://localhost:9200/"));
-
-                var connectionSettings =
-                    new ConnectionSettings(pool, sourceSerializer: (builtin, settings) => new JsonNetSerializer(
-                        builtin, settings,
-                        () => new JsonSerializerSettings { NullValueHandling = NullValueHandling.Include, ReferenceLoopHandling = ReferenceLoopHandling.Ignore },
-                        resolver => resolver.NamingStrategy = new SnakeCaseNamingStrategy()
-                    ));
-                connectionSettings.EnableApiVersioningHeader(true);
-
-
-
-                connectionSettings.EnableApiVersioningHeader(true);
-                var client = new ElasticClient(connectionSettings);
-                var jobjs = new List<string>();
-                var messages = new List<JObject>();
-                documents.ForEach(x =>
-                {
-                    var j = JsonConvert.SerializeObject(x);
-                    jobjs.Add(j);
-                });
-                //var res=  this.transmitBulkData(jobjs, "sales", "SalesInvocie", client, DateTime.Now, messages);
-
-                return constructResponse(null);
-            }
-
-
-
-            catch (Exception ex)
-            {
-
-                return constructResponse(ex);
-
-            }
-
-
-
-        }
+    
         [AllowAnonymous]
         public async override Task<BaseResponse> Get()
         {
-            var sales = (await _service.Get(x => x.Include(x => x.CustomerDetails) //Customer
+            var sales = (await _service.Get(x =>x  //Customer
             .Include(x => x.SalesInvoicePerson)
             //Sales Agent
             .Include(x => x.PaymentMethod)
-            .Include(x => x.SaleLineItem)
 
-                                    .ThenInclude(x => x.Vehicle)
+
+                                    .Include(x => x.Vehicle)
                        
 
             .Include(x => x.BodyType)
@@ -193,18 +172,21 @@ namespace PanoramaBackend.Api.Controllers
             OtherConstants.messageType = MessageType.Success;
             return constructResponse(sales);
         }
+
+        public async override Task<BaseResponse> Put(int id, [FromBody] SalesInvoice entity)
+        {
+            var result = await _service.UpdateAsync(id, entity);
+
+            return result ? constructResponse(OtherConstants.isSuccessful=true) : constructResponse(OtherConstants.isSuccessful = false);
+           
+        }
         //[HttpGet("ElasticSearch")]
         //public async override Task<BaseResponse> Search(string search)
         //{
         //    var sales = _salesRepo.Get(x=>x.)
         //}
 
-        public async override Task<BaseResponse> Put(int id, [FromBody] SalesInvoice entity)
-        {
-            _context.Set<SalesInvoice>().Update(entity).State=EntityState.Modified;
-            OtherConstants.isSuccessful = _context.SaveChanges() > 0;
-            return constructResponse(entity);
-        }
+
         [HttpPost("UploadExcel")]
         public async Task<BaseResponse> UploadExcel([FromForm(Name = "file")] IFormFile file)
         {
@@ -520,12 +502,12 @@ namespace PanoramaBackend.Api.Controllers
             var page = new PageConfig();
 
             var query = _context.Set<SalesInvoice>()
+                  .Include(x => x.Vehicle)
              .Include(x => x.SalesInvoicePerson)
             //Sales Agent
             .Include(x => x.PaymentMethod)
-            .Include(x => x.SaleLineItem)
-
-                                    .ThenInclude(x => x.Vehicle)
+         
+          
                         
 
             .Include(x => x.BodyType)
@@ -536,53 +518,30 @@ namespace PanoramaBackend.Api.Controllers
 
             if (data.SearchQuery!=null && (data.from==null || data.to==null) && data.BranchId==null )
             {
-                queryData = await query.Where(x =>
+                Expression<Func<SalesInvoice, bool>> predicate = x =>
 
 
-                (x.SaleLineItem.SingleOrDefault().PolicyNumber.Contains(data.SearchQuery))
+                (x.PolicyNumber.Contains(data.SearchQuery))
 
                 ||
                 (x.CustomerName.Contains(data.SearchQuery))
                 ||
-                (x.InsuranceCompanyName.Contains(data.SearchQuery))
-                ||
-                (x.InsuranceType.Name.Contains(data.SearchQuery))
+                (x.InsuranceCompanyName.Contains(data.SearchQuery));
 
-                ).ToListAsync();
-                page.TotalCount = queryData.Count();
+
                 
+                queryData = (await query.Where(predicate)
+.OrderByDescending(x => x.SalesInvoiceDate).Skip(((data.Page - 1) * data.ItemsPerPage)).Take(data.ItemsPerPage)
+                    .ToListAsync());
+
+                page.TotalCount = query.Count(predicate);
+       
+
+
             }
             else if (data.SearchQuery!=null && (data.from !=null && data.to!=null) && data.BranchId!=null)
             {
-                queryData = await query.Where(x =>
-
-                (
-                (x.SalesInvoiceDate.Date>=data.from.ToDateTime().Date) 
-                
-                &&
-                
-                (x.SalesInvoiceDate.Date<= data.to.ToDateTime().Date)
-                )
-                &&
-                (x.BranchId==data.BranchId)
-
-                &&
-
-            (   (x.SaleLineItem.SingleOrDefault().PolicyNumber.Contains(data.SearchQuery))
-
-               ||
-               (x.CustomerName.Contains(data.SearchQuery))
-               ||
-               (x.InsuranceCompanyName.Contains(data.SearchQuery))
-               ||
-               (x.InsuranceType.Name.Contains(data.SearchQuery)))
-
-               ).ToListAsync();
-                page.TotalCount = queryData.Count();
-            }
-            else if(data.SearchQuery==null && (data.from != null && data.to != null) && data.BranchId==null )
-            {
-                queryData = await query.Where(x =>
+                Expression<Func<SalesInvoice, bool>> predicate = x =>
 
                 (
                 (x.SalesInvoiceDate.Date >= data.from.ToDateTime().Date)
@@ -590,16 +549,50 @@ namespace PanoramaBackend.Api.Controllers
                 &&
 
                 (x.SalesInvoiceDate.Date <= data.to.ToDateTime().Date)
-                )).ToListAsync();
+                )
+                &&
+                (x.BranchId == data.BranchId)
 
-                page.TotalCount = queryData.Count();
+                &&
+
+            ((x.PolicyNumber.Contains(data.SearchQuery))
+
+               ||
+               (x.CustomerName.Contains(data.SearchQuery))
+               ||
+               (x.InsuranceCompanyName.Contains(data.SearchQuery))
+               ||
+               (x.InsuranceType.Name.Contains(data.SearchQuery)));
+                queryData = await query.Where(predicate)
+
+               .ToListAsync();
+                page.TotalCount = query.Count(predicate);
+            }
+            else if(data.SearchQuery==null && (data.from != null && data.to != null) && data.BranchId==null )
+            {
+                Expression<Func<SalesInvoice, bool>> predicate  = x =>
+
+                (
+                (x.SalesInvoiceDate.Date >= data.from.ToDateTime().Date)
+
+                &&
+
+                (x.SalesInvoiceDate.Date <= data.to.ToDateTime().Date)
+
+                );
+                queryData = await query.Where(predicate)
+
+                    .OrderByDescending(x => x.SalesInvoiceDate).Skip(((data.Page - 1) * data.ItemsPerPage)).Take(data.ItemsPerPage)
+                    .ToListAsync();
+
+                page.TotalCount = query.Count(predicate);
             }
             else
             {
 
-                queryData = await query.ToListAsync();
+                queryData = await query.OrderByDescending(x => x.SalesInvoiceDate).Skip(((data.Page - 1) * data.ItemsPerPage)).Take(data.ItemsPerPage).ToListAsync();
 
-                page.TotalCount = queryData.Count();
+                page.TotalCount = query.Count();
             }
 
             if (data.RequestExcel!=null)
@@ -610,18 +603,18 @@ namespace PanoramaBackend.Api.Controllers
                     var salesInvoiceReport = new SalesInvoiceReport();
 
                     salesInvoiceReport.Date = item.SalesInvoiceDate.Date.ToShortDateString();
-                    salesInvoiceReport.PolicyNumber = item.SaleLineItem.SingleOrDefault().PolicyNumber;
+                    salesInvoiceReport.PolicyNumber = item.PolicyNumber;
                     salesInvoiceReport.CustomerName = item.CustomerName;
                     salesInvoiceReport.InsuranceBroker = item.InsuranceCompany.DisplayNameAs;
                     salesInvoiceReport.InsuranceCompany = item.InsuranceCompanyName;
                     salesInvoiceReport.SalesAgent = item.SalesInvoicePerson.DisplayNameAs;
                     salesInvoiceReport.Branch = item.Branch.BranchName;
-                    salesInvoiceReport.Vehicle = item.SaleLineItem.SingleOrDefault().Vehicle.Make + item.SaleLineItem.SingleOrDefault().Vehicle.Model;
+                    salesInvoiceReport.Vehicle = item.Vehicle.Make + item.Vehicle.Model;
                     salesInvoiceReport.UnderWritter = item.UnderWritter;
-                    salesInvoiceReport.Gross = item.SaleLineItem.SingleOrDefault().Gross.ToString();
-                    salesInvoiceReport.VAT = item.SaleLineItem.SingleOrDefault().VAT.ToString();
-                    salesInvoiceReport.NET = item.SaleLineItem.SingleOrDefault().Net.ToString();
-                    salesInvoiceReport.Commission = item.SaleLineItem.SingleOrDefault().Commission.ToString() + "%";
+                    salesInvoiceReport.Gross = item.Gross.ToString();
+                    salesInvoiceReport.VAT = item.VAT.ToString();
+                    salesInvoiceReport.NET = item.Net.ToString();
+                    salesInvoiceReport.Commission = item.Commission.ToString() + "%";
 
                     report.Add(salesInvoiceReport);
                 }
@@ -644,7 +637,7 @@ namespace PanoramaBackend.Api.Controllers
 #endregion
             }
 
-           var finalSales = queryData.OrderByDescending(x=>x.CreateTime).Skip(((data.Page - 1) * data.ItemsPerPage)).Take(data.ItemsPerPage).ToList();
+            var finalSales = queryData;
             page.Data.AddRange(finalSales);
 
             OtherConstants.isSuccessful = true;

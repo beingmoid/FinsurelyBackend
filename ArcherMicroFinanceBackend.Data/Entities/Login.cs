@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace PanoramBackend.Data.Entities
+namespace PanoramaBackend.Data.Entities
 {
     public class Login : BaseEntity<int> 
     {

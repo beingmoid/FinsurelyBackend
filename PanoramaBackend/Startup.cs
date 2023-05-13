@@ -10,14 +10,14 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NukesLab.Core.Common;
 using PanoramaBackend.Api;
-using PanoramBackend.Data;
-using PanoramBackend.Services.Mapper;
+using PanoramaBackend.Data;
+using PanoramaBackend.Services.Mapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using PanoramBackend.Services.Data.DTOs;
+using PanoramaBackend.Services.Data.DTOs;
 using Microsoft.AspNetCore.Identity;
 using NukesLab.Core.Repository;
 using Microsoft.AspNetCore.Authorization;
@@ -25,16 +25,16 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using static NukesLab.Core.Common.Constants;
 using System.Text;
-using PanoramBackend.Services;
-using PanoramBackend.Data.Repository;
-using PanoramBackend.Services.Services;
+using PanoramaBackend.Services;
+using PanoramaBackend.Data.Repository;
+using PanoramaBackend.Services.Services;
 using Microsoft.Extensions.Logging.Console;
 using PanoramaBackend.Api.Jobs;
-using PanoramBackend.Data.CatalogDb.Repos;
-using PanoramBackend.Data.CatalogDb;
+using PanoramaBackend.Data.CatalogDb.Repos;
+using PanoramaBackend.Data.CatalogDb;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Nest;
-using PanoramBackend.Data.Entities;
+using PanoramaBackend.Data.Entities;
 using Newtonsoft.Json;
 using System.IO;
 using Microsoft.Extensions.FileProviders;
@@ -46,13 +46,16 @@ using Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-
+using AIB.Data;
+using PanoramaBackend.Service.Syncronization;
+//using AIB.Data;
+//using PanoramaBackend.Service.Syncronization;
 namespace PanoramaBackend
 {
     public class Startup
     {
         private readonly IWebHostEnvironment _env;
-        private readonly IServiceProvider serviceProvider;
+        private IServiceProvider serviceProvider;
 
         //public static readonly ILoggerFactory loggerFactory = new LoggerFactory(new[] {
         //      new ConsoleLoggerProvider((_, __) => true, true)
@@ -85,12 +88,13 @@ namespace PanoramaBackend
             }).SetCompatibilityVersion(CompatibilityVersion.Latest);
             services.TryAddTransient<IRazorViewToStringRenderer, RazorViewToStringRenderer>();
             services.TryAddTransient<IGeneratePdf, GeneratePdf>();
-            
+
             services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
             services.AddCors();
 
-            services.AddControllers().AddNewtonsoftJson(options => {
-    
+            services.AddControllers().AddNewtonsoftJson(options =>
+            {
+
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
 
@@ -116,15 +120,26 @@ namespace PanoramaBackend
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IUserProvider, IdentityUserProvider>();
             services.AddScoped<UserGenerator>();
+            ConnectionStrings.AIBConnectionString = Utils._config.GetConnectionString("AIBConnectionString");
+            services.AddDbContext<AIBContext>(options =>
+            {
+                options.UseSqlServer(Utils._config.GetConnectionString("AIBConnectionString"));
+                options.UseInternalServiceProvider(serviceProvider);
+                //option.EnableSensitiveDataLogging(true);
+                options.EnableDetailedErrors(true);
+                options.UseLoggerFactory(LoggerFactory.Create(builder => { builder.AddConsole(); }));
+            });
             services.AddDbContext<AMFContext>(option =>
             {
                 option.UseSqlServer(Utils._config.GetConnectionString("AMFDB"));
                 option.UseInternalServiceProvider(serviceProvider);
+
                 //option.EnableSensitiveDataLogging(true);
                 option.EnableDetailedErrors(true);
                 option.UseLoggerFactory(LoggerFactory.Create(builder => { builder.AddConsole(); }));
 
-            });
+            }, ServiceLifetime.Scoped);
+
             services.AddSwaggerGen();
             services.AddIdentity<ExtendedUser, ExtendedRole>(option =>
             {
@@ -133,10 +148,13 @@ namespace PanoramaBackend
                 option.Password.RequireNonAlphanumeric = true;
                 option.Password.RequireUppercase = false;
                 option.Password.RequireLowercase = false;
+
+
+
             }).AddEntityFrameworkStores<AMFContext>()
-              .AddDefaultTokenProviders() ;
-   
-        
+              .AddDefaultTokenProviders();
+
+
 
             services.AddScoped<RequestScope>(services =>
             {
@@ -144,7 +162,7 @@ namespace PanoramaBackend
                 var mapper = services.GetRequiredService<IMapper>();
                 return new RequestScope(services, logger, mapper);
             });
-          
+
             services.AddAuthorization(options =>
             {
                 options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
@@ -183,9 +201,8 @@ namespace PanoramaBackend
             services.AddScoped<IPaymentMethodService, PaymentMethodService>();
             services.AddScoped<ISalesInvoiceRepository, SalesInvoiceRepository>();
             services.AddScoped<ISalesInvoiceService, SalesInvoiceService>();
+            services.AddScoped<ISyncronizationRepository, SyncronizationRepository>();
 
-            services.AddScoped<ISalesLineItemRepository, SalesLineItemRepository>();
-            services.AddScoped<ISaleLineItemService, SaleLineItemService>();
             services.AddScoped<IInsuranceTypeRepository, InsuranceTypeRepository>();
             services.AddScoped<IInsuranceTypeService, InsuranceTypeService>();
             services.AddScoped<IVehicleRepository, VehicleRepository>();
@@ -197,7 +214,7 @@ namespace PanoramaBackend
             services.AddScoped<IPaymentAndBillingRepository, PaymentAndBillingRepository>();
             services.AddScoped<IPaymentAndBillingService, PaymentAndBillingService>(); services.AddScoped<IVehicleRepository, VehicleRepository>();
             services.AddScoped<IPreferredPaymentMethodRepository, PreferredPaymentMethodRepository>();
-            services.AddScoped<IPreferredPaymentMethodService,PreferredPaymentMethodService>();
+            services.AddScoped<IPreferredPaymentMethodService, PreferredPaymentMethodService>();
             services.AddScoped<IAttachmentRepository, AttachmentRepository>();
             services.AddScoped<IAttachmentsService, AttachmentsService>();
             services.AddScoped<ITermsRepository, TermsRepository>();
@@ -245,15 +262,20 @@ namespace PanoramaBackend
             services.AddScoped<IAttendanceService, AttendanceService>();
             services.AddScoped<IAnnouncementRepository, AnnouncementRepository>();
             services.AddScoped<IAnnoucementService, AnnoucementService>();
-            services.AddScoped<IExpenseRepository,ExpenseRepository>();
+            services.AddScoped<IExpenseRepository, ExpenseRepository>();
             services.AddScoped<IExpenseService, ExpenseService>();
             services.AddScoped<IExpenseCategoryReposiotory, ExpenseCategoryRepository>();
             services.AddScoped<IExpenseCategoryService, ExpenseCategoryService>();
             services.AddScoped<IPayrollRepository, PayrollRepository>();
-            services.AddScoped<IPayrollService,PayrollService>();
+            services.AddScoped<IPayrollService, PayrollService>();
             services.AddScoped<ExpenseExcel>();
             services.AddScoped<IVacationApplicationRepository, VacationApplicationRepository>();
             services.AddScoped<IVacationApplicationService, VacationApplicationService>();
+
+            services.AddScoped<ISetupClientRepository, SetupClientRepository>();
+            services.AddScoped<ISetupClientService, SetupClientService>();
+            services.AddScoped<IUserCompanyInformationRepository, UserCompanyInformationRepository>();
+            services.AddScoped<IUserCompanyInformationService, UserCompanyInformationService>();
 
 
             //services.AddScoped<IElasticClient, ElasticClient>();
@@ -322,10 +344,10 @@ namespace PanoramaBackend
 
             #endregion
 
-            
 
 
-   
+
+
 
 
         }
@@ -345,18 +367,13 @@ namespace PanoramaBackend
         //This method gets called by the runtime.Use this method to configure the HTTP request pipeline.
 
 
-        public void Configure(IApplicationBuilder app)
+        public async void Configure(IApplicationBuilder app)
         {
-            app.UseCors(x => x
-        .AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowAnyOrigin()
-                .SetIsOriginAllowed(origin => true) // allow any origin
-                .DisallowCredentials()
 
-); // allow credentials
             ServiceActivator.Configure(app.ApplicationServices);
             ExpenseExcel.ConfigureExcel();
+            //var syncronizationService = ServiceActivator.GetScope().ServiceProvider.GetService<ISyncronizationRepository>();
+            //await syncronizationService.MergeAll();
             if (_env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -383,19 +400,27 @@ namespace PanoramaBackend
                 FileProvider = new PhysicalFileProvider(Path.Combine(_env.ContentRootPath, "Uploads")),
                 RequestPath = "/uploads"
             });
+            app.UseCors(x => x
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowAnyOrigin()
+                        .SetIsOriginAllowed(origin => true) // allow any origin
+                        .DisallowCredentials()
+                        
+                        ); // allow credentials
+                        
             app.UseRouting();
 
-            
+
             app.UseMiddleware<ExceptionMiddleware>();
- 
+
             app.UseAuthentication();
 
             app.UseHttpsRedirection();
 
-   
 
 
-  
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

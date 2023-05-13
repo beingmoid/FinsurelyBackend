@@ -1,6 +1,6 @@
-﻿using PanoramBackend.Data.Entities;
-using PanoramBackend.Data.Repository;
-using PanoramBackend.Services.Core;
+﻿using PanoramaBackend.Data.Entities;
+using PanoramaBackend.Data.Repository;
+using PanoramaBackend.Services.Core;
 using NukesLab.Core.Repository;
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ using System.Linq;
 using PanoramaBackend.Services;
 using static NukesLab.Core.Common.Constants;
 
-namespace PanoramBackend.Services.Services
+namespace PanoramaBackend.Services.Services
 {
     public class RefundService : BaseService<Refund, int>, IRefundService
     {

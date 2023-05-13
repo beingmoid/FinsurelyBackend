@@ -5,11 +5,7 @@ using System.Text;
 
 namespace NukesLab.Core.Common
 {
-	public class StaticEntity : BaseEntity<int>, IStaticEntity
-	{
-		[DatabaseGenerated(DatabaseGeneratedOption.None)]
-		public override int Id { get; set; }
-	}
+
 
 	public interface IStaticEntity : IBaseEntity<int>
 	{

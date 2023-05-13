@@ -1,5 +1,5 @@
 ﻿
-using PanoramBackend.Services.Data.DTOs;
+using PanoramaBackend.Services.Data.DTOs;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static NukesLab.Core.Common.Constants;
 
-namespace PanoramBackend.Data.Repository
+namespace PanoramaBackend.Data.Repository
 {
     public class ExtendedRoleRepository: IExtendedRoleRepository
     {

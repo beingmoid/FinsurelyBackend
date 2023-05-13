@@ -1,6 +1,6 @@
-﻿using PanoramBackend.Data.Entities;
-using PanoramBackend.Data.Repository;
-using PanoramBackend.Services.Core;
+﻿using PanoramaBackend.Data.Entities;
+using PanoramaBackend.Data.Repository;
+using PanoramaBackend.Services.Core;
 using NukesLab.Core.Repository;
 using System;
 using System.Collections.Generic;
@@ -16,7 +16,7 @@ using System.ComponentModel.DataAnnotations;
 using static NukesLab.Core.Common.Constants;
 using AutoMapper;
 
-namespace PanoramBackend.Services.Services
+namespace PanoramaBackend.Services.Services
 {
 
     public class ReconcilationService : BaseService<Reconcilation, int>, IReconcilationService
@@ -238,7 +238,7 @@ namespace PanoramBackend.Services.Services
             recon.From = Recon.From;
             recon.DocumentId = Recon.DocumentId;
             int i = 0;
-            List<Corrections> corrections = new List<Corrections>();
+            List<CompanyInformation> corrections = new List<CompanyInformation>();
             List<SalesStatementReconcilation> reconReport = new List<SalesStatementReconcilation>();
             decimal excelBalance = 0;
             if (mappingInfo.Balance.Applicable && mappingInfo.Amount.Applicable)
@@ -292,7 +292,7 @@ namespace PanoramBackend.Services.Services
                                     else
                                     {
                                         mappingInfo.TransactionType = (false, true);
-                                        recon.Corrections.Add(new Corrections()
+                                        recon.Corrections.Add(new CompanyInformation()
                                         {
                                             Name = "TransactionType",
                                             Description = "Both columns are not identical"
@@ -310,7 +310,7 @@ namespace PanoramBackend.Services.Services
                                     else
                                     {
                                         mappingInfo.InvoiceNumber = (false, true);
-                                        recon.Corrections.Add(new Corrections()
+                                        recon.Corrections.Add(new CompanyInformation()
                                         {
                                             Name = "Invoice Number",
                                             Description = "Both columns are not identical"
@@ -328,7 +328,7 @@ namespace PanoramBackend.Services.Services
                                     else
                                     {
                                         mappingInfo.InvoiceDate = (false, true);
-                                        recon.Corrections.Add(new Corrections()
+                                        recon.Corrections.Add(new CompanyInformation()
                                         {
                                             Name = "Invoice Date",
                                             Description = "Date not matched"
@@ -347,7 +347,7 @@ namespace PanoramBackend.Services.Services
                                     else
                                     {
                                         mappingInfo.InsuranceType = (false, true);
-                                        recon.Corrections.Add(new Corrections()
+                                        recon.Corrections.Add(new CompanyInformation()
                                         {
                                             Name = "Invoice Number",
                                             Description = "Both columns are not identical"
@@ -367,7 +367,7 @@ namespace PanoramBackend.Services.Services
                                     else
                                     {
                                         mappingInfo.Amount = (false, true);
-                                        recon.Corrections.Add(new Corrections()
+                                        recon.Corrections.Add(new CompanyInformation()
                                         {
                                             Name = "Amount",
                                             Description = "Both columns are not identical"
@@ -387,7 +387,7 @@ namespace PanoramBackend.Services.Services
                                     else
                                     {
                                         mappingInfo.Debit = (false, true);
-                                        recon.Corrections.Add(new Corrections()
+                                        recon.Corrections.Add(new CompanyInformation()
                                         {
                                             Name = "Debit",
                                             Description = "Both columns are not identical"
@@ -407,7 +407,7 @@ namespace PanoramBackend.Services.Services
                                     else
                                     {
                                         mappingInfo.Credit = (false, true);
-                                        recon.Corrections.Add(new Corrections()
+                                        recon.Corrections.Add(new CompanyInformation()
                                         {
                                             Name = "Credit",
                                             Description = "Both columns are not identical"
@@ -427,7 +427,7 @@ namespace PanoramBackend.Services.Services
                                     else
                                     {
                                         mappingInfo.Balance = (false, true);
-                                        recon.Corrections.Add(new Corrections()
+                                        recon.Corrections.Add(new CompanyInformation()
                                         {
                                             Name = "Balance",
                                             Description = "Both columns are not identical"
@@ -447,7 +447,7 @@ namespace PanoramBackend.Services.Services
                                     else
                                     {
                                         mappingInfo.Vehicle = (false, true);
-                                        recon.Corrections.Add(new Corrections()
+                                        recon.Corrections.Add(new CompanyInformation()
                                         {
                                             Name = "Vehicle",
                                             Description = "Both columns are not identical"
@@ -469,7 +469,7 @@ namespace PanoramBackend.Services.Services
                                         else
                                         {
                                             mappingInfo.Customer = (false, true);
-                                            recon.Corrections.Add(new Corrections()
+                                            recon.Corrections.Add(new CompanyInformation()
                                             {
                                                 Name = "Customer",
                                                 Description = "Both columns are not identical"
@@ -489,7 +489,7 @@ namespace PanoramBackend.Services.Services
                             if (item.Equals(last) && foundItem == null)
                             {
                                 mappingInfo.PolicyNumber = (false, true);
-                                recon.Corrections.Add(new Corrections()
+                                recon.Corrections.Add(new CompanyInformation()
                                 {
                                     Name = "Policy Number",
                                     Description = $"Policy Number --{row.PolicyNumber}-- could not be found the whole row is rejected"
@@ -527,7 +527,7 @@ namespace PanoramBackend.Services.Services
                                 else
                                 {
                                     mappingInfo.TransactionRefNumber = (false, true);
-                                    recon.Corrections.Add(new Corrections()
+                                    recon.Corrections.Add(new CompanyInformation()
                                     {
                                         Name = "TransactionRefNumber",
                                         Description = "Both columns are not identical"
@@ -547,7 +547,7 @@ namespace PanoramBackend.Services.Services
                                 else
                                 {
                                     mappingInfo.Debit = (false, true);
-                                    recon.Corrections.Add(new Corrections()
+                                    recon.Corrections.Add(new CompanyInformation()
                                     {
                                         Name = "Debit",
                                         Description = "Both columns are not identical"
@@ -567,7 +567,7 @@ namespace PanoramBackend.Services.Services
                                 else
                                 {
                                     mappingInfo.Credit = (false, true);
-                                    recon.Corrections.Add(new Corrections()
+                                    recon.Corrections.Add(new CompanyInformation()
                                     {
                                         Name = "Credit",
                                         Description = "Both columns are not identical"
@@ -587,7 +587,7 @@ namespace PanoramBackend.Services.Services
                                 else
                                 {
                                     mappingInfo.Balance = (false, true);
-                                    recon.Corrections.Add(new Corrections()
+                                    recon.Corrections.Add(new CompanyInformation()
                                     {
                                         Name = "Balance",
                                         Description = "Both columns are not identical"
@@ -606,7 +606,7 @@ namespace PanoramBackend.Services.Services
                         if (item.Equals(last) && foundItem == null)
                         {
                             mappingInfo.PolicyNumber = (false, true);
-                            recon.Corrections.Add(new Corrections()
+                            recon.Corrections.Add(new CompanyInformation()
                             {
                                 Name = "Transaction Reference Number",
                                 Description = "Ambigious entry or transaction reference number could not be found the whole row is rejected"
@@ -629,7 +629,7 @@ namespace PanoramBackend.Services.Services
                 }
                 if (data.Count == 0)
                 {
-                    corrections.Add(new Corrections()
+                    corrections.Add(new CompanyInformation()
                     {
                         Name = "Data not found",
                         Description = $"Data could not be found between dates ${Recon.From.Date} to ${Recon.To.Date} "
@@ -691,8 +691,8 @@ namespace PanoramBackend.Services.Services
         public int NoOfSalesMissing { get; set; }
         public int? InsuranceCompanyId { get; set; }
         public UserDetails InsuranceCompany { get; set; }
-        private List<Corrections> _corrections;
-        public List<Corrections> Corrections => _corrections ?? (_corrections = new List<Corrections>());
+        private List<CompanyInformation> _corrections;
+        public List<CompanyInformation> Corrections => _corrections ?? (_corrections = new List<CompanyInformation>());
         public List<SalesStatementReconcilation> Statement { get; set; } = new List<SalesStatementReconcilation>();
    
     }

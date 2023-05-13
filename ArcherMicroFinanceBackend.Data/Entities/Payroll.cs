@@ -1,5 +1,5 @@
 ﻿using NukesLab.Core.Common;
-using PanoramBackend.Data.Entities;
+using PanoramaBackend.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,8 +9,9 @@ namespace PanoramaBackend.Data.Entities
 {
     public class Payroll:BaseEntity<int>
     {
+        [Column(TypeName = "nvarchar(100)")]
         public string Name { get; set; }
-        public int BranchId { get; set; }
+        public Guid BranchId { get; set; }
         public Branch Branch { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

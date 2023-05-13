@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using NukesLab.Core.Api;
 using NukesLab.Core.Repository;
 using PanoramaBackend.Controllers;
-using PanoramBackend.Data.Entities;
-using PanoramBackend.Services.Data.DTOs;
-using PanoramBackend.Services.Services;
+using PanoramaBackend.Data.Entities;
+using PanoramaBackend.Services.Data.DTOs;
+using PanoramaBackend.Services.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +32,7 @@ namespace PanoramaBackend.Api.Controllers
             {
                 Email = user.Email
          };
-            extendedUser.UserDetails = user.UserDetails;
+            extendedUser.UserDetails.Add(user.UserDetails);
             var result = await _userManager.CreateAsync(extendedUser);
             if (result.Succeeded)
             {

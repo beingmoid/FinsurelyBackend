@@ -1,6 +1,6 @@
-﻿using PanoramBackend.Data.Entities;
-using PanoramBackend.Data.Repository;
-using PanoramBackend.Services.Core;
+﻿using PanoramaBackend.Data.Entities;
+using PanoramaBackend.Data.Repository;
+using PanoramaBackend.Services.Core;
 using NukesLab.Core.Repository;
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ using PanoramaBackend.Services;
 using System.IO;
 using System.Net;
 using OfficeOpenXml;
-using PanoramBackend.Data;
+using PanoramaBackend.Data;
 using static NukesLab.Core.Common.Constants;
 using Z.EntityFramework.Plus;
 using Microsoft.Data.SqlClient;
@@ -20,22 +20,24 @@ using EntityFramework.Exceptions.Common;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Stripe;
 
-namespace PanoramBackend.Services.Services
+namespace PanoramaBackend.Services.Services
 {
-    public class SalesInvoiceService : BaseService<SalesInvoice, int>, ISalesInvoiceService
+    public class SalesInvoiceService : BaseService<SalesInvoice, int>, ISalesInvoiceService, IDisposable
     {
         private readonly ITransactionService _transactionService;
         private readonly ILedgerEntriesService ledgerEntriesService;
         private readonly ILedgerEntriesRepository ledgerEntriesRepository;
         private readonly ISalesInvoiceRepository _salesRepo;
         private readonly IAgentService _agentService;
+        private readonly IInsuranceCompanyService _insuranceCompanyService;
         private readonly AMFContext _context;
 
-        public SalesInvoiceService(RequestScope scopeContext, ISalesInvoiceRepository salesRepo, 
-            
-            AMFContext context, ISalesInvoiceRepository repo, ITransactionService transactionService, 
-            ILedgerEntriesService ledgerEntriesService, 
+        public SalesInvoiceService(RequestScope scopeContext, ISalesInvoiceRepository salesRepo,
+
+            AMFContext context, ISalesInvoiceRepository repo, ITransactionService transactionService,
+            ILedgerEntriesService ledgerEntriesService,
             ILedgerEntriesRepository ledgerEntriesRepository,
+            IInsuranceCompanyService insuranceCompanyService,
             IAgentService agentService)
             : base(scopeContext, repo)
         {
@@ -45,11 +47,12 @@ namespace PanoramBackend.Services.Services
             this.ledgerEntriesRepository = ledgerEntriesRepository;
             _salesRepo = salesRepo;
             _agentService = agentService;
+            _insuranceCompanyService = insuranceCompanyService;
             _context = context;
         }
 
-     
-          
+
+
 
 
         protected async override Task WhileDeleting(IEnumerable<SalesInvoice> entities)
@@ -57,19 +60,19 @@ namespace PanoramBackend.Services.Services
             foreach (var item in entities)
             {
                 var sales = (await _salesRepo.Get(x =>
-                x.Include(x => x.Transactions).ThenInclude(x => x.LedgarEntries),x=>x.Id==item.Id)).SingleOrDefault();
+                x.Include(x => x.Transactions).ThenInclude(x => x.LedgarEntries), x => x.Id == item.Id)).SingleOrDefault();
                 var transactions = sales.Transactions;
                 foreach (var tran in transactions)
                 {
 
                     foreach (var led in tran.LedgarEntries)
                     {
-                       await ledgerEntriesService.Delete(led.Id);
+                        await ledgerEntriesService.Delete(led.Id);
                     }
                     await _transactionService.Delete(item.Id);
                 }
             }
-        
+
         }
         public List<string> GetExcelColumnHeader(string path)
         {
@@ -96,7 +99,7 @@ namespace PanoramBackend.Services.Services
             {
                 ////item.IsSupplier = true;
                 //item.Total = item.SaleLineItem.Sum(x=>x.Total);
-                var sales = (await this.Get(x => x.Include(x => x.CustomerDetails).Include(x => x.SalesInvoicePerson).Include(x => x.SaleLineItem).Include(x => x.InsuranceCompany), x => x.Id == item.Id)).SingleOrDefault();
+                var sales = (await this.Get(x => x.Include(x => x.CustomerDetails).Include(x => x.SalesInvoicePerson).Include(x => x.InsuranceCompany), x => x.Id == item.Id)).SingleOrDefault();
                 ////Making Transaction
                 var transactionForAgent = new Transaction();
                 //transaction.Memo = "Opening Balance";
@@ -104,18 +107,18 @@ namespace PanoramBackend.Services.Services
                 transactionForAgent.UserDetailId = item.SalesInvoicePersonId;
                 transactionForAgent.SalesInvoiceId = item.Id;
                 transactionForAgent.TransactionType = TransactionTypes.Invoice;
-
+                transactionForAgent.BranchId = item.BranchId;
 
                 //Recording Transaction In Ledger
                 LedgarEntries Debitledgar = new LedgarEntries();
                 Debitledgar.TransactionDate = item.SalesInvoiceDate;
                 Debitledgar.DebitAccountId = sales.SalesInvoicePerson.DefaultAccountId; //(A/R)
-                Debitledgar.Amount = (decimal)sales.SaleLineItem.FirstOrDefault().SalesPrice;
+                Debitledgar.Amount = (decimal)sales.SalesPrice;
                 transactionForAgent.LedgarEntries.Add(Debitledgar);
                 var credit_ledger = new LedgarEntries();
                 credit_ledger.TransactionDate = item.SalesInvoiceDate;
                 credit_ledger.CreditAccountId = BuiltinAccounts.SalesAccount; //(Income)
-                credit_ledger.Amount = (decimal)sales.SaleLineItem.FirstOrDefault().SalesPrice;
+                credit_ledger.Amount = (decimal)sales.SalesPrice;
                 transactionForAgent.LedgarEntries.Add(credit_ledger);
                 //var taxEntry = new LedgarEntries();
                 //taxEntry.TransactionDate = item.SalesInvoiceDate;
@@ -128,16 +131,16 @@ namespace PanoramBackend.Services.Services
                 transactionForCompany.UserDetailId = sales.InsuranceCompanyId;
                 transactionForCompany.SalesInvoiceId = sales.Id;
                 transactionForCompany.TransactionType = TransactionTypes.InsuranceCredit;
-
+                transactionForCompany.BranchId = item.BranchId;
                 var cCreditLedger = new LedgarEntries();
                 cCreditLedger.TransactionDate = sales.SalesInvoiceDate;
                 cCreditLedger.CreditAccountId = sales.InsuranceCompany?.DefaultAccountId; //AP
-                cCreditLedger.Amount = ((decimal)sales.SaleLineItem.FirstOrDefault().Net);
+                cCreditLedger.Amount = ((decimal)sales.Net);
                 transactionForCompany.LedgarEntries
-                    .Add(cCreditLedger);                LedgarEntries Cdebitledger = new LedgarEntries();
+                    .Add(cCreditLedger); LedgarEntries Cdebitledger = new LedgarEntries();
                 Cdebitledger.TransactionDate = sales.SalesInvoiceDate;
                 Cdebitledger.DebitAccountId = BuiltinAccounts.AccountsPayable; //EX
-                Cdebitledger.Amount = (decimal)sales.SaleLineItem.FirstOrDefault().Net;
+                Cdebitledger.Amount = (decimal)sales.Net;
                 transactionForCompany.LedgarEntries.Add(Cdebitledger);
 
                 await _transactionService.Insert(new[] { transactionForAgent });
@@ -147,22 +150,132 @@ namespace PanoramBackend.Services.Services
         }
 
         public async Task<bool> UpdateAsync(int id, SalesInvoice entity)
-       {
-          
-            _context.Entry(entity).State = EntityState.Modified;
+        {
+            var valueBeforeUpdate = _context.Set<SalesInvoice>().AsNoTracking().SingleOrDefault(x => x.Id == id);
 
-            foreach (SaleLineItem child in entity.SaleLineItem)
+
+            var data = _context.Set<SalesInvoice>()
+
+                       .Include(x => x.SalesInvoicePerson)
+                           .ThenInclude(x => x.Transactions)
+                           .ThenInclude(x => x.LedgarEntries)
+                       .Include(x => x.InsuranceCompany)
+                           .ThenInclude(x => x.Transactions)
+                           .ThenInclude(x => x.LedgarEntries)
+
+                       .AsNoTracking()
+
+                       .SingleOrDefault(x => x.Id == id);
+            UserDetails newAgent = null;
+            UserDetails newBroker = null;
+            if (valueBeforeUpdate.SalesInvoicePersonId != entity.SalesInvoicePersonId)
             {
-                _context.Entry(child).State = child.Id == 0 ? EntityState.Added : EntityState.Modified;
+                newAgent = await _agentService.GetOne(entity.SalesInvoicePersonId ?? 0);
             }
+            if (valueBeforeUpdate.InsuranceCompanyId != entity.InsuranceCompanyId)
+            {
+                newBroker = await _insuranceCompanyService.GetOne(entity.InsuranceCompanyId ?? 0);
+            }
+            var AgentTransaction = data.SalesInvoicePerson.Transactions.SingleOrDefault();
+            var CompanyTransaction = data.InsuranceCompany.Transactions.SingleOrDefault();
+
+
+
+            _context.Entry(entity).State = EntityState.Detached;
 
             try
             {
-                return await _context.SaveChangesAsync()>0;
+                var result = await this.Update(id, entity);
+
+                if (result.Success)
+                {
+
+                    var transactions = AgentTransaction;
+                    if (newAgent != null)
+                    {
+              
+                        transactions.UserDetailId = newAgent.Id;
+                    }
+                    transactions.UserDetails = null;
+                    transactions.TransactionDate = entity.SalesInvoiceDate;
+                    transactions.TransactionType = TransactionTypes.Invoice;
+                    transactions.SalesInvoiceId = entity.Id;
+                    transactions.BranchId = entity.BranchId;
+                    transactions.LedgarEntries.Clear();
+                    _context.Entry(transactions).State = EntityState.Detached;
+                    var result2 = await _transactionService.Update(transactions.Id, transactions);
+                    var agentLedger = _context.Set<LedgarEntries>().AsNoTracking().Where(x => x.TransactionId == transactions.Id).ToList();
+                    foreach (var item in agentLedger)
+                    {
+                        if (item.DebitAccountId != null)
+                        {
+                            item.TransactionDate = entity.SalesInvoiceDate;
+                            if (newAgent != null)
+                            {
+                                item.DebitAccountId = newAgent.DefaultAccountId; //(A/R)
+                                item.DebitAccount = null;
+                            }
+
+                            item.Amount = (decimal)entity.SalesPrice;
+                        }
+                        if (item.CreditAccountId != null)
+                        {
+                            item.TransactionDate = entity.SalesInvoiceDate;
+                            item.Amount = (decimal)entity.SalesPrice;
+                        }
+
+                        _context.Entry(item).State = EntityState.Detached;
+                        var ledgerResult = await ledgerEntriesService.Update(item.Id, item);
+                    }
+
+                    var brokerTransaction = CompanyTransaction;
+   
+                    if (newBroker != null)
+                    {
+                       
+                        brokerTransaction.UserDetailId = newBroker.Id;
+                    }
+                    brokerTransaction.UserDetails = null;
+                    brokerTransaction.TransactionDate = entity.SalesInvoiceDate;
+                    brokerTransaction.TransactionType = TransactionTypes.Invoice;
+                    brokerTransaction.SalesInvoiceId = entity.Id;
+                    brokerTransaction.BranchId = entity.BranchId;
+                    brokerTransaction.LedgarEntries.Clear();
+                    _context.Entry(brokerTransaction).State = EntityState.Detached;
+                    var result3 = await _transactionService.Update(brokerTransaction.Id, brokerTransaction);
+                    var brokerLedger = _context.Set<LedgarEntries>().AsNoTracking().Where(x => x.TransactionId == brokerTransaction.Id).ToList();
+
+                    foreach (var item in brokerLedger)
+                    {
+                        if (item.CreditAccountId != null)
+                        {
+                            item.TransactionDate = entity.SalesInvoiceDate;
+                            if (newBroker != null)
+                            {
+                                item.CreditAccountId = newBroker.DefaultAccountId; //(A/R)
+                                item.CreditAccount = null;
+                            }
+
+                            item.Amount = (decimal)entity.Net;
+                        }
+                        if (item.DebitAccountId != null)
+                        {
+                            item.TransactionDate = entity.SalesInvoiceDate;
+                            item.Amount = (decimal)entity.Net;
+                        }
+
+                        _context.Entry(item).State = EntityState.Detached;
+                        var ledgerResult = await ledgerEntriesService.Update(item.Id, item);
+                    }
+
+
+
+                }
+                return result.Success;
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (! (await this.GetOne(id)!=null))
+                if (!(await this.GetOne(id) != null))
                 {
                     return false;
                 }
@@ -171,90 +284,6 @@ namespace PanoramBackend.Services.Services
                     throw;
                 }
             }
-            //var dbEntity = await this.Repository.GetOne(id);
-            //dbEntity.SaleLineItem.Clear();
-            //this.Map(entity, dbEntity);
-            //var result = await _salesRepo.UpdateAsync(dbEntity);
-
-
-            //try
-            //{
-
-            // //   var result = await this.Repository.SaveChanges();
-            //    if (result)
-            //    {
-
-            //        OtherConstants.isSuccessful = true;
-            //        return true;
-            //    }
-            //    else
-            //    {
-            //        OtherConstants.isSuccessful = false;
-            //        return false;
-            //    }
-            //}
-            //catch (DbUpdateConcurrencyException ex)
-            //{
-            //    foreach (var entry in ex.Entries)
-            //    {
-            //        if (entry.Entity is SalesInvoice)
-            //        {
-            //            var proposedValues = entry.CurrentValues;
-            //            var databaseValues = entry.GetDatabaseValues();
-
-            //            foreach (var property in proposedValues.Properties)
-            //            {
-            //                var proposedValue = proposedValues[property];
-            //                var databaseValue = databaseValues[property];
-
-            //                // TODO: decide which value should be written to database
-            //                // proposedValues[property] = <value to be saved>;
-            //            }
-
-            //            // Refresh original values to bypass next concurrency check
-            //            entry.OriginalValues.SetValues(databaseValues);
-            //            await Repository.SaveChanges();
-            //        }
-            //        else
-            //        {
-            //            throw new NotSupportedException(
-            //                "Don't know how to handle concurrency conflicts for "
-            //                + entry.Metadata.Name);
-
-            //        }
-            //    }
-            //    return false;
-            //}
-            //catch (UniqueConstraintException ex)
-            //{
-            //    throw ex;
-            //}
-            //catch (CannotInsertNullException ex)
-            //{
-            //    throw ex;
-            //}
-            //catch (MaxLengthExceededException ex)
-            //{
-            //    throw ex;
-            //}
-            //catch (ReferenceConstraintException ex)
-            //{
-            //    throw ex;
-            //}
-            //catch (NumericOverflowException ex)
-            //{
-            //    throw ex;
-            //}
-
-            //catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
-            //{
-            //    throw ex;
-            //}
-            //catch(Exception ex)
-            //{
-            //    throw ex;
-            //}
-
 
 
 
@@ -269,33 +298,37 @@ namespace PanoramBackend.Services.Services
 
 
 
+        public void Dispose(object obj)
+        {
+            GC.SuppressFinalize(obj);
 
+        }
 
 
     }
     public interface ISalesInvoiceService : IBaseService<SalesInvoice, int>
-        {
-             List<string> GetExcelColumnHeader(string path);
+    {
+        List<string> GetExcelColumnHeader(string path);
         Task<bool> UpdateAsync(int id, SalesInvoice entity);
 
-        }
-    
-        public static class ExcelWorksheetExtension
+    }
+
+    public static class ExcelWorksheetExtension
+    {
+        /// <summary>
+        ///     Get Header row with EPPlus. 
+        ///     <a href="https://stackoverflow.com/questions/10278101/epplus-reading-column-headers">
+        ///         EPPlus Reading Column Headers
+        ///     </a>
+        /// </summary>
+        /// <param name="sheet"></param>
+        /// <returns>Array of headers</returns>
+        public static string[] GetHeaderColumns(this ExcelWorksheet sheet)
         {
-            /// <summary>
-            ///     Get Header row with EPPlus. 
-            ///     <a href="https://stackoverflow.com/questions/10278101/epplus-reading-column-headers">
-            ///         EPPlus Reading Column Headers
-            ///     </a>
-            /// </summary>
-            /// <param name="sheet"></param>
-            /// <returns>Array of headers</returns>
-            public static string[] GetHeaderColumns(this ExcelWorksheet sheet)
-            {
-                return sheet.Cells[sheet.Dimension.Start.Row, sheet.Dimension.Start.Column, 1, sheet.Dimension.End.Column]
-                    .Select(firstRowCell => firstRowCell.Text).ToArray();
-            }
+            return sheet.Cells[sheet.Dimension.Start.Row, sheet.Dimension.Start.Column, 1, sheet.Dimension.End.Column]
+                .Select(firstRowCell => firstRowCell.Text).ToArray();
         }
     }
+}
 
 

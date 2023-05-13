@@ -8,11 +8,11 @@ namespace NukesLab.Core.Repository
 {
     public interface IUserProvider
     {
-        string UserId { get; }
+        Guid UserId { get; }
     }
     public class IdentityUserProvider : IUserProvider
     {
-        public string UserId { get; private set; }
+        public Guid UserId { get; private set; }
 
         public IdentityUserProvider(IHttpContextAccessor httpContextAccessor)
         {

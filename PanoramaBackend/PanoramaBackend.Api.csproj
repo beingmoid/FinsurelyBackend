@@ -50,6 +50,8 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+    <PackageReference Include="Azure.AI.FormRecognizer" Version="4.0.0" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.16.0" />
     <PackageReference Include="DinkToPdf" Version="1.0.8" />
     <PackageReference Include="DotLiquid" Version="2.2.656" />
     <PackageReference Include="EFCore.BulkExtensions" Version="3.6.5" />
@@ -60,16 +62,16 @@
     <PackageReference Include="EntityFrameworkCore.Cacheable" Version="2.0.1" />
     <PackageReference Include="FluentExcel" Version="2.2.0" />
     <PackageReference Include="FluentExcel_Forked" Version="2.2.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.16" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.32" />
     <PackageReference Include="Microsoft.AspNetCore.ResponseCaching.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="3.1.19" />
-    <PackageReference Include="Microsoft.Extensions.Caching.SqlServer" Version="3.1.19" />
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.16" />
-      <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.16" />
-      <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.16" />
-      <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.16" />
-      <PackageReference Include="Microsoft.Extensions.Logging.EventSource" Version="3.1.16" />
-      <PackageReference Include="Microsoft.Extensions.Logging.TraceSource" Version="3.1.16" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="3.1.32" />
+    <PackageReference Include="Microsoft.Extensions.Caching.SqlServer" Version="3.1.32" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.32" />
+      <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.32" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.32" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.32" />
+      <PackageReference Include="Microsoft.Extensions.Logging.EventSource" Version="3.1.32" />
+      <PackageReference Include="Microsoft.Extensions.Logging.TraceSource" Version="3.1.32" />
       <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.13" />
       <PackageReference Include="MongoDB.EmbeddedMulti" Version="2.1.1.6480" />
       <PackageReference Include="ncrontab" Version="3.3.1" />
@@ -85,11 +87,11 @@
    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.1.4" />
    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.1.4" />
    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.1.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.16">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.32">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.16">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.32">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -97,12 +99,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ArcherMicroFinanceBackend.Data\PanoramaBackend.Data.csproj" />
     <ProjectReference Include="..\ArcherMicroFinanceBackend.Services\PanoramaBackend.Services.csproj" />
     <ProjectReference Include="..\NukesLab.Core.Api\NukesLab.Core.Api.csproj" />
     <ProjectReference Include="..\NukesLab.Core.Common\NukesLab.Core.Common.csproj" />
-    <ProjectReference Include="..\NukesLab.Core.Repository\NukesLab.Core.Repository.csproj" />
-    <ProjectReference Include="..\NukesLab.Core.Services\NukesLab.Core.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>

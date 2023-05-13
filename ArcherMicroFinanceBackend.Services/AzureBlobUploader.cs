@@ -1,4 +1,4 @@
-﻿using PanoramBackend.Services.Core;
+﻿using PanoramaBackend.Services.Core;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using System;
@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 using static NukesLab.Core.Common.Constants;
 using Azure.Storage.Blobs;
 using Azure;
-using PanoramBackend.Services.Services;
+using PanoramaBackend.Services.Services;
 using Azure.Storage.Blobs.Models;
 
-namespace PanoramBackend.Services
+namespace PanoramaBackend.Services
 {
     public class AzureBlobUploader : IFileUploader
     {

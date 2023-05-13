@@ -1,15 +1,15 @@
-﻿using PanoramBackend.Data.Entities;
-using PanoramBackend.Data.Repository;
-using PanoramBackend.Services.Core;
+﻿using PanoramaBackend.Data.Entities;
+using PanoramaBackend.Data.Repository;
+using PanoramaBackend.Services.Core;
 using NukesLab.Core.Repository;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PanoramBackend.Services.Services
+namespace PanoramaBackend.Services.Services
 {
-    public class BranchService : BaseService<Branch, int>, IBranchService
+    public class BranchService : BaseService<Branch, Guid>, IBranchService
     {
         public BranchService(RequestScope scopeContext, IBranchRepository repo) : base(scopeContext, repo)
         {
@@ -17,7 +17,7 @@ namespace PanoramBackend.Services.Services
         }
    
     }
-    public interface IBranchService : IBaseService<Branch, int>
+    public interface IBranchService : IBaseService<Branch, Guid>
     {
 
     }

@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using NukesLab.Core.Repository;
 using PanoramaBackend.Controllers;
-using PanoramBackend.Data.Entities;
-using PanoramBackend.Services.Services;
+using PanoramaBackend.Data.Entities;
+using PanoramaBackend.Services.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using static NukesLab.Core.Common.Constants;
 using NukesLab.Core.Api;
 using PanoramaBackend.Services;
-using PanoramBackend.Data;
+using PanoramaBackend.Data;
 using EFCore.BulkExtensions;
 using Nest;
 using NPOI.SS.Formula.Functions;
@@ -179,7 +179,7 @@ namespace PanoramaBackend.Api.Controllers
         {
             var transactionIds = (await _ledgerService.Get(x => x.Include(x => x.CreditAccount).Include(x => x.DebitAccount)
 
-            .Include(x => x.Transaction).ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.SaleLineItem)
+            .Include(x => x.Transaction).ThenInclude(x => x.SalesInvoice)
             , x => x.CreditAccountId == id || x.DebitAccountId == id)).GroupBy(x=>x.TransactionId).Select(x => x.Key).ToList();
 
             var transactions = _context.Set<Transaction>().Include(x => x.LedgarEntries).ThenInclude(x => x.DebitAccount)
@@ -192,7 +192,7 @@ namespace PanoramaBackend.Api.Controllers
             {
                 var service = await _transactionService.Get(x => x.Include(x => x.LedgarEntries).ThenInclude(x => x.DebitAccount)
                  .Include(x => x.LedgarEntries).ThenInclude(x => x.CreditAccount).ThenInclude(x=>x.UserDetail)
-                 .Include(x=>x.SalesInvoice).ThenInclude(x=>x.SaleLineItem)
+                 .Include(x=>x.SalesInvoice)
                 , x => x.Id == item);
                 transacList.Add(service.FirstOrDefault());
             }

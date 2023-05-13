@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace PanoramBackend.Data.CatalogDb
+namespace PanoramaBackend.Data.CatalogDb
 {
     public class Enums
     {

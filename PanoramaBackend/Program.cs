@@ -18,7 +18,7 @@ namespace PanoramaBackend
     public class Program
     {
         public static void Main(string[] args)
-        {
+       {
             CreateHostBuilder(args).Build().Run();
         }
 
@@ -30,7 +30,7 @@ namespace PanoramaBackend
             webBuilder.ConfigureKestrel(serverOptions =>
             {
 
-             //  webBuilder.UseUrls("http://192.168.100.163:5001");
+                webBuilder.UseUrls("http://localhost:5000/");
 
 
 

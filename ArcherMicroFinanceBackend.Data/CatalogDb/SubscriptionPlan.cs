@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
-using static PanoramBackend.Data.CatalogDb.Enums;
+using static PanoramaBackend.Data.CatalogDb.Enums;
 
-namespace PanoramBackend.Data.CatalogDb
+namespace PanoramaBackend.Data.CatalogDb
 {
     [Table("CatalogDb_SubscriptionPlan")]
     public class SubscriptionPlans : BaseEntity<int>

@@ -1,12 +1,15 @@
-﻿using NukesLab.Core.Common;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using NukesLab.Core.Common;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 
-namespace PanoramBackend.Data.Entities
+namespace PanoramaBackend.Data.Entities
 {
     public class PaymentMethod:BaseEntity<int>
     {
+        [Column(TypeName = "nvarchar(100)")]
         public string Name { get; set; }
         private ICollection<SalesInvoice> _SalesInvoice;
         [IgnoreDataMember]

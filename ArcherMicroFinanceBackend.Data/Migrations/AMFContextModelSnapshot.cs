@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using PanoramBackend.Data;
+using PanoramaBackend.Data;
 
 namespace PanoramaBackend.Data.Migrations
 {
@@ -15,15 +15,17 @@ namespace PanoramaBackend.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.16")
+                .HasAnnotation("ProductVersion", "3.1.32")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
+                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
+                        .HasAnnotation("SqlServer:IdentitySeed", 1)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ClaimType")
@@ -32,9 +34,8 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -48,459 +49,459 @@ namespace PanoramaBackend.Data.Migrations
                             Id = 1,
                             ClaimType = "Dashboard",
                             ClaimValue = "Create",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 2,
                             ClaimType = "Dashboard",
                             ClaimValue = "Edit",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 3,
                             ClaimType = "Dashboard",
                             ClaimValue = "View",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 4,
                             ClaimType = "Dashboard",
                             ClaimValue = "Delete",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 5,
                             ClaimType = "Dashboard",
                             ClaimValue = "Search",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 6,
                             ClaimType = "Branch",
                             ClaimValue = "Create",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 7,
                             ClaimType = "Branch",
                             ClaimValue = "Edit",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 8,
                             ClaimType = "Branch",
                             ClaimValue = "View",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 9,
                             ClaimType = "Branch",
                             ClaimValue = "Delete",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 10,
                             ClaimType = "Branch",
                             ClaimValue = "Search",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 11,
                             ClaimType = "Sales Agent",
                             ClaimValue = "Create",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 12,
                             ClaimType = "Sales Agent",
                             ClaimValue = "Edit",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 13,
                             ClaimType = "Sales Agent",
                             ClaimValue = "View",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 14,
                             ClaimType = "Sales Agent",
                             ClaimValue = "Delete",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 15,
                             ClaimType = "Sales Agent",
                             ClaimValue = "Search",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 16,
                             ClaimType = "Insurance Companies",
                             ClaimValue = "Create",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 17,
                             ClaimType = "Insurance Companies",
                             ClaimValue = "Edit",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 18,
                             ClaimType = "Insurance Companies",
                             ClaimValue = "View",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 19,
                             ClaimType = "Insurance Companies",
                             ClaimValue = "Delete",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 20,
                             ClaimType = "Insurance Companies",
                             ClaimValue = "Search",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 21,
                             ClaimType = "Sales",
                             ClaimValue = "Create",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 22,
                             ClaimType = "Sales",
                             ClaimValue = "Edit",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 23,
                             ClaimType = "Sales",
                             ClaimValue = "View",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 24,
                             ClaimType = "Sales",
                             ClaimValue = "Delete",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 25,
                             ClaimType = "Sales",
                             ClaimValue = "Search",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 26,
                             ClaimType = "Transactions",
                             ClaimValue = "Create",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 27,
                             ClaimType = "Transactions",
                             ClaimValue = "Edit",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 28,
                             ClaimType = "Transactions",
                             ClaimValue = "View",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 29,
                             ClaimType = "Transactions",
                             ClaimValue = "Delete",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 30,
                             ClaimType = "Transactions",
                             ClaimValue = "Search",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 31,
                             ClaimType = "Task",
                             ClaimValue = "Create",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 32,
                             ClaimType = "Task",
                             ClaimValue = "Edit",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 33,
                             ClaimType = "Task",
                             ClaimValue = "View",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 34,
                             ClaimType = "Task",
                             ClaimValue = "Delete",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 35,
                             ClaimType = "Task",
                             ClaimValue = "Search",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 36,
                             ClaimType = "Documents",
                             ClaimValue = "Create",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 37,
                             ClaimType = "Documents",
                             ClaimValue = "Edit",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 38,
                             ClaimType = "Documents",
                             ClaimValue = "View",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 39,
                             ClaimType = "Documents",
                             ClaimValue = "Delete",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 40,
                             ClaimType = "Documents",
                             ClaimValue = "Search",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 41,
                             ClaimType = "Expenses",
                             ClaimValue = "Create",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 42,
                             ClaimType = "Expenses",
                             ClaimValue = "Edit",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 43,
                             ClaimType = "Expenses",
                             ClaimValue = "View",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 44,
                             ClaimType = "Expenses",
                             ClaimValue = "Delete",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 45,
                             ClaimType = "Expenses",
                             ClaimValue = "Search",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 46,
                             ClaimType = "Accounting",
                             ClaimValue = "Create",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 47,
                             ClaimType = "Accounting",
                             ClaimValue = "Edit",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 48,
                             ClaimType = "Accounting",
                             ClaimValue = "View",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 49,
                             ClaimType = "Accounting",
                             ClaimValue = "Delete",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 50,
                             ClaimType = "Accounting",
                             ClaimValue = "Search",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 51,
                             ClaimType = "Workplace",
                             ClaimValue = "Create",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 52,
                             ClaimType = "Workplace",
                             ClaimValue = "Edit",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 53,
                             ClaimType = "Workplace",
                             ClaimValue = "View",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 54,
                             ClaimType = "Workplace",
                             ClaimValue = "Delete",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 55,
                             ClaimType = "Workplace",
                             ClaimValue = "Search",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 56,
                             ClaimType = "Teams",
                             ClaimValue = "Create",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 57,
                             ClaimType = "Teams",
                             ClaimValue = "Edit",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 58,
                             ClaimType = "Teams",
                             ClaimValue = "View",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 59,
                             ClaimType = "Teams",
                             ClaimValue = "Delete",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 60,
                             ClaimType = "Teams",
                             ClaimValue = "Search",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 61,
                             ClaimType = "Reports",
                             ClaimValue = "Create",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 62,
                             ClaimType = "Reports",
                             ClaimValue = "Edit",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 63,
                             ClaimType = "Reports",
                             ClaimValue = "View",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 64,
                             ClaimType = "Reports",
                             ClaimValue = "Delete",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         },
                         new
                         {
                             Id = 65,
                             ClaimType = "Reports",
                             ClaimValue = "Search",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         });
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -513,9 +514,8 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -524,7 +524,7 @@ namespace PanoramaBackend.Data.Migrations
                     b.ToTable("AspNetUserClaims");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
                     b.Property<string>("LoginProvider")
                         .HasColumnType("nvarchar(450)");
@@ -535,9 +535,8 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -546,13 +545,13 @@ namespace PanoramaBackend.Data.Migrations
                     b.ToTable("AspNetUserLogins");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -563,15 +562,15 @@ namespace PanoramaBackend.Data.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "a18be9c0-aa65-4af8-bd17-00bd9344e575",
-                            RoleId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            UserId = new Guid("92043fc4-b79d-4adb-9078-c046ecfe4342"),
+                            RoleId = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f")
                         });
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("LoginProvider")
                         .HasColumnType("nvarchar(450)");
@@ -587,7 +586,7 @@ namespace PanoramaBackend.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.AccountDetailType", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.AccountDetailType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -600,10 +599,9 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -611,12 +609,11 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<byte[]>("Timestamp")
@@ -635,894 +632,767 @@ namespace PanoramaBackend.Data.Migrations
                         {
                             Id = 1,
                             AccountTypeId = 1,
-                            Description = "Accounts Receivable (A/R)",
-                            IsDeleted = false
+                            Description = "Accounts Receivable (A/R)"
                         },
                         new
                         {
                             Id = 2,
                             AccountTypeId = 2,
-                            Description = "Allowance for bad debits",
-                            IsDeleted = false
+                            Description = "Allowance for bad debits"
                         },
                         new
                         {
                             Id = 3,
                             AccountTypeId = 2,
-                            Description = "Assets Available for sale",
-                            IsDeleted = false
+                            Description = "Assets Available for sale"
                         },
                         new
                         {
                             Id = 4,
                             AccountTypeId = 2,
-                            Description = "Development Cost",
-                            IsDeleted = false
+                            Description = "Development Cost"
                         },
                         new
                         {
                             Id = 5,
                             AccountTypeId = 2,
-                            Description = "Employee Cash Advances",
-                            IsDeleted = false
+                            Description = "Employee Cash Advances"
                         },
                         new
                         {
                             Id = 6,
                             AccountTypeId = 2,
-                            Description = "Inventory",
-                            IsDeleted = false
+                            Description = "Inventory"
                         },
                         new
                         {
                             Id = 7,
                             AccountTypeId = 2,
-                            Description = "Investments - Other",
-                            IsDeleted = false
+                            Description = "Investments - Other"
                         },
                         new
                         {
                             Id = 8,
                             AccountTypeId = 2,
-                            Description = "Loans To Officers",
-                            IsDeleted = false
+                            Description = "Loans To Officers"
                         },
                         new
                         {
                             Id = 9,
                             AccountTypeId = 2,
-                            Description = "Loans to Others",
-                            IsDeleted = false
+                            Description = "Loans to Others"
                         },
                         new
                         {
                             Id = 10,
                             AccountTypeId = 2,
-                            Description = "Loans to Shareholders",
-                            IsDeleted = false
+                            Description = "Loans to Shareholders"
                         },
                         new
                         {
                             Id = 11,
                             AccountTypeId = 2,
-                            Description = "Prepaid Expenses",
-                            IsDeleted = false
+                            Description = "Prepaid Expenses"
                         },
                         new
                         {
                             Id = 12,
                             AccountTypeId = 2,
-                            Description = "Retainage",
-                            IsDeleted = false
+                            Description = "Retainage"
                         },
                         new
                         {
                             Id = 13,
                             AccountTypeId = 2,
-                            Description = "Undeposited Funds",
-                            IsDeleted = false
+                            Description = "Undeposited Funds"
                         },
                         new
                         {
                             Id = 14,
                             AccountTypeId = 3,
-                            Description = "Bank",
-                            IsDeleted = false
+                            Description = "Bank"
                         },
                         new
                         {
                             Id = 15,
                             AccountTypeId = 3,
-                            Description = "Cash and cash equivalents",
-                            IsDeleted = false
+                            Description = "Cash and cash equivalents"
                         },
                         new
                         {
                             Id = 16,
                             AccountTypeId = 3,
-                            Description = "Cash on hand",
-                            IsDeleted = false
+                            Description = "Cash on hand"
                         },
                         new
                         {
                             Id = 17,
                             AccountTypeId = 3,
-                            Description = "Client trust account",
-                            IsDeleted = false
+                            Description = "Client trust account"
                         },
                         new
                         {
                             Id = 18,
                             AccountTypeId = 3,
-                            Description = "Money Market",
-                            IsDeleted = false
+                            Description = "Money Market"
                         },
                         new
                         {
                             Id = 19,
                             AccountTypeId = 3,
-                            Description = "Rents Held in Trust",
-                            IsDeleted = false
+                            Description = "Rents Held in Trust"
                         },
                         new
                         {
                             Id = 20,
                             AccountTypeId = 3,
-                            Description = "Savings",
-                            IsDeleted = false
+                            Description = "Savings"
                         },
                         new
                         {
                             Id = 21,
                             AccountTypeId = 4,
-                            Description = "Accumulated depletion",
-                            IsDeleted = false
+                            Description = "Accumulated depletion"
                         },
                         new
                         {
                             Id = 22,
                             AccountTypeId = 4,
-                            Description = "Buildings",
-                            IsDeleted = false
+                            Description = "Buildings"
                         },
                         new
                         {
                             Id = 23,
                             AccountTypeId = 4,
-                            Description = "Depletable Assets",
-                            IsDeleted = false
+                            Description = "Depletable Assets"
                         },
                         new
                         {
                             Id = 24,
                             AccountTypeId = 4,
-                            Description = "Furniture and Fixtures",
-                            IsDeleted = false
+                            Description = "Furniture and Fixtures"
                         },
                         new
                         {
                             Id = 25,
                             AccountTypeId = 4,
-                            Description = "Leasehold Improvements",
-                            IsDeleted = false
+                            Description = "Leasehold Improvements"
                         },
                         new
                         {
                             Id = 26,
                             AccountTypeId = 4,
-                            Description = "Machinery and equipment",
-                            IsDeleted = false
+                            Description = "Machinery and equipment"
                         },
                         new
                         {
                             Id = 27,
                             AccountTypeId = 4,
-                            Description = "Other fixed assets",
-                            IsDeleted = false
+                            Description = "Other fixed assets"
                         },
                         new
                         {
                             Id = 28,
                             AccountTypeId = 4,
-                            Description = "Vehicles",
-                            IsDeleted = false
+                            Description = "Vehicles"
                         },
                         new
                         {
                             Id = 29,
                             AccountTypeId = 5,
-                            Description = "Accumulated amortisation of non-current assets",
-                            IsDeleted = false
+                            Description = "Accumulated amortisation of non-current assets"
                         },
                         new
                         {
                             Id = 30,
                             AccountTypeId = 5,
-                            Description = "Assets held for sale",
-                            IsDeleted = false
+                            Description = "Assets held for sale"
                         },
                         new
                         {
                             Id = 31,
                             AccountTypeId = 5,
-                            Description = "Deferred tax",
-                            IsDeleted = false
+                            Description = "Deferred tax"
                         },
                         new
                         {
                             Id = 32,
                             AccountTypeId = 5,
-                            Description = "Goodwill",
-                            IsDeleted = false
+                            Description = "Goodwill"
                         },
                         new
                         {
                             Id = 33,
                             AccountTypeId = 5,
-                            Description = "Intangible Assets",
-                            IsDeleted = false
+                            Description = "Intangible Assets"
                         },
                         new
                         {
                             Id = 34,
                             AccountTypeId = 5,
-                            Description = "Lease Buyout",
-                            IsDeleted = false
+                            Description = "Lease Buyout"
                         },
                         new
                         {
                             Id = 35,
                             AccountTypeId = 5,
-                            Description = "Licences",
-                            IsDeleted = false
+                            Description = "Licences"
                         },
                         new
                         {
                             Id = 37,
                             AccountTypeId = 5,
-                            Description = "Long-term investments",
-                            IsDeleted = false
+                            Description = "Long-term investments"
                         },
                         new
                         {
                             Id = 38,
                             AccountTypeId = 5,
-                            Description = "Organisational Costs",
-                            IsDeleted = false
+                            Description = "Organisational Costs"
                         },
                         new
                         {
                             Id = 39,
                             AccountTypeId = 5,
-                            Description = "Other non-current assets",
-                            IsDeleted = false
+                            Description = "Other non-current assets"
                         },
                         new
                         {
                             Id = 40,
                             AccountTypeId = 5,
-                            Description = "Security Deposits",
-                            IsDeleted = false
+                            Description = "Security Deposits"
                         },
                         new
                         {
                             Id = 41,
                             AccountTypeId = 6,
-                            Description = "Accounts Payable (A/P)",
-                            IsDeleted = false
+                            Description = "Accounts Payable (A/P)"
                         },
                         new
                         {
                             Id = 42,
                             AccountTypeId = 7,
-                            Description = "Discounts/Refunds Given",
-                            IsDeleted = false
+                            Description = "Discounts/Refunds Given"
                         },
                         new
                         {
                             Id = 43,
                             AccountTypeId = 7,
-                            Description = "Non-Profit Income",
-                            IsDeleted = false
+                            Description = "Non-Profit Income"
                         },
                         new
                         {
                             Id = 44,
                             AccountTypeId = 7,
-                            Description = "Other Primary Income",
-                            IsDeleted = false
+                            Description = "Other Primary Income"
                         },
                         new
                         {
                             Id = 45,
                             AccountTypeId = 7,
-                            Description = "SalesInvoice - services",
-                            IsDeleted = false
+                            Description = "SalesInvoice - services"
                         },
                         new
                         {
                             Id = 46,
                             AccountTypeId = 7,
-                            Description = "Unapplied Cash Payment Income",
-                            IsDeleted = false
+                            Description = "Unapplied Cash Payment Income"
                         },
                         new
                         {
                             Id = 47,
                             AccountTypeId = 8,
-                            Description = "Credit Card",
-                            IsDeleted = false
+                            Description = "Credit Card"
                         },
                         new
                         {
                             Id = 48,
                             AccountTypeId = 9,
-                            Description = "Accrued liabilities",
-                            IsDeleted = false
+                            Description = "Accrued liabilities"
                         },
                         new
                         {
                             Id = 49,
                             AccountTypeId = 9,
-                            Description = "Client Trust Accounts - Liabilities",
-                            IsDeleted = false
+                            Description = "Client Trust Accounts - Liabilities"
                         },
                         new
                         {
                             Id = 50,
                             AccountTypeId = 9,
-                            Description = "Current Tax Liability",
-                            IsDeleted = false
+                            Description = "Current Tax Liability"
                         },
                         new
                         {
                             Id = 51,
                             AccountTypeId = 9,
-                            Description = "Current portion of obligations under finance leases",
-                            IsDeleted = false
+                            Description = "Current portion of obligations under finance leases"
                         },
                         new
                         {
                             Id = 52,
                             AccountTypeId = 9,
-                            Description = "Dividends payable",
-                            IsDeleted = false
+                            Description = "Dividends payable"
                         },
                         new
                         {
                             Id = 53,
                             AccountTypeId = 9,
-                            Description = "Income tax payable",
-                            IsDeleted = false
+                            Description = "Income tax payable"
                         },
                         new
                         {
                             Id = 54,
                             AccountTypeId = 9,
-                            Description = "Insurance payable",
-                            IsDeleted = false
+                            Description = "Insurance payable"
                         },
                         new
                         {
                             Id = 55,
                             AccountTypeId = 9,
-                            Description = "Line of Credit",
-                            IsDeleted = false
+                            Description = "Line of Credit"
                         },
                         new
                         {
                             Id = 56,
                             AccountTypeId = 9,
-                            Description = "Loan Payable",
-                            IsDeleted = false
+                            Description = "Loan Payable"
                         },
                         new
                         {
                             Id = 57,
                             AccountTypeId = 9,
-                            Description = "Other current liabilities",
-                            IsDeleted = false
+                            Description = "Other current liabilities"
                         },
                         new
                         {
                             Id = 58,
                             AccountTypeId = 9,
-                            Description = "Payroll Clearing",
-                            IsDeleted = false
+                            Description = "Payroll Clearing"
                         },
                         new
                         {
                             Id = 59,
                             AccountTypeId = 9,
-                            Description = "Payroll liabilities",
-                            IsDeleted = false
+                            Description = "Payroll liabilities"
                         },
                         new
                         {
                             Id = 60,
                             AccountTypeId = 9,
-                            Description = "Prepaid Expenses Payable",
-                            IsDeleted = false
+                            Description = "Prepaid Expenses Payable"
                         },
                         new
                         {
                             Id = 61,
                             AccountTypeId = 9,
-                            Description = "Rents in trust - Liability",
-                            IsDeleted = false
+                            Description = "Rents in trust - Liability"
                         },
                         new
                         {
                             Id = 62,
                             AccountTypeId = 9,
-                            Description = "SalesInvoice and service tax payable",
-                            IsDeleted = false
+                            Description = "SalesInvoice and service tax payable"
                         },
                         new
                         {
                             Id = 63,
                             AccountTypeId = 10,
-                            Description = "Accrued holiday payable",
-                            IsDeleted = false
+                            Description = "Accrued holiday payable"
                         },
                         new
                         {
                             Id = 64,
                             AccountTypeId = 10,
-                            Description = "Accrued non-current liabilities",
-                            IsDeleted = false
+                            Description = "Accrued non-current liabilities"
                         },
                         new
                         {
                             Id = 65,
                             AccountTypeId = 10,
-                            Description = "Liabilities related to assets held for sale",
-                            IsDeleted = false
+                            Description = "Liabilities related to assets held for sale"
                         },
                         new
                         {
                             Id = 66,
                             AccountTypeId = 10,
-                            Description = "Long-term debt",
-                            IsDeleted = false
+                            Description = "Long-term debt"
                         },
                         new
                         {
                             Id = 67,
                             AccountTypeId = 10,
-                            Description = "Notes Payable",
-                            IsDeleted = false
+                            Description = "Notes Payable"
                         },
                         new
                         {
                             Id = 68,
                             AccountTypeId = 10,
-                            Description = "Other non-current liabilities",
-                            IsDeleted = false
+                            Description = "Other non-current liabilities"
                         },
                         new
                         {
                             Id = 69,
                             AccountTypeId = 10,
-                            Description = "Shareholder Notes Payable",
-                            IsDeleted = false
+                            Description = "Shareholder Notes Payable"
                         },
                         new
                         {
                             Id = 70,
                             AccountTypeId = 11,
-                            Description = "Accumulated adjustment",
-                            IsDeleted = false
+                            Description = "Accumulated adjustment"
                         },
                         new
                         {
                             Id = 71,
                             AccountTypeId = 11,
-                            Description = "Dividend disbursed",
-                            IsDeleted = false
+                            Description = "Dividend disbursed"
                         },
                         new
                         {
                             Id = 72,
                             AccountTypeId = 11,
-                            Description = "Opening Balance Equity",
-                            IsDeleted = false
+                            Description = "Opening Balance Equity"
                         },
                         new
                         {
                             Id = 73,
                             AccountTypeId = 11,
-                            Description = "Ordinary shares",
-                            IsDeleted = false
+                            Description = "Ordinary shares"
                         },
                         new
                         {
                             Id = 74,
                             AccountTypeId = 11,
-                            Description = "Other comprehensive income",
-                            IsDeleted = false
+                            Description = "Other comprehensive income"
                         },
                         new
                         {
                             Id = 75,
                             AccountTypeId = 11,
-                            Description = "Owner's Equity",
-                            IsDeleted = false
+                            Description = "Owner's Equity"
                         },
                         new
                         {
                             Id = 76,
                             AccountTypeId = 11,
-                            Description = "Paid-in capital or surplus",
-                            IsDeleted = false
+                            Description = "Paid-in capital or surplus"
                         },
                         new
                         {
                             Id = 77,
                             AccountTypeId = 11,
-                            Description = "Partner Contributions",
-                            IsDeleted = false
+                            Description = "Partner Contributions"
                         },
                         new
                         {
                             Id = 78,
                             AccountTypeId = 11,
-                            Description = "Partner Distributions",
-                            IsDeleted = false
+                            Description = "Partner Distributions"
                         },
                         new
                         {
                             Id = 79,
                             AccountTypeId = 11,
-                            Description = "Partner's Equity",
-                            IsDeleted = false
+                            Description = "Partner's Equity"
                         },
                         new
                         {
                             Id = 80,
                             AccountTypeId = 11,
-                            Description = "Preferred shares",
-                            IsDeleted = false
+                            Description = "Preferred shares"
                         },
                         new
                         {
                             Id = 81,
                             AccountTypeId = 11,
-                            Description = "Retained Earnings",
-                            IsDeleted = false
+                            Description = "Retained Earnings"
                         },
                         new
                         {
                             Id = 82,
                             AccountTypeId = 11,
-                            Description = "Share capital",
-                            IsDeleted = false
+                            Description = "Share capital"
                         },
                         new
                         {
                             Id = 83,
                             AccountTypeId = 11,
-                            Description = "Treasury Shares",
-                            IsDeleted = false
+                            Description = "Treasury Shares"
                         },
                         new
                         {
                             Id = 84,
                             AccountTypeId = 12,
-                            Description = "Dividend income",
-                            IsDeleted = false
+                            Description = "Dividend income"
                         },
                         new
                         {
                             Id = 85,
                             AccountTypeId = 12,
-                            Description = "Other Investment Income",
-                            IsDeleted = false
+                            Description = "Other Investment Income"
                         },
                         new
                         {
                             Id = 86,
                             AccountTypeId = 12,
-                            Description = "Other Miscellaneous Income",
-                            IsDeleted = false
+                            Description = "Other Miscellaneous Income"
                         },
                         new
                         {
                             Id = 87,
                             AccountTypeId = 12,
-                            Description = "Other operating income",
-                            IsDeleted = false
+                            Description = "Other operating income"
                         },
                         new
                         {
                             Id = 88,
                             AccountTypeId = 12,
-                            Description = "Tax-Exempt Interest",
-                            IsDeleted = false
+                            Description = "Tax-Exempt Interest"
                         },
                         new
                         {
                             Id = 89,
                             AccountTypeId = 12,
-                            Description = "Unrealised loss on securities, net of tax",
-                            IsDeleted = false
+                            Description = "Unrealised loss on securities, net of tax"
                         },
                         new
                         {
                             Id = 90,
                             AccountTypeId = 13,
-                            Description = "Cost of labour - COS",
-                            IsDeleted = false
+                            Description = "Cost of labour - COS"
                         },
                         new
                         {
                             Id = 91,
                             AccountTypeId = 13,
-                            Description = "Equipment rental - COS",
-                            IsDeleted = false
+                            Description = "Equipment rental - COS"
                         },
                         new
                         {
                             Id = 92,
                             AccountTypeId = 13,
-                            Description = "Freight and delivery - COS",
-                            IsDeleted = false
+                            Description = "Freight and delivery - COS"
                         },
                         new
                         {
                             Id = 93,
                             AccountTypeId = 13,
-                            Description = "Other costs of SalesInvoice - COS",
-                            IsDeleted = false
+                            Description = "Other costs of SalesInvoice - COS"
                         },
                         new
                         {
                             Id = 94,
                             AccountTypeId = 13,
-                            Description = "Supplies and materials - COS",
-                            IsDeleted = false
+                            Description = "Supplies and materials - COS"
                         },
                         new
                         {
                             Id = 95,
                             AccountTypeId = 14,
-                            Description = "Advertising/Promotional",
-                            IsDeleted = false
+                            Description = "Advertising/Promotional"
                         },
                         new
                         {
                             Id = 96,
                             AccountTypeId = 15,
-                            Description = "Amortisation expense",
-                            IsDeleted = false
+                            Description = "Amortisation expense"
                         },
                         new
                         {
                             Id = 97,
                             AccountTypeId = 14,
-                            Description = "Auto",
-                            IsDeleted = false
+                            Description = "Auto"
                         },
                         new
                         {
                             Id = 98,
                             AccountTypeId = 14,
-                            Description = "Bad debts",
-                            IsDeleted = false
+                            Description = "Bad debts"
                         },
                         new
                         {
                             Id = 99,
                             AccountTypeId = 14,
-                            Description = "Bank charges",
-                            IsDeleted = false
+                            Description = "Bank charges"
                         },
                         new
                         {
                             Id = 100,
                             AccountTypeId = 14,
-                            Description = "Charitable Contributions",
-                            IsDeleted = false
+                            Description = "Charitable Contributions"
                         },
                         new
                         {
                             Id = 101,
                             AccountTypeId = 14,
-                            Description = "Commissions and fees",
-                            IsDeleted = false
+                            Description = "Commissions and fees"
                         },
                         new
                         {
                             Id = 102,
                             AccountTypeId = 14,
-                            Description = "Cost of Labour",
-                            IsDeleted = false
+                            Description = "Cost of Labour"
                         },
                         new
                         {
                             Id = 103,
                             AccountTypeId = 14,
-                            Description = "Dues and Subscriptions",
-                            IsDeleted = false
+                            Description = "Dues and Subscriptions"
                         },
                         new
                         {
                             Id = 104,
                             AccountTypeId = 14,
-                            Description = "Equipment rental",
-                            IsDeleted = false
+                            Description = "Equipment rental"
                         },
                         new
                         {
                             Id = 105,
                             AccountTypeId = 14,
-                            Description = "Finance costs",
-                            IsDeleted = false
+                            Description = "Finance costs"
                         },
                         new
                         {
                             Id = 106,
                             AccountTypeId = 14,
-                            Description = "Income tax expense",
-                            IsDeleted = false
+                            Description = "Income tax expense"
                         },
                         new
                         {
                             Id = 107,
                             AccountTypeId = 14,
-                            Description = "Insurance",
-                            IsDeleted = false
+                            Description = "Insurance"
                         },
                         new
                         {
                             Id = 108,
                             AccountTypeId = 14,
-                            Description = "Interest paid",
-                            IsDeleted = false
+                            Description = "Interest paid"
                         },
                         new
                         {
                             Id = 109,
                             AccountTypeId = 14,
-                            Description = "Legal and professional fees",
-                            IsDeleted = false
+                            Description = "Legal and professional fees"
                         },
                         new
                         {
                             Id = 110,
                             AccountTypeId = 14,
-                            Description = "Loss on discontinued operations, net of tax",
-                            IsDeleted = false
+                            Description = "Loss on discontinued operations, net of tax"
                         },
                         new
                         {
                             Id = 111,
                             AccountTypeId = 14,
-                            Description = "Management compensation",
-                            IsDeleted = false
+                            Description = "Management compensation"
                         },
                         new
                         {
                             Id = 112,
                             AccountTypeId = 14,
-                            Description = "Meals and entertainment",
-                            IsDeleted = false
+                            Description = "Meals and entertainment"
                         },
                         new
                         {
                             Id = 113,
                             AccountTypeId = 14,
-                            Description = "Office/General Administrative Expenses",
-                            IsDeleted = false
+                            Description = "Office/General Administrative Expenses"
                         },
                         new
                         {
                             Id = 114,
                             AccountTypeId = 14,
-                            Description = "Other Miscellaneous Service Cost",
-                            IsDeleted = false
+                            Description = "Other Miscellaneous Service Cost"
                         },
                         new
                         {
                             Id = 115,
                             AccountTypeId = 14,
-                            Description = "Payroll Expenses",
-                            IsDeleted = false
+                            Description = "Payroll Expenses"
                         },
                         new
                         {
                             Id = 116,
                             AccountTypeId = 14,
-                            Description = "Rent or Lease of Buildings",
-                            IsDeleted = false
+                            Description = "Rent or Lease of Buildings"
                         },
                         new
                         {
                             Id = 117,
                             AccountTypeId = 14,
-                            Description = "Repair and maintenance",
-                            IsDeleted = false
+                            Description = "Repair and maintenance"
                         },
                         new
                         {
                             Id = 118,
                             AccountTypeId = 14,
-                            Description = "Shipping and delivery expense",
-                            IsDeleted = false
+                            Description = "Shipping and delivery expense"
                         },
                         new
                         {
                             Id = 119,
                             AccountTypeId = 14,
-                            Description = "Taxes Paid",
-                            IsDeleted = false
+                            Description = "Taxes Paid"
                         },
                         new
                         {
                             Id = 120,
                             AccountTypeId = 14,
-                            Description = "Travel expenses - general and admin expenses",
-                            IsDeleted = false
+                            Description = "Travel expenses - general and admin expenses"
                         },
                         new
                         {
                             Id = 121,
                             AccountTypeId = 14,
-                            Description = "Travel expenses - selling expense",
-                            IsDeleted = false
+                            Description = "Travel expenses - selling expense"
                         },
                         new
                         {
                             Id = 122,
                             AccountTypeId = 14,
-                            Description = "Unapplied Cash Bill Payment Expense",
-                            IsDeleted = false
+                            Description = "Unapplied Cash Bill Payment Expense"
                         },
                         new
                         {
                             Id = 123,
                             AccountTypeId = 14,
-                            Description = "Utilities",
-                            IsDeleted = false
+                            Description = "Utilities"
                         },
                         new
                         {
                             Id = 124,
                             AccountTypeId = 15,
-                            Description = "Amortisation",
-                            IsDeleted = false
+                            Description = "Amortisation"
                         },
                         new
                         {
                             Id = 125,
                             AccountTypeId = 15,
-                            Description = "Depreciation",
-                            IsDeleted = false
+                            Description = "Depreciation"
                         },
                         new
                         {
                             Id = 126,
                             AccountTypeId = 15,
-                            Description = "Exchange Gain or Loss",
-                            IsDeleted = false
+                            Description = "Exchange Gain or Loss"
                         },
                         new
                         {
                             Id = 127,
                             AccountTypeId = 15,
-                            Description = "Other Expense",
-                            IsDeleted = false
+                            Description = "Other Expense"
                         },
                         new
                         {
                             Id = 128,
                             AccountTypeId = 15,
-                            Description = "Penalties and settlements",
-                            IsDeleted = false
+                            Description = "Penalties and settlements"
                         });
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.AccountType", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.AccountType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1532,24 +1402,22 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<byte[]>("Timestamp")
                         .IsConcurrencyToken()
@@ -1557,7 +1425,7 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("rowversion");
 
                     b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -1567,111 +1435,96 @@ namespace PanoramaBackend.Data.Migrations
                         new
                         {
                             Id = 1,
-                            IsDeleted = false,
                             Name = "Accounts Receivable (A/R)",
                             Type = "Assets"
                         },
                         new
                         {
                             Id = 2,
-                            IsDeleted = false,
                             Name = "Current Assets",
                             Type = "Assets"
                         },
                         new
                         {
                             Id = 3,
-                            IsDeleted = false,
                             Name = "Cash and cash equivalents",
                             Type = "Assets"
                         },
                         new
                         {
                             Id = 4,
-                            IsDeleted = false,
                             Name = "Fixed assets",
                             Type = "Assets"
                         },
                         new
                         {
                             Id = 5,
-                            IsDeleted = false,
                             Name = "Non-current assetss",
                             Type = "Assets"
                         },
                         new
                         {
                             Id = 6,
-                            IsDeleted = false,
                             Name = "Accounts Payable (A/P)",
                             Type = "Liablity"
                         },
                         new
                         {
                             Id = 7,
-                            IsDeleted = false,
                             Name = "Income",
                             Type = "Revenues/Income"
                         },
                         new
                         {
                             Id = 8,
-                            IsDeleted = false,
                             Name = "Credit Card",
                             Type = "Liablity"
                         },
                         new
                         {
                             Id = 9,
-                            IsDeleted = false,
                             Name = "Current liabilities",
                             Type = "Liablity"
                         },
                         new
                         {
                             Id = 10,
-                            IsDeleted = false,
                             Name = "Non-current liabilities",
                             Type = "Liablity"
                         },
                         new
                         {
                             Id = 11,
-                            IsDeleted = false,
                             Name = "Owners Equity",
                             Type = "Owner’s equity"
                         },
                         new
                         {
                             Id = 12,
-                            IsDeleted = false,
                             Name = "Other income",
                             Type = "Revenues/Income"
                         },
                         new
                         {
                             Id = 13,
-                            IsDeleted = false,
                             Name = "Cost of Sales Invoice",
                             Type = "Liablity"
                         },
                         new
                         {
                             Id = 14,
-                            IsDeleted = false,
                             Name = "Expense",
                             Type = "Expense"
                         },
                         new
                         {
                             Id = 15,
-                            IsDeleted = false,
                             Name = "Other Expense",
                             Type = "Expense"
                         });
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.Accounts", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.Accounts", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1690,36 +1543,34 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("DefaultTaxCode")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<bool?>("IsSubAccount")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Number")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<decimal?>("OpeningBalanceEquity")
                         .HasColumnType("decimal(18,2)");
@@ -1746,7 +1597,6 @@ namespace PanoramaBackend.Data.Migrations
                             Id = 1,
                             AccountDetailTypeId = 15,
                             Description = "Asset",
-                            IsDeleted = false,
                             Name = "Cash Account"
                         },
                         new
@@ -1754,7 +1604,6 @@ namespace PanoramaBackend.Data.Migrations
                             Id = 2,
                             AccountDetailTypeId = 15,
                             Description = "Asset",
-                            IsDeleted = false,
                             Name = "Test Bank Account"
                         },
                         new
@@ -1762,7 +1611,6 @@ namespace PanoramaBackend.Data.Migrations
                             Id = 3,
                             AccountDetailTypeId = 1,
                             Description = "Asset",
-                            IsDeleted = false,
                             Name = "Accounts Receivable(A/ R)"
                         },
                         new
@@ -1770,7 +1618,6 @@ namespace PanoramaBackend.Data.Migrations
                             Id = 4,
                             AccountDetailTypeId = 41,
                             Description = "Liability",
-                            IsDeleted = false,
                             Name = "Accounts Payable(A/ P)"
                         },
                         new
@@ -1778,7 +1625,6 @@ namespace PanoramaBackend.Data.Migrations
                             Id = 5,
                             AccountDetailTypeId = 105,
                             Description = "Expense",
-                            IsDeleted = false,
                             Name = "Expense"
                         },
                         new
@@ -1786,7 +1632,6 @@ namespace PanoramaBackend.Data.Migrations
                             Id = 6,
                             AccountDetailTypeId = 45,
                             Description = "Income",
-                            IsDeleted = false,
                             Name = "Sales Account"
                         },
                         new
@@ -1794,7 +1639,6 @@ namespace PanoramaBackend.Data.Migrations
                             Id = 7,
                             AccountDetailTypeId = 41,
                             Description = "Liablity",
-                            IsDeleted = false,
                             Name = "VAT Payable"
                         },
                         new
@@ -1802,7 +1646,6 @@ namespace PanoramaBackend.Data.Migrations
                             Id = 8,
                             AccountDetailTypeId = 81,
                             Description = "Owner's Equity",
-                            IsDeleted = false,
                             Name = "Retained Earning"
                         },
                         new
@@ -1810,7 +1653,6 @@ namespace PanoramaBackend.Data.Migrations
                             Id = 9,
                             AccountDetailTypeId = 81,
                             Description = "Owner's Equity",
-                            IsDeleted = false,
                             Name = "Opening Balance Equity"
                         },
                         new
@@ -1818,12 +1660,11 @@ namespace PanoramaBackend.Data.Migrations
                             Id = 100,
                             AccountDetailTypeId = 45,
                             Description = "Refund Income Collector",
-                            IsDeleted = false,
                             Name = "Refund Income Account"
                         });
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.AccountsMapping", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.AccountsMapping", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1836,23 +1677,21 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("FormName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<byte[]>("Timestamp")
@@ -1873,30 +1712,26 @@ namespace PanoramaBackend.Data.Migrations
                         new
                         {
                             Id = 1,
-                            FormName = "Sales Agent",
-                            IsDeleted = false
+                            FormName = "Sales Agent"
                         },
                         new
                         {
                             Id = 2,
-                            FormName = "Sales",
-                            IsDeleted = false
+                            FormName = "Sales"
                         },
                         new
                         {
                             Id = 3,
-                            FormName = "Insurance Broker",
-                            IsDeleted = false
+                            FormName = "Insurance Broker"
                         },
                         new
                         {
                             Id = 4,
-                            FormName = "Transfer",
-                            IsDeleted = false
+                            FormName = "Transfer"
                         });
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.Address", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.Address", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1915,20 +1750,18 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("PostalCode")
@@ -1955,7 +1788,56 @@ namespace PanoramaBackend.Data.Migrations
                     b.ToTable("Address");
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.Attachments", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.Announcement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AnnoucementTitle")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreateUserId")
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("EditTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("EditUserId")
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Fullname")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("JobTitle")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<byte[]>("Timestamp")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Announcement");
+                });
+
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.Attachments", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1968,20 +1850,18 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<byte[]>("Timestamp")
@@ -1999,7 +1879,7 @@ namespace PanoramaBackend.Data.Migrations
                     b.ToTable("Attachments");
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.BDType", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.BDType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -2012,20 +1892,18 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<bool?>("IsForBenefit")
@@ -2035,7 +1913,7 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<byte[]>("Timestamp")
                         .IsConcurrencyToken()
@@ -2052,13 +1930,12 @@ namespace PanoramaBackend.Data.Migrations
                         new
                         {
                             Id = 1,
-                            IsDeleted = false,
                             IsForDeduction = true,
                             Name = "Deduction For Leave"
                         });
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.BankDetails", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.BankDetails", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -2066,10 +1943,10 @@ namespace PanoramaBackend.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AccountHolderName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("AccountNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("BankType")
                         .HasColumnType("int");
@@ -2077,23 +1954,21 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("EmploymentDetailId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<byte[]>("Timestamp")
@@ -2102,7 +1977,7 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("rowversion");
 
                     b.Property<string>("ibanNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -2111,7 +1986,7 @@ namespace PanoramaBackend.Data.Migrations
                     b.ToTable("BankDetails");
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.Benefits", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.Benefits", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -2130,27 +2005,25 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<int>("Occurance")
                         .HasColumnType("int");
 
                     b.Property<string>("PayStubLabel")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<byte[]>("Timestamp")
                         .IsConcurrencyToken()
@@ -2166,7 +2039,7 @@ namespace PanoramaBackend.Data.Migrations
                     b.ToTable("Benefits");
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.BenefitsAndDeduction", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.BenefitsAndDeduction", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -2182,23 +2055,21 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("EmploymentDetailId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<byte[]>("Timestamp")
@@ -2213,7 +2084,7 @@ namespace PanoramaBackend.Data.Migrations
                     b.ToTable("BenefitsAndDeduction");
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.BodyType", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.BodyType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -2223,24 +2094,22 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<byte[]>("Timestamp")
                         .IsConcurrencyToken()
@@ -2250,38 +2119,42 @@ namespace PanoramaBackend.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("BodyType");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "NORMAL"
+                        });
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.Branch", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.Branch", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("BranchAddress")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("BranchName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<byte[]>("Timestamp")
@@ -2294,7 +2167,7 @@ namespace PanoramaBackend.Data.Migrations
                     b.ToTable("Branch");
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.Compensation", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.CompanyInformation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -2304,18 +2177,64 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(1200)");
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("ReconcilationReportId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TempId")
+                        .HasColumnType("int");
+
+                    b.Property<byte[]>("Timestamp")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReconcilationReportId");
+
+                    b.ToTable("CompanyInformation");
+                });
+
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.Compensation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime?>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreateUserId")
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("EditTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("EditUserId")
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("Effective")
                         .HasColumnType("bit");
@@ -2332,7 +2251,7 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("ExpiryDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<decimal>("SalaryAmount")
@@ -2350,57 +2269,7 @@ namespace PanoramaBackend.Data.Migrations
                     b.ToTable("Compensation");
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.Corrections", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime?>("CreateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreateUserId")
-                        .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("EditTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EditUserId")
-                        .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ReconcilationReportId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TempId")
-                        .HasColumnType("int");
-
-                    b.Property<byte[]>("Timestamp")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ReconcilationReportId");
-
-                    b.ToTable("Corrections");
-                });
-
-            modelBuilder.Entity("PanoramBackend.Data.Entities.Deduction", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.Deduction", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -2416,10 +2285,9 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("DeductionTypeId")
                         .HasColumnType("int");
@@ -2427,19 +2295,18 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<int>("Occurance")
                         .HasColumnType("int");
 
                     b.Property<string>("PayStubLabel")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<byte[]>("Timestamp")
                         .IsConcurrencyToken()
@@ -2455,7 +2322,7 @@ namespace PanoramaBackend.Data.Migrations
                     b.ToTable("Deduction");
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.Documents", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.Documents", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -2471,20 +2338,18 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<byte[]>("Timestamp")
@@ -2497,7 +2362,7 @@ namespace PanoramaBackend.Data.Migrations
                     b.ToTable("Documents");
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.EmployeeFiles", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.EmployeeFiles", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -2507,10 +2372,9 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -2521,15 +2385,14 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("EmploymentDetailId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<byte[]>("Timestamp")
@@ -2544,7 +2407,7 @@ namespace PanoramaBackend.Data.Migrations
                     b.ToTable("EmployeeFiles");
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.EmploymentDetails", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.EmploymentDetails", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -2554,18 +2417,16 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("EmployeeIsActive")
                         .HasColumnType("bit");
@@ -2573,14 +2434,14 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime>("HiredDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<int?>("ManagerId")
                         .HasColumnType("int");
 
                     b.Property<string>("Position")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int?>("TeamId")
                         .HasColumnType("int");
@@ -2604,7 +2465,7 @@ namespace PanoramaBackend.Data.Migrations
                     b.ToTable("EmploymentDetails");
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.EmploymentStatus", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.EmploymentStatus", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -2614,23 +2475,21 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("EmploymentDetailId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<byte[]>("Timestamp")
@@ -2645,7 +2504,65 @@ namespace PanoramaBackend.Data.Migrations
                     b.ToTable("EmploymentStatus");
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.InsuranceType", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.Expense", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AccountId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreateUserId")
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("EditTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("EditUserId")
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("ExpenseAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("ExpenseCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ExpenseDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ExpenseName")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<byte[]>("Timestamp")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("ExpenseCategoryId");
+
+                    b.ToTable("Expense");
+                });
+
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.ExpenseCategory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -2655,24 +2572,59 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<byte[]>("Timestamp")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ExpenseCategory");
+                });
+
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.InsuranceType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime?>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreateUserId")
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("EditTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("EditUserId")
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<byte[]>("Timestamp")
                         .IsConcurrencyToken()
@@ -2687,18 +2639,16 @@ namespace PanoramaBackend.Data.Migrations
                         new
                         {
                             Id = 1,
-                            IsDeleted = false,
-                            Name = "Third Party Liability"
+                            Name = "TPL"
                         },
                         new
                         {
                             Id = 2,
-                            IsDeleted = false,
-                            Name = "Comprehensive"
+                            Name = "COMP"
                         });
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.LeaveApplication", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.LeaveApplication", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -2708,10 +2658,9 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DateOfReturn")
                         .HasColumnType("datetime2");
@@ -2719,10 +2668,9 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("EmploymentStatusId")
                         .HasColumnType("int");
@@ -2733,7 +2681,7 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<bool>("IsCasualLeave")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsSickLeave")
@@ -2766,7 +2714,7 @@ namespace PanoramaBackend.Data.Migrations
                     b.ToTable("LeaveApplication");
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.LedgarEntries", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.LedgarEntries", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -2779,10 +2727,9 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int?>("CreditAccountId")
                         .HasColumnType("int");
@@ -2793,12 +2740,14 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<string>("EntryNote")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<byte[]>("Timestamp")
@@ -2823,7 +2772,7 @@ namespace PanoramaBackend.Data.Migrations
                     b.ToTable("LedgarEntries");
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.Login", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.Login", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -2833,20 +2782,18 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("RefreshToken")
@@ -2868,7 +2815,7 @@ namespace PanoramaBackend.Data.Migrations
                     b.ToTable("Login");
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.Payment", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.Payment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -2881,10 +2828,9 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int?>("CreditAccountId")
                         .HasColumnType("int");
@@ -2895,18 +2841,17 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int?>("InsuranceCompanyId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsPaymentCredit")
@@ -2916,7 +2861,7 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Memo")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("PaymentDate")
                         .HasColumnType("datetime2");
@@ -2933,7 +2878,7 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("rowversion");
 
                     b.Property<string>("TransactionReferenceNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -2950,7 +2895,7 @@ namespace PanoramaBackend.Data.Migrations
                     b.ToTable("Payment");
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.PaymentAndBilling", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.PaymentAndBilling", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -2963,20 +2908,18 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<decimal?>("OpeningBalance")
@@ -3010,7 +2953,7 @@ namespace PanoramaBackend.Data.Migrations
                     b.ToTable("PaymentAndBilling");
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.PaymentMethod", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.PaymentMethod", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -3020,24 +2963,22 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<byte[]>("Timestamp")
                         .IsConcurrencyToken()
@@ -3052,30 +2993,85 @@ namespace PanoramaBackend.Data.Migrations
                         new
                         {
                             Id = 1,
-                            IsDeleted = false,
                             Name = "Cash"
                         },
                         new
                         {
                             Id = 2,
-                            IsDeleted = false,
                             Name = "Cheque"
                         },
                         new
                         {
                             Id = 3,
-                            IsDeleted = false,
                             Name = "Debit Card"
                         },
                         new
                         {
                             Id = 4,
-                            IsDeleted = false,
                             Name = "Credit Card"
                         });
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.PreferredPaymentMethod", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.Payroll", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreateUserId")
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("EditTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("EditUserId")
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ExpenseAccountId")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsRecurring")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<byte[]>("Timestamp")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("ExpenseAccountId");
+
+                    b.ToTable("Payroll");
+                });
+
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.PreferredPaymentMethod", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -3085,20 +3081,18 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Text")
@@ -3117,30 +3111,26 @@ namespace PanoramaBackend.Data.Migrations
                         new
                         {
                             Id = 1,
-                            IsDeleted = false,
                             Text = "Cash"
                         },
                         new
                         {
                             Id = 2,
-                            IsDeleted = false,
                             Text = "Cheque"
                         },
                         new
                         {
                             Id = 3,
-                            IsDeleted = false,
                             Text = "Debit Card"
                         },
                         new
                         {
                             Id = 4,
-                            IsDeleted = false,
                             Text = "Credit Card"
                         });
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.Priority", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.Priority", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -3150,20 +3140,18 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
@@ -3182,24 +3170,21 @@ namespace PanoramaBackend.Data.Migrations
                         new
                         {
                             Id = 1,
-                            IsDeleted = false,
                             Name = "low"
                         },
                         new
                         {
                             Id = 2,
-                            IsDeleted = false,
                             Name = "medium"
                         },
                         new
                         {
                             Id = 3,
-                            IsDeleted = false,
                             Name = "high"
                         });
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.Reconcilation", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.Reconcilation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -3212,10 +3197,9 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("DocumentId")
                         .HasColumnType("int");
@@ -3223,10 +3207,9 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("From")
                         .HasColumnType("datetime2");
@@ -3237,7 +3220,7 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<int?>("InsuranceCompanyId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<int>("NoOfSalesMissing")
@@ -3265,7 +3248,7 @@ namespace PanoramaBackend.Data.Migrations
                     b.ToTable("Reconcilation");
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.Refund", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.Refund", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -3282,26 +3265,24 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("CompanyName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CustomerName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int?>("InsuranceCompanyId")
                         .HasColumnType("int");
@@ -3309,7 +3290,7 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<int?>("InsuranceTypeId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("MessageOnReceipt")
@@ -3319,7 +3300,7 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PolicyNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("RefundDate")
                         .HasColumnType("datetime2");
@@ -3345,7 +3326,7 @@ namespace PanoramaBackend.Data.Migrations
                     b.ToTable("Refund");
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.SaleLineItem", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.SalesInvoice", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -3354,6 +3335,15 @@ namespace PanoramaBackend.Data.Migrations
 
                     b.Property<decimal?>("ActualComission")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("BodyTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ChassisNumber")
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<decimal?>("CommisionRate")
                         .HasColumnType("decimal(18,2)");
@@ -3364,32 +3354,57 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("CustomerDetailId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CustomerName")
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal?>("Gross")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<int?>("InsuranceCompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("InsuranceCompanyName")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("InsuranceTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<decimal?>("Net")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("OtherFieldsAndValues")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PaymentMethodId")
+                        .HasColumnType("int");
+
                     b.Property<string>("PolicyNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SaleId")
+                    b.Property<DateTime>("SalesInvoiceDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("SalesInvoicePersonId")
                         .HasColumnType("int");
 
                     b.Property<decimal?>("SalesPrice")
@@ -3400,96 +3415,17 @@ namespace PanoramaBackend.Data.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
-                    b.Property<decimal>("Total")
+                    b.Property<decimal?>("Total")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("UnderWritter")
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<decimal?>("VAT")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int?>("VehilcleId")
                         .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SaleId");
-
-                    b.HasIndex("VehilcleId");
-
-                    b.ToTable("SaleLineItem");
-                });
-
-            modelBuilder.Entity("PanoramBackend.Data.Entities.SalesInvoice", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("BodyTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BranchId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ChassisNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreateUserId")
-                        .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<int?>("CustomerDetailId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CustomerName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("EditTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EditUserId")
-                        .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<int?>("InsuranceCompanyId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("InsuranceCompanyName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("InsuranceTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Notes")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("PaymentMethodId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("SalesInvoiceDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("SalesInvoicePersonId")
-                        .HasColumnType("int");
-
-                    b.Property<byte[]>("Timestamp")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.Property<decimal?>("Total")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("UnderWritter")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -3507,10 +3443,12 @@ namespace PanoramaBackend.Data.Migrations
 
                     b.HasIndex("SalesInvoicePersonId");
 
+                    b.HasIndex("VehilcleId");
+
                     b.ToTable("SalesInvoice");
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.StaffOffBoarding", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.SetupClient", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -3520,10 +3458,46 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("EditTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("EditUserId")
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("FirstTime")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<byte[]>("Timestamp")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SetupClient");
+                });
+
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.StaffOffBoarding", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime?>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreateUserId")
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DateOfNotice")
                         .HasColumnType("datetime2");
@@ -3531,22 +3505,21 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("EmploymentStatusId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("LastDayOfWork")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Reason")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<byte[]>("Timestamp")
                         .IsConcurrencyToken()
@@ -3560,7 +3533,7 @@ namespace PanoramaBackend.Data.Migrations
                     b.ToTable("StaffOffBoarding");
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.Status", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.Status", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -3570,20 +3543,18 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
@@ -3602,24 +3573,21 @@ namespace PanoramaBackend.Data.Migrations
                         new
                         {
                             Id = 1,
-                            IsDeleted = false,
                             Name = "completed"
                         },
                         new
                         {
                             Id = 2,
-                            IsDeleted = false,
                             Name = "inprocess"
                         },
                         new
                         {
                             Id = 3,
-                            IsDeleted = false,
                             Name = "pending"
                         });
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.TaskTodo", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.TaskTodo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -3635,10 +3603,9 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("DueDate")
                         .HasColumnType("datetime2");
@@ -3646,16 +3613,15 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Notes")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int?>("PriorityId")
                         .HasColumnType("int");
@@ -3667,7 +3633,7 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("TaskName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Time")
                         .HasColumnType("nvarchar(max)");
@@ -3690,7 +3656,7 @@ namespace PanoramaBackend.Data.Migrations
                     b.ToTable("TaskTodo");
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.Teams", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.Teams", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -3700,27 +3666,25 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<int>("ManagerId")
                         .HasColumnType("int");
 
                     b.Property<string>("TeamName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<byte[]>("Timestamp")
                         .IsConcurrencyToken()
@@ -3734,7 +3698,7 @@ namespace PanoramaBackend.Data.Migrations
                     b.ToTable("Teams");
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.Terms", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.Terms", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -3744,20 +3708,18 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Text")
@@ -3776,60 +3738,57 @@ namespace PanoramaBackend.Data.Migrations
                         new
                         {
                             Id = 1,
-                            IsDeleted = false,
                             Text = "Due on recipt"
                         },
                         new
                         {
                             Id = 2,
-                            IsDeleted = false,
                             Text = "Net 15"
                         },
                         new
                         {
                             Id = 3,
-                            IsDeleted = false,
                             Text = "Net 30"
                         },
                         new
                         {
                             Id = 4,
-                            IsDeleted = false,
                             Text = "Net 60"
                         });
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.Transaction", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.Transaction", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<Guid?>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int?>("ExpenseId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Memo")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int?>("PaymentId")
                         .HasColumnType("int");
@@ -3859,6 +3818,8 @@ namespace PanoramaBackend.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BranchId");
+
                     b.HasIndex("ExpenseId");
 
                     b.HasIndex("PaymentId");
@@ -3872,49 +3833,158 @@ namespace PanoramaBackend.Data.Migrations
                     b.ToTable("Transaction");
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.UserDetails", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.UserCompanyInformation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("BusinessLocation")
+                        .HasColumnName("nvarchar(100)")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .HasColumnName("nvarchar(100)")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ContactInformation")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Country")
+                        .HasColumnName("nvarchar(100)")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreateUserId")
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Currency")
+                        .HasColumnName("nvarchar(100)")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("EditTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("EditUserId")
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("EmailAddress")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Language")
+                        .HasColumnName("nvarchar(100)")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LegalStructure")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("LogoBase64")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LogoUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OrganizationName")
+                        .HasColumnName("nvarchar(100)")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("PayrollDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("State")
+                        .HasColumnName("nvarchar(100)")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Street1")
+                        .HasColumnName("nvarchar(100)")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Street2")
+                        .HasColumnName("nvarchar(100)")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TaxRegistrationNumber")
+                        .HasColumnName("nvarchar(100)")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("Timestamp")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<string>("Timezone")
+                        .HasColumnName("nvarchar(100)")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("VATRegistrationNumber")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("VatRegisterOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Website")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Zip")
+                        .HasColumnName("nvarchar(100)")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isMigrationRequired")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserCompanyInformation");
+                });
+
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.UserDetails", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<bool?>("BillWithParent")
-                        .HasColumnType("bit");
+                    b.Property<string>("BillWithParent")
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Company")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int?>("DefaultAccountId")
                         .HasColumnType("int");
 
                     b.Property<string>("DisplayNameAs")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Fax")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
@@ -3925,7 +3995,7 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<bool?>("IsCustomer")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<bool?>("IsEmployee")
@@ -3941,25 +4011,25 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("MiddleName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Mobile")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<decimal?>("OpenBalance")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Other")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Phone")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Suffix")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<byte[]>("Timestamp")
                         .IsConcurrencyToken()
@@ -3967,16 +4037,16 @@ namespace PanoramaBackend.Data.Migrations
                         .HasColumnType("rowversion");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int?>("UserDetailId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Website")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -3984,29 +4054,91 @@ namespace PanoramaBackend.Data.Migrations
 
                     b.HasIndex("UserDetailId");
 
-                    b.HasIndex("UserId")
-                        .IsUnique()
-                        .HasFilter("[UserId] IS NOT NULL");
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserDetails");
 
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            Id = 999999,
                             Company = "Systems Limited",
                             DisplayNameAs = "Moid",
                             FirstName = "Muhamamad",
                             ImageUrl = "https://pbs.twimg.com/profile_images/633202777695514625/tUVSrLDG.jpg",
-                            IsDeleted = false,
                             LastName = "Shams",
                             MiddleName = "Moid",
                             Title = "Mr.",
-                            UserId = "a18be9c0-aa65-4af8-bd17-00bd9344e575"
+                            UserId = new Guid("92043fc4-b79d-4adb-9078-c046ecfe4342")
                         });
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.VacationPolicy", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.VacationApplication", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ApplicantName")
+                        .HasColumnType("nvarchar(1200)");
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreateUserId")
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DateFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateTo")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("EditTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("EditUserId")
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("JobTitle")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<byte[]>("Timestamp")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<int>("UserDetailId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("VacationDescription")
+                        .HasColumnType("nvarchar(1200)");
+
+                    b.Property<string>("VacationTitle")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("UserDetailId");
+
+                    b.ToTable("VacationApplication");
+                });
+
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.VacationPolicy", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -4025,18 +4157,16 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("EmploymentDetailId")
                         .HasColumnType("int");
@@ -4044,7 +4174,7 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime>("ForYear")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<int>("SickLeaveCount")
@@ -4062,7 +4192,7 @@ namespace PanoramaBackend.Data.Migrations
                     b.ToTable("VacationPolicy");
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.Vehicle", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.Vehicle", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -4072,27 +4202,25 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Make")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Model")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<byte[]>("Timestamp")
                         .IsConcurrencyToken()
@@ -4102,32 +4230,9 @@ namespace PanoramaBackend.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Vehicle");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            IsDeleted = false,
-                            Make = "Honda Civic",
-                            Model = "2010-2020"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            IsDeleted = false,
-                            Make = "Toyota Corolla",
-                            Model = "2010-2020"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            IsDeleted = false,
-                            Make = "Mitsubishi Lancer",
-                            Model = "2010-2020"
-                        });
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Repository.ComissionRate", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Repository.ComissionRate", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -4140,18 +4245,16 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("EditTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EditUserId")
+                    b.Property<Guid?>("EditUserId")
                         .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("ExpiredDate")
                         .HasColumnType("datetime2");
@@ -4159,7 +4262,7 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsNonTpl")
@@ -4186,22 +4289,48 @@ namespace PanoramaBackend.Data.Migrations
                     b.ToTable("ComissionRate");
                 });
 
-            modelBuilder.Entity("PanoramBackend.Services.Data.DTOs.ExtendedRole", b =>
+            modelBuilder.Entity("PanoramaBackend.Services.Data.DTOs.ExtendedRole", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreateUserId")
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("EditTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("EditUserId")
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(256)")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(256);
 
                     b.Property<string>("NormalizedName")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
+
+                    b.Property<byte[]>("Timestamp")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<int?>("UserDetailsId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -4210,29 +4339,32 @@ namespace PanoramaBackend.Data.Migrations
                         .HasName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
+                    b.HasIndex("UserDetailsId");
+
                     b.ToTable("AspNetRoles");
 
                     b.HasData(
                         new
                         {
-                            Id = "a18be9c0-aa65-4af8-bd17-00bd9344e575",
-                            ConcurrencyStamp = "6a372f80-4215-429f-8dd8-98a08cb66546",
+                            Id = new Guid("b3bd6a92-3f1d-4b85-b39c-c0dee4264a5f"),
+                            ConcurrencyStamp = "b9a04050-79e9-4b1d-b00c-efa235ce958c",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
-                            Id = "a18be9c0-aa65-4af8-bd17-00bd9344e678",
-                            ConcurrencyStamp = "2150399b-b9a2-4627-bc81-9cc3795a7830",
+                            Id = new Guid("a478b39e-4387-4f1f-be58-f27e9b1418e6"),
+                            ConcurrencyStamp = "1eb7bae4-e29a-452b-b5a9-20f3521e9294",
                             Name = "CompanyAdmin",
                             NormalizedName = "CompanyAdmin"
                         });
                 });
 
-            modelBuilder.Entity("PanoramBackend.Services.Data.DTOs.ExtendedUser", b =>
+            modelBuilder.Entity("PanoramaBackend.Services.Data.DTOs.ExtendedUser", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -4241,11 +4373,28 @@ namespace PanoramaBackend.Data.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreateUserId")
+                        .HasColumnName("CreateUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("EditTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("EditUserId")
+                        .HasColumnName("EditUserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<bool>("LockoutEnabled")
@@ -4274,6 +4423,11 @@ namespace PanoramaBackend.Data.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<byte[]>("Timestamp")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -4296,15 +4450,15 @@ namespace PanoramaBackend.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "a18be9c0-aa65-4af8-bd17-00bd9344e575",
+                            Id = new Guid("92043fc4-b79d-4adb-9078-c046ecfe4342"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3e6d46c2-72d5-493d-80ab-4926012d097b",
+                            ConcurrencyStamp = "c6bf7e3d-0f12-4cef-aa40-aaf9653f1985",
                             Email = "admin@nukeslab.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "admin@nukeslab.com",
                             NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEPx7srXf+g9TFGaOQBTANT2ZzSXNH32VKmIUzOCWRzviKHmU4m74i/e5xoM+0ISSfg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEADVcEXnprx4hqBniCTl/O3TdRLD4GifFg++ERbl0W6Xr8MQt8avRKXRWHykTlNIYQ==",
                             PhoneNumber = "+923400064394",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
@@ -4313,774 +4467,223 @@ namespace PanoramaBackend.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("PanoramaBackend.Data.Entities.Announcement", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AnnoucementTitle")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreateUserId")
-                        .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("EditTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EditUserId")
-                        .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("Fullname")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("JobTitle")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte[]>("Timestamp")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Announcement");
-                });
-
-            modelBuilder.Entity("PanoramaBackend.Data.Entities.Expense", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("AccountId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BranchId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("CreateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreateUserId")
-                        .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<DateTime?>("EditTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EditUserId")
-                        .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<decimal>("ExpenseAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("ExpenseCategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("ExpenseDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ExpenseName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<byte[]>("Timestamp")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccountId");
-
-                    b.HasIndex("BranchId");
-
-                    b.HasIndex("ExpenseCategoryId");
-
-                    b.ToTable("Expense");
-                });
-
-            modelBuilder.Entity("PanoramaBackend.Data.Entities.ExpenseCategory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime?>("CreateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreateUserId")
-                        .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<DateTime?>("EditTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EditUserId")
-                        .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte[]>("Timestamp")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ExpenseCategory");
-                });
-
-            modelBuilder.Entity("PanoramaBackend.Data.Entities.Payroll", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("BranchId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("CreateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreateUserId")
-                        .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<DateTime?>("EditTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EditUserId")
-                        .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ExpenseAccountId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsRecurring")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<byte[]>("Timestamp")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BranchId");
-
-                    b.HasIndex("ExpenseAccountId");
-
-                    b.ToTable("Payroll");
-                });
-
-            modelBuilder.Entity("PanoramaBackend.Data.Entities.VacationApplication", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ApplicantName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("BranchId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("CreateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreateUserId")
-                        .HasColumnName("CreateUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<DateTime>("DateFrom")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateTo")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("EditTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EditUserId")
-                        .HasColumnName("EditUserId")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("JobTitle")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte[]>("Timestamp")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.Property<int>("UserDetailId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("VacationDescription")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("VacationTitle")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BranchId");
-
-                    b.HasIndex("UserDetailId");
-
-                    b.ToTable("VacationApplication");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-                {
-                    b.HasOne("PanoramBackend.Services.Data.DTOs.ExtendedRole", null)
+                    b.HasOne("PanoramaBackend.Services.Data.DTOs.ExtendedRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
-                    b.HasOne("PanoramBackend.Services.Data.DTOs.ExtendedUser", null)
+                    b.HasOne("PanoramaBackend.Services.Data.DTOs.ExtendedUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
-                    b.HasOne("PanoramBackend.Services.Data.DTOs.ExtendedUser", null)
+                    b.HasOne("PanoramaBackend.Services.Data.DTOs.ExtendedUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.HasOne("PanoramBackend.Services.Data.DTOs.ExtendedRole", null)
+                    b.HasOne("PanoramaBackend.Services.Data.DTOs.ExtendedRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PanoramBackend.Services.Data.DTOs.ExtendedUser", null)
+                    b.HasOne("PanoramaBackend.Services.Data.DTOs.ExtendedUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
-                    b.HasOne("PanoramBackend.Services.Data.DTOs.ExtendedUser", null)
+                    b.HasOne("PanoramaBackend.Services.Data.DTOs.ExtendedUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.AccountDetailType", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.AccountDetailType", b =>
                 {
-                    b.HasOne("PanoramBackend.Data.Entities.AccountType", "AccountType")
+                    b.HasOne("PanoramaBackend.Data.Entities.AccountType", "AccountType")
                         .WithMany("AccountDetailTypes")
                         .HasForeignKey("AccountTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.Accounts", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.Accounts", b =>
                 {
-                    b.HasOne("PanoramBackend.Data.Entities.AccountDetailType", "AccountDetailType")
+                    b.HasOne("PanoramaBackend.Data.Entities.AccountDetailType", "AccountDetailType")
                         .WithMany("Accounts")
                         .HasForeignKey("AccountDetailTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("PanoramBackend.Data.Entities.Accounts", "Account")
+                    b.HasOne("PanoramaBackend.Data.Entities.Accounts", "Account")
                         .WithMany("SubAccounts")
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.AccountsMapping", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.AccountsMapping", b =>
                 {
-                    b.HasOne("PanoramBackend.Data.Entities.Accounts", "Accounts")
+                    b.HasOne("PanoramaBackend.Data.Entities.Accounts", "Accounts")
                         .WithMany("AccountsMappings")
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.Address", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.Address", b =>
                 {
-                    b.HasOne("PanoramBackend.Data.Entities.UserDetails", "UserDetails")
+                    b.HasOne("PanoramaBackend.Data.Entities.UserDetails", "UserDetails")
                         .WithMany("Addresses")
                         .HasForeignKey("UserDetailId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.Attachments", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.Attachments", b =>
                 {
-                    b.HasOne("PanoramBackend.Data.Entities.UserDetails", "UserDetails")
+                    b.HasOne("PanoramaBackend.Data.Entities.UserDetails", "UserDetails")
                         .WithMany("Attachments")
                         .HasForeignKey("UserDetailId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.BDType", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.BDType", b =>
                 {
-                    b.HasOne("PanoramBackend.Data.Entities.BDType", "Category")
+                    b.HasOne("PanoramaBackend.Data.Entities.BDType", "Category")
                         .WithMany("ChildernTypes")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.BankDetails", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.BankDetails", b =>
                 {
-                    b.HasOne("PanoramBackend.Data.Entities.EmploymentDetails", "EmploymentDetails")
+                    b.HasOne("PanoramaBackend.Data.Entities.EmploymentDetails", "EmploymentDetails")
                         .WithMany("BankDetails")
                         .HasForeignKey("EmploymentDetailId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.Benefits", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.Benefits", b =>
                 {
-                    b.HasOne("PanoramBackend.Data.Entities.BenefitsAndDeduction", "BenefitsAndDeduction")
+                    b.HasOne("PanoramaBackend.Data.Entities.BenefitsAndDeduction", "BenefitsAndDeduction")
                         .WithMany("Benefits")
                         .HasForeignKey("BenefitAndDeductionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("PanoramBackend.Data.Entities.BDType", "Type")
+                    b.HasOne("PanoramaBackend.Data.Entities.BDType", "Type")
                         .WithMany("Benefits")
                         .HasForeignKey("BenefitTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.BenefitsAndDeduction", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.BenefitsAndDeduction", b =>
                 {
-                    b.HasOne("PanoramBackend.Data.Entities.EmploymentDetails", "EmploymentDetails")
+                    b.HasOne("PanoramaBackend.Data.Entities.EmploymentDetails", "EmploymentDetails")
                         .WithMany("BenefitsAndDeductions")
                         .HasForeignKey("EmploymentDetailId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.Compensation", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.CompanyInformation", b =>
                 {
-                    b.HasOne("PanoramBackend.Data.Entities.EmploymentDetails", "EmploymentDetails")
-                        .WithMany("Compensations")
-                        .HasForeignKey("EmploymentDetailId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("PanoramBackend.Data.Entities.Corrections", b =>
-                {
-                    b.HasOne("PanoramBackend.Data.Entities.Reconcilation", "Reconcilation")
+                    b.HasOne("PanoramaBackend.Data.Entities.Reconcilation", "Reconcilation")
                         .WithMany("Corrections")
                         .HasForeignKey("ReconcilationReportId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.Deduction", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.Compensation", b =>
                 {
-                    b.HasOne("PanoramBackend.Data.Entities.BenefitsAndDeduction", "BenefitsAndDeduction")
+                    b.HasOne("PanoramaBackend.Data.Entities.EmploymentDetails", "EmploymentDetails")
+                        .WithMany("Compensations")
+                        .HasForeignKey("EmploymentDetailId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.Deduction", b =>
+                {
+                    b.HasOne("PanoramaBackend.Data.Entities.BenefitsAndDeduction", "BenefitsAndDeduction")
                         .WithMany("Deduction")
                         .HasForeignKey("BenefitAndDeductionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("PanoramBackend.Data.Entities.BDType", "Type")
+                    b.HasOne("PanoramaBackend.Data.Entities.BDType", "Type")
                         .WithMany("Deductions")
                         .HasForeignKey("DeductionTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.EmployeeFiles", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.EmployeeFiles", b =>
                 {
-                    b.HasOne("PanoramBackend.Data.Entities.EmploymentDetails", "EmploymentDetails")
+                    b.HasOne("PanoramaBackend.Data.Entities.EmploymentDetails", "EmploymentDetails")
                         .WithMany("EmployeeFiles")
                         .HasForeignKey("EmploymentDetailId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.EmploymentDetails", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.EmploymentDetails", b =>
                 {
-                    b.HasOne("PanoramBackend.Data.Entities.UserDetails", "Manager")
+                    b.HasOne("PanoramaBackend.Data.Entities.UserDetails", "Manager")
                         .WithMany("ManagerResources")
                         .HasForeignKey("ManagerId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("PanoramBackend.Data.Entities.Teams", "Team")
+                    b.HasOne("PanoramaBackend.Data.Entities.Teams", "Team")
                         .WithMany("TeamMembers")
                         .HasForeignKey("TeamId");
 
-                    b.HasOne("PanoramBackend.Data.Entities.UserDetails", "UserDetails")
+                    b.HasOne("PanoramaBackend.Data.Entities.UserDetails", "UserDetails")
                         .WithMany("EmploymentDetails")
                         .HasForeignKey("UserDetailId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.EmploymentStatus", b =>
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.EmploymentStatus", b =>
                 {
-                    b.HasOne("PanoramBackend.Data.Entities.EmploymentDetails", "EmploymentDetails")
+                    b.HasOne("PanoramaBackend.Data.Entities.EmploymentDetails", "EmploymentDetails")
                         .WithMany("EmploymentStatus")
                         .HasForeignKey("EmploymentDetailId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PanoramBackend.Data.Entities.LeaveApplication", b =>
-                {
-                    b.HasOne("PanoramBackend.Data.Entities.EmploymentStatus", "EmploymentStatus")
-                        .WithMany("LeaveApplications")
-                        .HasForeignKey("EmploymentStatusId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("PanoramBackend.Data.Entities.LedgarEntries", b =>
-                {
-                    b.HasOne("PanoramBackend.Data.Entities.Accounts", "CreditAccount")
-                        .WithMany("CreditLedgarEntries")
-                        .HasForeignKey("CreditAccountId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("PanoramBackend.Data.Entities.Accounts", "DebitAccount")
-                        .WithMany("DebitLedgarEntries")
-                        .HasForeignKey("DebitAccountId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("PanoramBackend.Data.Entities.Transaction", "Transaction")
-                        .WithMany("LedgarEntries")
-                        .HasForeignKey("TransactionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("PanoramBackend.Data.Entities.Payment", b =>
-                {
-                    b.HasOne("PanoramBackend.Data.Entities.Accounts", "CreditAccount")
-                        .WithMany("CreditPayment")
-                        .HasForeignKey("CreditAccountId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("PanoramBackend.Data.Entities.Accounts", "DepositAccount")
-                        .WithMany("DepositPayments")
-                        .HasForeignKey("DepositAccountId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("PanoramBackend.Data.Entities.UserDetails", "InsuranceCompany")
-                        .WithMany("InsuranceCompanyPayment")
-                        .HasForeignKey("InsuranceCompanyId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("PanoramBackend.Data.Entities.PaymentMethod", "PaymentMethod")
-                        .WithMany("Payments")
-                        .HasForeignKey("PaymentMethodId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PanoramBackend.Data.Entities.UserDetails", "SalesAgent")
-                        .WithMany("Payments")
-                        .HasForeignKey("SalesAgentId");
-                });
-
-            modelBuilder.Entity("PanoramBackend.Data.Entities.PaymentAndBilling", b =>
-                {
-                    b.HasOne("PanoramBackend.Data.Entities.PreferredPaymentMethod", "PreferredPaymentMethod")
-                        .WithMany("PaymentAndBilling")
-                        .HasForeignKey("PreferredPaymentMethodId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("PanoramBackend.Data.Entities.Terms", "Terms")
-                        .WithMany("PaymentAndBilling")
-                        .HasForeignKey("TermsId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("PanoramBackend.Data.Entities.UserDetails", "UserDetails")
-                        .WithMany("PaymentAndBilling")
-                        .HasForeignKey("UserDetailId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("PanoramBackend.Data.Entities.Reconcilation", b =>
-                {
-                    b.HasOne("PanoramBackend.Data.Entities.Documents", "Documents")
-                        .WithMany("ReconcilationInsuranceCompany")
-                        .HasForeignKey("DocumentId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("PanoramBackend.Data.Entities.UserDetails", "InsuranceCompany")
-                        .WithMany("ReconcilationInsuranceCompany")
-                        .HasForeignKey("InsuranceCompanyId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("PanoramBackend.Data.Entities.UserDetails", "SalesAgent")
-                        .WithMany("ReconcilationAgents")
-                        .HasForeignKey("SalesAgentId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("PanoramBackend.Data.Entities.Refund", b =>
-                {
-                    b.HasOne("PanoramBackend.Data.Entities.UserDetails", "Agent")
-                        .WithMany("AgentRefunds")
-                        .HasForeignKey("AgentId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("PanoramBackend.Data.Entities.UserDetails", "InsuranceCompany")
-                        .WithMany("InsuranceCompanyRefunds")
-                        .HasForeignKey("InsuranceCompanyId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("PanoramBackend.Data.Entities.InsuranceType", "InsuranceType")
-                        .WithMany("InsuranceTypeRefunds")
-                        .HasForeignKey("InsuranceTypeId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("PanoramBackend.Data.Entities.Vehicle", "Vehicle")
-                        .WithMany("RefundsOnVehicles")
-                        .HasForeignKey("VehilcleId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("PanoramBackend.Data.Entities.SaleLineItem", b =>
-                {
-                    b.HasOne("PanoramBackend.Data.Entities.SalesInvoice", "SalesInvoice")
-                        .WithMany("SaleLineItem")
-                        .HasForeignKey("SaleId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("PanoramBackend.Data.Entities.Vehicle", "Vehicle")
-                        .WithMany("SaleLineItem")
-                        .HasForeignKey("VehilcleId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("PanoramBackend.Data.Entities.SalesInvoice", b =>
-                {
-                    b.HasOne("PanoramBackend.Data.Entities.BodyType", "BodyType")
-                        .WithMany("SalesInvoice")
-                        .HasForeignKey("BodyTypeId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("PanoramBackend.Data.Entities.Branch", "Branch")
-                        .WithMany("Sales")
-                        .HasForeignKey("BranchId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("PanoramBackend.Data.Entities.UserDetails", "CustomerDetails")
-                        .WithMany("CustomerSalesInvoice")
-                        .HasForeignKey("CustomerDetailId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("PanoramBackend.Data.Entities.UserDetails", "InsuranceCompany")
-                        .WithMany("InsuranceCompanyInvoices")
-                        .HasForeignKey("InsuranceCompanyId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("PanoramBackend.Data.Entities.InsuranceType", "InsuranceType")
-                        .WithMany("SalesInvoice")
-                        .HasForeignKey("InsuranceTypeId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("PanoramBackend.Data.Entities.PaymentMethod", "PaymentMethod")
-                        .WithMany("SalesInvoice")
-                        .HasForeignKey("PaymentMethodId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("PanoramBackend.Data.Entities.UserDetails", "SalesInvoicePerson")
-                        .WithMany("SalesInvoicePersons")
-                        .HasForeignKey("SalesInvoicePersonId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("PanoramBackend.Data.Entities.StaffOffBoarding", b =>
-                {
-                    b.HasOne("PanoramBackend.Data.Entities.EmploymentStatus", "EmploymentStatus")
-                        .WithMany("StaffOffBoardings")
-                        .HasForeignKey("EmploymentStatusId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("PanoramBackend.Data.Entities.TaskTodo", b =>
-                {
-                    b.HasOne("PanoramBackend.Data.Entities.UserDetails", "AssignedBy")
-                        .WithMany("AssignedByTask")
-                        .HasForeignKey("AssignedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("PanoramBackend.Data.Entities.UserDetails", "AssignedTo")
-                        .WithMany("AssignedTask")
-                        .HasForeignKey("AssignedToId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("PanoramBackend.Data.Entities.Priority", "Priority")
-                        .WithMany("TaskTodos")
-                        .HasForeignKey("PriorityId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("PanoramBackend.Data.Entities.Status", "Status")
-                        .WithMany("TaskTodos")
-                        .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("PanoramBackend.Data.Entities.Teams", b =>
-                {
-                    b.HasOne("PanoramBackend.Data.Entities.UserDetails", "Manager")
-                        .WithMany("ManagerTeams")
-                        .HasForeignKey("ManagerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("PanoramBackend.Data.Entities.Transaction", b =>
-                {
-                    b.HasOne("PanoramaBackend.Data.Entities.Expense", "Expense")
-                        .WithMany("Transactions")
-                        .HasForeignKey("ExpenseId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("PanoramBackend.Data.Entities.Payment", "Payment")
-                        .WithMany("Transactions")
-                        .HasForeignKey("PaymentId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("PanoramBackend.Data.Entities.Refund", "Refund")
-                        .WithMany("Transactions")
-                        .HasForeignKey("RefundId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("PanoramBackend.Data.Entities.SalesInvoice", "SalesInvoice")
-                        .WithMany("Transactions")
-                        .HasForeignKey("SalesInvoiceId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("PanoramBackend.Data.Entities.UserDetails", "UserDetails")
-                        .WithMany("Transactions")
-                        .HasForeignKey("UserDetailId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("PanoramBackend.Data.Entities.UserDetails", b =>
-                {
-                    b.HasOne("PanoramBackend.Data.Entities.Accounts", "Accounts")
-                        .WithMany("UserDetail")
-                        .HasForeignKey("DefaultAccountId");
-
-                    b.HasOne("PanoramBackend.Data.Entities.UserDetails", "UserDetail")
-                        .WithMany("Parent")
-                        .HasForeignKey("UserDetailId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("PanoramBackend.Services.Data.DTOs.ExtendedUser", "ExtendedUser")
-                        .WithOne("UserDetails")
-                        .HasForeignKey("PanoramBackend.Data.Entities.UserDetails", "UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("PanoramBackend.Data.Entities.VacationPolicy", b =>
-                {
-                    b.HasOne("PanoramBackend.Data.Entities.EmploymentDetails", "EmploymentDetails")
-                        .WithMany("VacationPolicies")
-                        .HasForeignKey("EmploymentDetailId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("PanoramBackend.Data.Repository.ComissionRate", b =>
-                {
-                    b.HasOne("PanoramBackend.Data.Entities.UserDetails", "UserDetail")
-                        .WithMany("ComissionRates")
-                        .HasForeignKey("UserDetailId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("PanoramaBackend.Data.Entities.Expense", b =>
                 {
-                    b.HasOne("PanoramBackend.Data.Entities.Accounts", "Account")
+                    b.HasOne("PanoramaBackend.Data.Entities.Accounts", "Account")
                         .WithMany("Expenses")
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PanoramBackend.Data.Entities.Branch", "Branch")
+                    b.HasOne("PanoramaBackend.Data.Entities.Branch", "Branch")
                         .WithMany("ExpensesByBranch")
                         .HasForeignKey("BranchId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -5093,34 +4696,310 @@ namespace PanoramaBackend.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.LeaveApplication", b =>
+                {
+                    b.HasOne("PanoramaBackend.Data.Entities.EmploymentStatus", "EmploymentStatus")
+                        .WithMany("LeaveApplications")
+                        .HasForeignKey("EmploymentStatusId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.LedgarEntries", b =>
+                {
+                    b.HasOne("PanoramaBackend.Data.Entities.Accounts", "CreditAccount")
+                        .WithMany("CreditLedgarEntries")
+                        .HasForeignKey("CreditAccountId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("PanoramaBackend.Data.Entities.Accounts", "DebitAccount")
+                        .WithMany("DebitLedgarEntries")
+                        .HasForeignKey("DebitAccountId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("PanoramaBackend.Data.Entities.Transaction", "Transaction")
+                        .WithMany("LedgarEntries")
+                        .HasForeignKey("TransactionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.Payment", b =>
+                {
+                    b.HasOne("PanoramaBackend.Data.Entities.Accounts", "CreditAccount")
+                        .WithMany("CreditPayment")
+                        .HasForeignKey("CreditAccountId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("PanoramaBackend.Data.Entities.Accounts", "DepositAccount")
+                        .WithMany("DepositPayments")
+                        .HasForeignKey("DepositAccountId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("PanoramaBackend.Data.Entities.UserDetails", "InsuranceCompany")
+                        .WithMany("InsuranceCompanyPayment")
+                        .HasForeignKey("InsuranceCompanyId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("PanoramaBackend.Data.Entities.PaymentMethod", "PaymentMethod")
+                        .WithMany("Payments")
+                        .HasForeignKey("PaymentMethodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PanoramaBackend.Data.Entities.UserDetails", "SalesAgent")
+                        .WithMany("Payments")
+                        .HasForeignKey("SalesAgentId");
+                });
+
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.PaymentAndBilling", b =>
+                {
+                    b.HasOne("PanoramaBackend.Data.Entities.PreferredPaymentMethod", "PreferredPaymentMethod")
+                        .WithMany("PaymentAndBilling")
+                        .HasForeignKey("PreferredPaymentMethodId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("PanoramaBackend.Data.Entities.Terms", "Terms")
+                        .WithMany("PaymentAndBilling")
+                        .HasForeignKey("TermsId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("PanoramaBackend.Data.Entities.UserDetails", "UserDetails")
+                        .WithMany("PaymentAndBilling")
+                        .HasForeignKey("UserDetailId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
             modelBuilder.Entity("PanoramaBackend.Data.Entities.Payroll", b =>
                 {
-                    b.HasOne("PanoramBackend.Data.Entities.Branch", "Branch")
+                    b.HasOne("PanoramaBackend.Data.Entities.Branch", "Branch")
                         .WithMany("PaidToBranch")
                         .HasForeignKey("BranchId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("PanoramBackend.Data.Entities.Accounts", "ExpenseAccount")
+                    b.HasOne("PanoramaBackend.Data.Entities.Accounts", "ExpenseAccount")
                         .WithMany("PayrollExpenseAccount")
                         .HasForeignKey("ExpenseAccountId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.Reconcilation", b =>
+                {
+                    b.HasOne("PanoramaBackend.Data.Entities.Documents", "Documents")
+                        .WithMany("ReconcilationInsuranceCompany")
+                        .HasForeignKey("DocumentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("PanoramaBackend.Data.Entities.UserDetails", "InsuranceCompany")
+                        .WithMany("ReconcilationInsuranceCompany")
+                        .HasForeignKey("InsuranceCompanyId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("PanoramaBackend.Data.Entities.UserDetails", "SalesAgent")
+                        .WithMany("ReconcilationAgents")
+                        .HasForeignKey("SalesAgentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.Refund", b =>
+                {
+                    b.HasOne("PanoramaBackend.Data.Entities.UserDetails", "Agent")
+                        .WithMany("AgentRefunds")
+                        .HasForeignKey("AgentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("PanoramaBackend.Data.Entities.UserDetails", "InsuranceCompany")
+                        .WithMany("InsuranceCompanyRefunds")
+                        .HasForeignKey("InsuranceCompanyId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("PanoramaBackend.Data.Entities.InsuranceType", "InsuranceType")
+                        .WithMany("InsuranceTypeRefunds")
+                        .HasForeignKey("InsuranceTypeId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("PanoramaBackend.Data.Entities.Vehicle", "Vehicle")
+                        .WithMany("RefundsOnVehicles")
+                        .HasForeignKey("VehilcleId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.SalesInvoice", b =>
+                {
+                    b.HasOne("PanoramaBackend.Data.Entities.BodyType", "BodyType")
+                        .WithMany("SalesInvoice")
+                        .HasForeignKey("BodyTypeId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("PanoramaBackend.Data.Entities.Branch", "Branch")
+                        .WithMany("Sales")
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("PanoramaBackend.Data.Entities.UserDetails", "CustomerDetails")
+                        .WithMany("CustomerSalesInvoice")
+                        .HasForeignKey("CustomerDetailId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("PanoramaBackend.Data.Entities.UserDetails", "InsuranceCompany")
+                        .WithMany("InsuranceCompanyInvoices")
+                        .HasForeignKey("InsuranceCompanyId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("PanoramaBackend.Data.Entities.InsuranceType", "InsuranceType")
+                        .WithMany("SalesInvoice")
+                        .HasForeignKey("InsuranceTypeId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("PanoramaBackend.Data.Entities.PaymentMethod", "PaymentMethod")
+                        .WithMany("SalesInvoice")
+                        .HasForeignKey("PaymentMethodId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("PanoramaBackend.Data.Entities.UserDetails", "SalesInvoicePerson")
+                        .WithMany("SalesInvoicePersons")
+                        .HasForeignKey("SalesInvoicePersonId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("PanoramaBackend.Data.Entities.Vehicle", "Vehicle")
+                        .WithMany("SalesInvoice")
+                        .HasForeignKey("VehilcleId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.StaffOffBoarding", b =>
+                {
+                    b.HasOne("PanoramaBackend.Data.Entities.EmploymentStatus", "EmploymentStatus")
+                        .WithMany("StaffOffBoardings")
+                        .HasForeignKey("EmploymentStatusId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.TaskTodo", b =>
+                {
+                    b.HasOne("PanoramaBackend.Data.Entities.UserDetails", "AssignedBy")
+                        .WithMany("AssignedByTask")
+                        .HasForeignKey("AssignedById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("PanoramaBackend.Data.Entities.UserDetails", "AssignedTo")
+                        .WithMany("AssignedTask")
+                        .HasForeignKey("AssignedToId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("PanoramaBackend.Data.Entities.Priority", "Priority")
+                        .WithMany("TaskTodos")
+                        .HasForeignKey("PriorityId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("PanoramaBackend.Data.Entities.Status", "Status")
+                        .WithMany("TaskTodos")
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.Teams", b =>
+                {
+                    b.HasOne("PanoramaBackend.Data.Entities.UserDetails", "Manager")
+                        .WithMany("ManagerTeams")
+                        .HasForeignKey("ManagerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.Transaction", b =>
+                {
+                    b.HasOne("PanoramaBackend.Data.Entities.Branch", "Branch")
+                        .WithMany("Transaction")
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("PanoramaBackend.Data.Entities.Expense", "Expense")
+                        .WithMany("Transactions")
+                        .HasForeignKey("ExpenseId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("PanoramaBackend.Data.Entities.Payment", "Payment")
+                        .WithMany("Transactions")
+                        .HasForeignKey("PaymentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("PanoramaBackend.Data.Entities.Refund", "Refund")
+                        .WithMany("Transactions")
+                        .HasForeignKey("RefundId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("PanoramaBackend.Data.Entities.SalesInvoice", "SalesInvoice")
+                        .WithMany("Transactions")
+                        .HasForeignKey("SalesInvoiceId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("PanoramaBackend.Data.Entities.UserDetails", "UserDetails")
+                        .WithMany("Transactions")
+                        .HasForeignKey("UserDetailId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.UserDetails", b =>
+                {
+                    b.HasOne("PanoramaBackend.Data.Entities.Accounts", "Accounts")
+                        .WithMany("UserDetail")
+                        .HasForeignKey("DefaultAccountId");
+
+                    b.HasOne("PanoramaBackend.Data.Entities.UserDetails", "UserDetail")
+                        .WithMany("Parent")
+                        .HasForeignKey("UserDetailId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("PanoramaBackend.Services.Data.DTOs.ExtendedUser", "ExtendedUser")
+                        .WithMany("UserDetails")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("PanoramaBackend.Data.Entities.VacationApplication", b =>
                 {
-                    b.HasOne("PanoramBackend.Data.Entities.Branch", "Branch")
+                    b.HasOne("PanoramaBackend.Data.Entities.Branch", "Branch")
                         .WithMany("Vacations")
                         .HasForeignKey("BranchId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("PanoramBackend.Data.Entities.UserDetails", "EmployeeDetails")
+                    b.HasOne("PanoramaBackend.Data.Entities.UserDetails", "EmployeeDetails")
                         .WithMany("Vacations")
                         .HasForeignKey("UserDetailId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("PanoramaBackend.Data.Entities.VacationPolicy", b =>
+                {
+                    b.HasOne("PanoramaBackend.Data.Entities.EmploymentDetails", "EmploymentDetails")
+                        .WithMany("VacationPolicies")
+                        .HasForeignKey("EmploymentDetailId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PanoramaBackend.Data.Repository.ComissionRate", b =>
+                {
+                    b.HasOne("PanoramaBackend.Data.Entities.UserDetails", "UserDetail")
+                        .WithMany("ComissionRates")
+                        .HasForeignKey("UserDetailId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PanoramaBackend.Services.Data.DTOs.ExtendedRole", b =>
+                {
+                    b.HasOne("PanoramaBackend.Data.Entities.UserDetails", "UserDetails")
+                        .WithMany()
+                        .HasForeignKey("UserDetailsId");
                 });
 #pragma warning restore 612, 618
         }

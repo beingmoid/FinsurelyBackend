@@ -1,10 +1,12 @@
-﻿using NukesLab.Core.Common;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using NukesLab.Core.Common;
 using Stripe;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace PanoramBackend.Data.Entities
+namespace PanoramaBackend.Data.Entities
 {
     public class Refund:BaseEntity<int>
     {
@@ -15,9 +17,11 @@ namespace PanoramBackend.Data.Entities
         public DateTime RefundDate { get; set; }
         //public int PaymentMethodId { get; set; }
         //public PaymentMethod PaymentMethod { get; set; }
-
+        [Column(TypeName = "nvarchar(100)")]
         public string CompanyName { get; set; }
+        [Column(TypeName = "nvarchar(100)")]
         public string CustomerName { get; set; }
+        [Column(TypeName = "nvarchar(100)")]
         public string PolicyNumber { get; set; }
         public int? InsuranceTypeId { get; set; }
         public InsuranceType InsuranceType { get; set; }

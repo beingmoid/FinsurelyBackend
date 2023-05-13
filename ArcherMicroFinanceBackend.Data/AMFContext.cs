@@ -1,20 +1,25 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NPOI.HSSF.Record;
 using NukesLab.Core.Common;
 using NukesLab.Core.Repository;
 using PanoramaBackend.Data.Entities;
-using PanoramBackend.Data.Entities;
-using PanoramBackend.Data.Repository;
-using PanoramBackend.Services.Data.DTOs;
+
+using PanoramaBackend.Data.Repository;
+using PanoramaBackend.Services.Data.DTOs;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Linq.Expressions;
-using Transaction = PanoramBackend.Data.Entities.Transaction;
+using System.Reflection.Emit;
+using System.Text.Json.Serialization;
+using Transaction = PanoramaBackend.Data.Entities.Transaction;
 
-namespace PanoramBackend.Data
+namespace PanoramaBackend.Data
 {
 
 	public class AMFContext : NukesLabEFContext<ExtendedUser,ExtendedRole>
@@ -34,10 +39,10 @@ namespace PanoramBackend.Data
         {
             base.OnModelCreating(modelBuilder);
             _modelBuilder = modelBuilder;
+    
 
 
-
-			InitializeEntities();
+            InitializeEntities();
             SeedStaticData(modelBuilder);
             SeedTestingData(modelBuilder);
 			//foreach (var item in modelBuilder.Model.GetEntityTypes())
@@ -69,11 +74,24 @@ namespace PanoramBackend.Data
 			optionsBuilder.UseInternalServiceProvider(_serviceProvider);
             base.OnConfiguring(optionsBuilder); 
         }
-        protected  void InitializeEntities()
-        {
-			//this.InitializeEntity<RCM>();
-			
+		protected void InitializeEntities()
+		{
+			_modelBuilder.Entity<IdentityUserRole<Guid>>()
+		  .HasKey(x => new { x.UserId, x.RoleId });
+            _modelBuilder.Entity<IdentityRoleClaim<Guid>>()
+
+         .Property(x => x.Id)
+         .UseIdentityColumn();
+
+            this.InitializeEntity<ExtendedUser>();
+			this.CreateRelation<ExtendedUser, UserDetails>(x => x.UserDetails, x => x.ExtendedUser, x => x.Id);
+			this.InitializeEntity<ExtendedRole>();
+
 			this.InitializeEntity<VacationApplication>();
+		
+				
+			this.InitializeEntity<UserCompanyInformation>();
+         
             this.InitializeEntity<AccountType>();
 			this.InitializeEntity<AccountDetailType>();
 			this.InitializeEntity<Accounts>();
@@ -85,10 +103,10 @@ namespace PanoramBackend.Data
 			this.InitializeEntity<PaymentMethod>();
 			this.InitializeEntity<SalesInvoice>()
 				;
-			this.InitializeEntity<SaleLineItem>();
+		
 			this.InitializeEntity<InsuranceType>();
 			this.InitializeEntity<Vehicle>();
-			this.InitializeEntity<PanoramBackend.Data.Entities.Transaction>();
+			this.InitializeEntity<PanoramaBackend.Data.Entities.Transaction>();
 			this.InitializeEntity<LedgarEntries>();
 			this.InitializeEntity<Login>();
 			this.InitializeEntity<AccountsMapping>();
@@ -99,7 +117,7 @@ namespace PanoramBackend.Data
 			this.InitializeEntity<ComissionRate>();
 			this.InitializeEntity<Documents>();
 			this.InitializeEntity<Reconcilation>();
-			this.InitializeEntity<Corrections>();
+			this.InitializeEntity<Entities.CompanyInformation>();
 
 			//EmployeeEntities
 			this.InitializeEntity<EmploymentDetails>();
@@ -128,7 +146,8 @@ namespace PanoramBackend.Data
 			this.InitializeEntity<Announcement>();
 			this.InitializeEntity<ExpenseCategory>();
 			this.InitializeEntity<Payroll>();
-
+			this.InitializeEntity<UserCompanyInformation>();
+			this.InitializeEntity<SetupClient>();
 			//EmployeeRelations
 			this.CreateRelation<UserDetails, Teams>(x => x.ManagerTeams, x => x.Manager, x => x.ManagerId);
 			this.CreateRelation<UserDetails, EmploymentDetails>(x => x.ManagerResources, x => x.Manager, x => x.ManagerId);
@@ -187,10 +206,10 @@ namespace PanoramBackend.Data
 		
 			this.CreateRelation<PreferredPaymentMethod, PaymentAndBilling>(x => x.PaymentAndBilling, x => x.PreferredPaymentMethod, x => x.PreferredPaymentMethodId);
 			this.CreateRelation<Terms, PaymentAndBilling>(x => x.PaymentAndBilling, x => x.Terms, x => x.TermsId);
-			this.CreateRelation<SalesInvoice,SaleLineItem >(x => x.SaleLineItem, x => x.SalesInvoice, x => x.SaleId);
+		
 			this.CreateRelation<UserDetails, SalesInvoice>(x => x.InsuranceCompanyInvoices, x => x.InsuranceCompany, x => x.InsuranceCompanyId);
 			this.CreateRelation<InsuranceType, SalesInvoice>(x => x.SalesInvoice, x => x.InsuranceType, x => x.InsuranceTypeId);
-			this.CreateRelation<Vehicle, SaleLineItem>(x => x.SaleLineItem, x => x.Vehicle, x => x.VehilcleId);
+		
 			this.CreateRelation<Accounts, AccountsMapping>(x => x.AccountsMappings, x => x.Accounts, x => x.AccountId);
 			this.CreateRelation<Accounts, LedgarEntries>(x => x.DebitLedgarEntries, x => x.DebitAccount, x => x.DebitAccountId);
 			this.CreateRelation<Accounts, LedgarEntries>(x => x.CreditLedgarEntries, x => x.CreditAccount, x => x.CreditAccountId);
@@ -208,19 +227,20 @@ namespace PanoramBackend.Data
 			this.CreateRelation<Accounts, Payment>(x => x.DepositPayments, x => x.DepositAccount, x => x.DepositAccountId);
 			this.CreateRelation<UserDetails, Reconcilation>(x => x.ReconcilationAgents, x => x.SalesAgent, x => x.SalesAgentId);
 			this.CreateRelation<UserDetails, Reconcilation>(x => x.ReconcilationInsuranceCompany, x => x.InsuranceCompany, x => x.InsuranceCompanyId);
-			this.CreateRelation<Reconcilation, Corrections>(x => x.Corrections, x => x.Reconcilation, x => x.ReconcilationReportId);
+			this.CreateRelation<Reconcilation, Entities.CompanyInformation>(x => x.Corrections, x => x.Reconcilation, x => x.ReconcilationReportId);
 			this.CreateRelation<Documents, Reconcilation>(x => x.ReconcilationInsuranceCompany, x => x.Documents, x => x.DocumentId);
 			this.CreateRelation<Branch, SalesInvoice>(x => x.Sales, x => x.Branch, x => x.BranchId);
 			this.CreateRelation<BodyType, SalesInvoice>(x => x.SalesInvoice, x => x.BodyType, x => x.BodyTypeId);
+            this.CreateRelation<Vehicle, SalesInvoice>(x => x.SalesInvoice, x => x.Vehicle, x => x.VehilcleId);
 
 
-			this.CreateRelation<Expense, Transaction>(x => x.Transactions, x => x.Expense, x => x.ExpenseId);
- 
+            this.CreateRelation<Expense, Transaction>(x => x.Transactions, x => x.Expense, x => x.ExpenseId);
+			this.CreateRelation<Branch, Transaction>(x => x.Transaction, x => x.Branch, x => x.BranchId);
 			
 
         }
 
-		
+
 		//protected EntityTypeBuilder<TEntity> InitializeEntity<TEntity>()
 		//where TEntity : class, IBaseEntity
 		//{
@@ -238,36 +258,36 @@ namespace PanoramBackend.Data
 
 		private void SeedTestingData(ModelBuilder modelBuilder)
 		{
-			//
-			const string ADMIN_ID = "a18be9c0-aa65-4af8-bd17-00bd9344e575";
+
+			 Guid ADMIN_ID = Guid.NewGuid();
 			// any guid, but nothing is against to use the same one
-			const string ROLE_ID = ADMIN_ID;
-			modelBuilder.Entity<ExtendedRole>().HasData(new IdentityRole
+			 Guid ROLE_ID = Guid.NewGuid();
+            modelBuilder.Entity<ExtendedRole>().HasData(new IdentityRole<Guid>
 			{
 				Id = ROLE_ID,
 				Name = "Admin",
 				NormalizedName = "Admin"
 			});
-			const string UserRole_Id = "a18be9c0-aa65-4af8-bd17-00bd9344e678";
-			modelBuilder.Entity<ExtendedRole>().HasData(new IdentityRole
-			{
+            Guid UserRole_Id = Guid.NewGuid();
+            modelBuilder.Entity<ExtendedRole>().HasData(new IdentityRole<Guid>
+            {
 				Id = UserRole_Id,
 				Name = "CompanyAdmin",
 				NormalizedName = "CompanyAdmin"
 			});
 
-	
+
 
 
 			var hasher = new PasswordHasher<ExtendedUser>();
 			modelBuilder.Entity<ExtendedUser>().HasData(new ExtendedUser
 			{
 				Id = ADMIN_ID,
-				UserName = "moid",	
+				UserName = "moid",
 				NormalizedUserName = "admin",
 				Email = "admin@nukeslab.com",
 				NormalizedEmail = "admin@nukeslab.com",
-				PhoneNumber="+923400064394",
+				PhoneNumber = "+923400064394",
 				EmailConfirmed = true,
 				PasswordHash = hasher.HashPassword(null, "Test@0000"),
 				SecurityStamp = string.Empty
@@ -275,45 +295,48 @@ namespace PanoramBackend.Data
 			modelBuilder.Entity<UserDetails>().HasData(new UserDetails
 
 			{
-				Id=1,
-			UserId=ADMIN_ID,
-			FirstName="Muhamamad",
-			MiddleName="Moid",
-			LastName="Shams",
-			Title="Mr.",
-			DisplayNameAs="Moid",
-			Company="Systems Limited",
-			ImageUrl= "https://pbs.twimg.com/profile_images/633202777695514625/tUVSrLDG.jpg"
+				Id = 999999,
+				UserId = ADMIN_ID,
+				FirstName = "Muhamamad",
+				MiddleName = "Moid",
+				LastName = "Shams",
+				Title = "Mr.",
+				DisplayNameAs = "Moid",
+				Company = "Systems Limited",
+				ImageUrl = "https://pbs.twimg.com/profile_images/633202777695514625/tUVSrLDG.jpg"
 			});
 
-			modelBuilder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>
-			{
+
+            modelBuilder.Entity<IdentityUserRole<Guid>>().HasData(new IdentityUserRole<Guid>
+            {
+			
 				RoleId = ROLE_ID,
-				UserId = ADMIN_ID
-			});
+				UserId = ADMIN_ID,
+		
 
-			var array = new string[13] { "Dashboard", 
-				"Branch", 
+			});
+			var array = new string[13] { "Dashboard",
+				"Branch",
 				"Sales Agent",
-				"Insurance Companies", 
+				"Insurance Companies",
 				"Sales",
-				"Transactions",  
+				"Transactions",
 				"Task",
 				"Documents",
-				"Expenses" , 
+				"Expenses" ,
 				"Accounting",
 				"Workplace" ,
-				"Teams", 
+				"Teams",
 				"Reports" };
-			var array2 = new string[5] { "Create", "Edit", "View", "Delete","Search" };
+			var array2 = new string[5] { "Create", "Edit", "View", "Delete", "Search" };
 
-			var list = new List<IdentityRoleClaim<string>>();
+			var list = new List<IdentityRoleClaim<Guid>>();
 			var counter = 1;
 			for (int i = 0; i < array.Length; i++)
 			{
 				foreach (var item in array2)
 				{
-					var roleClaim = new IdentityRoleClaim<string>();
+					var roleClaim = new IdentityRoleClaim<Guid>();
 					roleClaim.Id = counter;
 					roleClaim.RoleId = ROLE_ID;
 					roleClaim.ClaimType = array[i];
@@ -322,11 +345,11 @@ namespace PanoramBackend.Data
 					counter++;
 				}
 			}
-			modelBuilder.Entity<IdentityRoleClaim<string>>().HasData(list);
-			//var accountType = new Dictionary<int, string>() { { 1, "Assets" }, { 2, "Liablity" }, { 3, "Expense" }, { 4, "Revenues/Income" }, { 5, "Owner’s equity" } };
-			var account = new List<Tuple<string, string,int>>();
+			modelBuilder.Entity<IdentityRoleClaim<Guid>>().HasData(list);
+			var accountType = new Dictionary<int, string>() { { 1, "Assets" }, { 2, "Liablity" }, { 3, "Expense" }, { 4, "Revenues/Income" }, { 5, "Owner’s equity" } };
+			var account = new List<Tuple<string, string, int>>();
 
-			account.Add(Tuple.Create( "Accounts Receivable (A/R)", "Assets", 1));
+			account.Add(Tuple.Create("Accounts Receivable (A/R)", "Assets", 1));
 			account.Add(Tuple.Create("Current Assets", "Assets", 2));
 			account.Add(Tuple.Create("Cash and cash equivalents", "Assets", 3));
 			account.Add(Tuple.Create("Fixed assets", "Assets", 4));
@@ -344,16 +367,16 @@ namespace PanoramBackend.Data
 			var accountTypeList = new List<AccountType>();
 
 
-            #region Account Detail Type MetaData
+			#region Account Detail Type MetaData
 
-            var accountTypeDetail = new List<AccountDetailType>() { 
+			var accountTypeDetail = new List<AccountDetailType>() {
 			new AccountDetailType()
-            {
+			{
 				Id=1,
 				AccountTypeId=1,
 				Description="Accounts Receivable (A/R)"
 			},
-		
+
 					new AccountDetailType()
 			{
 				Id=2,
@@ -995,8 +1018,8 @@ namespace PanoramBackend.Data
 			}
 			};
 
-            #endregion
-            foreach (var item in account)
+			#endregion
+			foreach (var item in account)
 			{
 				var entity = new AccountType();
 				entity.Id = item.Item3;
@@ -1006,27 +1029,27 @@ namespace PanoramBackend.Data
 			}
 
 
-			
-         
 
 
-		
-			
-    //        foreach (var item in account)
-    //        {
-				//var entity = new Accounts()
-				//{
-				//	Id = item.Item3,
-				//	Name = item.Item1,
-				//	AccountTypeId = Convert.ToInt32(item.Item2),
 
-				//};
-				//accountsList.Add(entity);
-				
-    //        }
+
+
+
+			//        foreach (var item in account)
+			//        {
+			//var entity = new Accounts()
+			//{
+			//	Id = item.Item3,
+			//	Name = item.Item1,
+			//	AccountTypeId = Convert.ToInt32(item.Item2),
+
+			//};
+			//accountsList.Add(entity);
+
+			//        }
 			modelBuilder.Entity<AccountType>().HasData(accountTypeList);
-            modelBuilder.Entity<AccountDetailType>().HasData(accountTypeDetail);
-			modelBuilder.Entity<Accounts>().HasData( new List<Accounts>()
+			modelBuilder.Entity<AccountDetailType>().HasData(accountTypeDetail);
+			modelBuilder.Entity<Accounts>().HasData(new List<Accounts>()
 			{
 				new Accounts(){ Id=1,AccountDetailTypeId= 15,Name="Cash Account" , Description="Asset"},
 				new Accounts() { Id = 2, AccountDetailTypeId = 15, Name = "Test Bank Account", Description = "Asset" },
@@ -1041,12 +1064,12 @@ namespace PanoramBackend.Data
 
 			});
 
-			modelBuilder.Entity<PreferredPaymentMethod>().HasData(new List<PreferredPaymentMethod>() { 
-			new PreferredPaymentMethod(){ 
+			modelBuilder.Entity<PreferredPaymentMethod>().HasData(new List<PreferredPaymentMethod>() {
+			new PreferredPaymentMethod(){
 			Id=1,
 			Text="Cash",
 
-			
+
 			},new PreferredPaymentMethod(){
 				Id=2,
 			Text="Cheque",
@@ -1068,7 +1091,10 @@ namespace PanoramBackend.Data
 
 
 			});
-
+			modelBuilder.Entity<InsuranceType>().HasData(new InsuranceType[]
+			{
+				new InsuranceType(){ Id=1,Name="TPL"}, new InsuranceType(){ Id=2,Name="COMP"}
+			});
 
 			modelBuilder.Entity<Terms>().HasData(new List<Terms>() { new Terms() {
 
@@ -1130,43 +1156,10 @@ namespace PanoramBackend.Data
 
 			} });
 
-			modelBuilder.Entity<InsuranceType>().HasData(new List<InsuranceType>() {
-			new InsuranceType()
-			{
-				Id=1,
-				Name="Third Party Liability"
-			},
 
-			new InsuranceType()
-			{
-				Id=2,
-				Name="Comprehensive"
-			},
-			});
-			modelBuilder.Entity<Vehicle>().HasData(new List<Vehicle>() {
-			new Vehicle()
-            {
-				Id=1,
-				Make="Honda Civic",
-				Model="2010-2020"
-			},
-				new Vehicle()
-			{
-				Id=2,
-				Make="Toyota Corolla",
-				Model="2010-2020"
-			},
-						new Vehicle()
-			{
-				Id=3,
-				Make="Mitsubishi Lancer",
-				Model="2010-2020"
-			},
+			modelBuilder.Entity<BodyType>().HasData(new BodyType() { Id = 1, Name="NORMAL" });
 
-			});
-
-
-			modelBuilder.Entity<AccountsMapping>().HasData(new List<AccountsMapping>() {
+            modelBuilder.Entity<AccountsMapping>().HasData(new List<AccountsMapping>() {
 			
 			new AccountsMapping()
             {

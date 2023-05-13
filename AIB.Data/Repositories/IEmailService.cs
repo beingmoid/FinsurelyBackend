@@ -1,0 +1,4 @@
+﻿namespace AIB.Data.Repositories
+{
+
+}

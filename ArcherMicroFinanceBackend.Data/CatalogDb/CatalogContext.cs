@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NukesLab.Core.Common;
 using NukesLab.Core.Repository;
-using PanoramBackend.Data.CatalogDb.Repos;
+using PanoramaBackend.Data.CatalogDb.Repos;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
-namespace PanoramBackend.Data.CatalogDb
+namespace PanoramaBackend.Data.CatalogDb
 {
    
     public class CatalogUser : IdentityUser

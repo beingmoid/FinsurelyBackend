@@ -3,14 +3,14 @@ using Microsoft.AspNetCore.Mvc;
 using NukesLab.Core.Api;
 using NukesLab.Core.Repository;
 using PanoramaBackend.Controllers;
-using PanoramBackend.Data.Entities;
-using PanoramBackend.Services.Services;
+using PanoramaBackend.Data.Entities;
+using PanoramaBackend.Services.Services;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using static NukesLab.Core.Common.Constants;
-using PanoramBackend.Data.Repository;
-using PanoramBackend.Data;
+using PanoramaBackend.Data.Repository;
+using PanoramaBackend.Data;
 using System.Collections.Generic;
 using PanoramaBackend.Services;
 using Microsoft.AspNetCore.Hosting;
@@ -55,7 +55,7 @@ namespace PanoramaBackend.Api.Controllers
                .ThenInclude(x => x.Terms)
              .Include(x => x.PaymentAndBilling)
               .ThenInclude(x => x.PreferredPaymentMethod)
-              .Include(x => x.UserDetail)
+      
               .Include(x => x.InsuranceCompanyInvoices).ThenInclude(x => x.Transactions),
               x => x.Id == id
 
@@ -120,7 +120,7 @@ namespace PanoramaBackend.Api.Controllers
         }
 
         [HttpPost("GetInsuranceCompanyStatementAsync")]
-        public async Task<BaseResponse> GetInsuranceCompanyStatementAsync([FromQuery] PaginationParams<int> @params)
+        public async Task<BaseResponse> GetInsuranceCompanyStatementAsync([FromBody] PaginationParams<int> @params)
         {
             List<AgentStatementDTO> accountStatement = new List<AgentStatementDTO>();
 
@@ -136,7 +136,7 @@ namespace PanoramaBackend.Api.Controllers
 
             var query = _context.Set<LedgarEntries>().Include(x => x.Transaction)
            .ThenInclude(x => x.SalesInvoice)
-                       .ThenInclude(x => x.SaleLineItem)
+               
                            .ThenInclude(x => x.Vehicle)
 
            .Include(x => x.Transaction)
@@ -221,7 +221,7 @@ namespace PanoramaBackend.Api.Controllers
            ((x.Transaction.SalesInvoice.CustomerName.Contains(searchString) || (x.Transaction.Refund.CustomerName.Contains(searchString)))
            ||
 
-           ((x.Transaction.SalesInvoice.SaleLineItem.SingleOrDefault().PolicyNumber.Contains(searchString) || ((x.Transaction.Refund.PolicyNumber.Contains(searchString)))))
+           ((x.Transaction.SalesInvoice.PolicyNumber.Contains(searchString) || ((x.Transaction.Refund.PolicyNumber.Contains(searchString)))))
            )
            )
            )
@@ -260,7 +260,7 @@ namespace PanoramaBackend.Api.Controllers
            ||
 
 
-           ((x.Transaction.SalesInvoice.SaleLineItem.SingleOrDefault().PolicyNumber.Contains(searchString) || ((x.Transaction.Refund.PolicyNumber.Contains(searchString)))))
+           ((x.Transaction.SalesInvoice.PolicyNumber.Contains(searchString) || ((x.Transaction.Refund.PolicyNumber.Contains(searchString)))))
            )
            )
            )
@@ -308,21 +308,21 @@ namespace PanoramaBackend.Api.Controllers
     ).ToList();
             page.TotalPages = entries.Count() / @params.ItemsPerPage + (entries.Count() % @params.ItemsPerPage > 0 ? 1 : 0);
 
-            var creditValueForDateGreaterThanParamsToDate = broker.Accounts.CreditLedgarEntries.Where(x => x.TransactionDate.Date > @params.from.ToDateTime().Date).Sum(x => x.Amount);
-            var debitValueForDateGreaterThanParamsToDate = broker.Accounts.DebitLedgarEntries.Where(x => x.TransactionDate.Date > @params.from.ToDateTime().Date).Sum(x => x.Amount);
-            var creditEntriesForDateGreaterThanParamsToDate = broker.Accounts.CreditLedgarEntries.Where(x => x.TransactionDate.Date > @params.from.ToDateTime().Date).ToList();
-            var debitEntriesForDateGreaterThanParamsToDate = broker.Accounts.DebitLedgarEntries.Where(x => x.TransactionDate.Date > @params.from.ToDateTime().Date).ToList();
+            var creditValueForDateGreaterThanParamsToDate = broker.Accounts.CreditLedgarEntries.Where(x => x.TransactionDate.Date >= @params.from.ToDateTime().Date).Sum(x => x.Amount);
+            var debitValueForDateGreaterThanParamsToDate = broker.Accounts.DebitLedgarEntries.Where(x => x.TransactionDate.Date >= @params.from.ToDateTime().Date).Sum(x => x.Amount);
+            var creditEntriesForDateGreaterThanParamsToDate = broker.Accounts.CreditLedgarEntries.Where(x => x.TransactionDate.Date >= @params.from.ToDateTime().Date).ToList();
+            var debitEntriesForDateGreaterThanParamsToDate = broker.Accounts.DebitLedgarEntries.Where(x => x.TransactionDate.Date >= @params.from.ToDateTime().Date).ToList();
 
-            var brokerBalanceForDateOf = (creditValueForDateGreaterThanParamsToDate) + (-debitValueForDateGreaterThanParamsToDate);
+            var brokerBalanceForDateOf = (-creditValueForDateGreaterThanParamsToDate) + (debitValueForDateGreaterThanParamsToDate);
 
-            decimal debitBalance = brokerBalanceForDateOf;
+            decimal debitBalance = 0;
 
 
             var _value = (@params.Page - 1) * @params.ItemsPerPage;
 
 #endregion
             var list = entries.ToList();
-
+           accountStatement = new List<AgentStatementDTO>();
             //Looping out all kinds of transaction relevant to accountId of Broker/Insurance Company
             foreach (var item in list)
             {
@@ -343,13 +343,11 @@ namespace PanoramaBackend.Api.Controllers
 
                     debit.InvoiceDate = _actualItem?.Transaction?.SalesInvoice?.SalesInvoiceDate;
                     debit.CustomerName = _actualItem?.Transaction?.SalesInvoice?.CustomerName;
-                    debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.SingleOrDefault()?.PolicyNumber;
+                    debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.PolicyNumber;
 
                     debit.InsuranceType = _actualItem?.Transaction?.SalesInvoice?.InsuranceType?.Name;
-                    debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
-                                SingleOrDefault().Vehicle?.Make + " " + " | " +
-                                _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
-                                SingleOrDefault().Vehicle?.Model;
+                    debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.Vehicle?.Make + " " + " | " +
+                                _actualItem?.Transaction?.SalesInvoice?.Vehicle?.Model;
                     debit.BodyType = _actualItem?.Transaction?.SalesInvoice?.BodyType?.Name;
 
                     debit.Debit = _actualItem?.Amount;
@@ -419,7 +417,7 @@ namespace PanoramaBackend.Api.Controllers
                     debit.InvoiceDate = _actualItem?.Transaction?.Refund?.RefundDate;
                     debit.CustomerName = _actualItem?.Transaction?.Refund?.CustomerName;
                     debit.PolicyNumber = _actualItem?.Transaction?.Refund?.PolicyNumber;
-        
+
                     //debit.RefNo = _actualItem?.Transaction?.Refund?.;
 
                     debit.InsuranceType = _actualItem?.Transaction?.Refund?.InsuranceType?.Name;
@@ -435,7 +433,7 @@ namespace PanoramaBackend.Api.Controllers
 
                 }
 
-
+                accountStatement.Add(debit);
 
             }
 
@@ -458,8 +456,10 @@ namespace PanoramaBackend.Api.Controllers
                 accountStatement = new List<AgentStatementDTO>();
                 #endregion
             }
-
-            return constructResponse(null);
+            page.Data.AddRange(accountStatement.Skip((@params.Page - 1) * @params.ItemsPerPage).
+                Take(@params.ItemsPerPage).ToList());
+            page.TotalBalance = debitBalance;
+            return constructResponse(page);
         }
     }
 }

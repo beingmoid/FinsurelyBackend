@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace PanoramBackend.Data.CatalogDb.Stripe
+namespace PanoramaBackend.Data.CatalogDb.Stripe
 {
     public class CreateCustomerDTO
     {

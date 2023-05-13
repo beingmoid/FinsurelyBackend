@@ -1,15 +1,18 @@
-﻿using NukesLab.Core.Common;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using NukesLab.Core.Common;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace PanoramBackend.Data.Entities
+namespace PanoramaBackend.Data.Entities
 {
 
     public class Teams : BaseEntity<int>
     {
         public int ManagerId { get; set; }
         public UserDetails Manager { get; set; }
+        [Column(TypeName = "nvarchar(100)")]
         public string TeamName { get; set; }
 
         private ICollection<EmploymentDetails> _EmploymentDetails;
@@ -23,6 +26,7 @@ namespace PanoramBackend.Data.Entities
         public UserDetails Manager { get; set; }
         public int UserDetailId { get; set; }
         public UserDetails UserDetails { get; set; }
+        [Column(TypeName = "nvarchar(100)")]
         public string Position { get; set; }
         public DateTime HiredDate { get; set; }
         public int? TeamId { get; set; }
@@ -83,6 +87,7 @@ namespace PanoramBackend.Data.Entities
         public int BenefitAndDeductionId { get; set; }
         public BenefitsAndDeduction BenefitsAndDeduction { get; set; }
         public int BenefitTypeId { get; set; }
+        [Column(TypeName = "nvarchar(100)")]
         public string PayStubLabel { get; set; }
         public decimal Amount { get; set; }
         //public int TypeId { get; set; }
@@ -94,6 +99,7 @@ namespace PanoramBackend.Data.Entities
         public int BenefitAndDeductionId { get; set; }
         public BenefitsAndDeduction BenefitsAndDeduction { get; set; }
         public int DeductionTypeId { get; set; }
+        [Column(TypeName = "nvarchar(100)")]
         public string PayStubLabel { get; set; }
         public decimal Amount { get; set; }
         //public int TypeId { get; set; }
@@ -102,6 +108,7 @@ namespace PanoramBackend.Data.Entities
     }
     public class BDType:BaseEntity<int>
     {
+        [Column(TypeName = "nvarchar(100)")]
         public string Name { get; set; }
         public int? CategoryId { get; set; }
         public BDType Category { get; set; }
@@ -127,8 +134,11 @@ namespace PanoramBackend.Data.Entities
     {
         public int EmploymentDetailId { get; set; }
         public EmploymentDetails EmploymentDetails { get; set; }
+        [Column(TypeName = "nvarchar(100)")]
         public string AccountHolderName { get; set; }
+        [Column(TypeName = "nvarchar(100)")]
         public string AccountNumber { get; set; }
+        [Column(TypeName = "nvarchar(100)")]
         public string ibanNumber { get; set; }
         public BankType BankType { get; set; }
 
@@ -148,6 +158,7 @@ namespace PanoramBackend.Data.Entities
 
         public int EmploymentStatusId { get; set; }
         public EmploymentStatus EmploymentStatus { get; set; }
+        [Column(TypeName = "nvarchar(500)")]
         public string Reason { get; set; }
         public DateTime LastDayOfWork { get; set; }
         public DateTime DateOfNotice { get; set; }

@@ -1,15 +1,15 @@
-﻿using PanoramBackend.Services.Data.DTOs;
+﻿using PanoramaBackend.Services.Data.DTOs;
 using NukesLab.Core.Common;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel.DataAnnotations.Schema;
-using PanoramBackend.Data.Repository;
+using PanoramaBackend.Data.Repository;
 using System.Text.Json.Serialization;
 using System.Runtime.Serialization;
 using PanoramaBackend.Data.Entities;
 
-namespace PanoramBackend.Data.Entities
+namespace PanoramaBackend.Data.Entities
 {
     public class UserDetails:BaseEntity<int>
     {
@@ -20,26 +20,40 @@ namespace PanoramBackend.Data.Entities
         public bool? IsSupplier { get; set; }
         public bool? IsInsuranceCompany { get; set; }
         public bool? IsAgent { get; set; }
+        [Column(TypeName = "nvarchar(100)")]
         public string Title { get; set; }
+        [Column(TypeName = "nvarchar(100)")]
         public string FirstName { get; set; }
+        [Column(TypeName = "nvarchar(100)")]
         public string LastName { get; set; }
+        [Column(TypeName = "nvarchar(100)")]
         public string MiddleName { get; set; }
+        [Column(TypeName = "nvarchar(100)")]
         public string Suffix { get; set; }
+        [Column(TypeName = "nvarchar(100)")]
         public string Email { get; set; }
+        [Column(TypeName = "nvarchar(100)")]
         public string Company { get; set; }
+        [Column(TypeName = "nvarchar(100)")]
         public string DisplayNameAs { get; set; }
+        [Column(TypeName = "nvarchar(100)")]
         public string Phone { get; set; }
+        [Column(TypeName = "nvarchar(100)")]
         public string Mobile { get; set; }
+        [Column(TypeName = "nvarchar(100)")]
         public string Fax { get; set; }
+        [Column(TypeName = "nvarchar(100)")]
         public string Other { get; set; }
+        [Column(TypeName = "nvarchar(100)")]
         public string Website { get; set; }
+        [Column(TypeName = "nvarchar(100)")]
         public bool? BillWithParent { get; set; }
         public bool? IsSubCustomer { get; set; }
       
         public int? UserDetailId { get; set; }
         public string ImageUrl { get; set; } //Logo Or Avatar
         public UserDetails UserDetail { get; set; }
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
         public virtual ExtendedUser ExtendedUser { get; set; }
         public decimal? OpenBalance { get; set; }
 

@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "QF80+t5I8Vnv24RlHRvBhJvkLDyEliFgZLeAZKcAz7Y=",
+  "Source": "ReportGenerationMicroservice.API",
+  "BasePath": "_content/ReportGenerationMicroservice.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

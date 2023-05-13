@@ -1,5 +1,5 @@
-﻿using PanoramBackend.Data;
-using PanoramBackend.Services.Validations;
+﻿using PanoramaBackend.Data;
+using PanoramaBackend.Services.Validations;
 using NukesLab.Core.Common;
 using NukesLab.Core.Repository;
 
@@ -13,10 +13,10 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 using Newtonsoft.Json;
-using PanoramBackend.Services.Services;
+using PanoramaBackend.Services.Services;
 using Nest;
 
-namespace PanoramBackend.Services.Core
+namespace PanoramaBackend.Services.Core
 {
     public class BaseService : IBaseService
     {
@@ -117,6 +117,7 @@ namespace PanoramBackend.Services.Core
         protected virtual Task OnInserted(IEnumerable<TEntity> entities) { return Task.FromResult(entities); }
         protected virtual Task WhileUpdating(IEnumerable<TEntity> entities) { return Task.FromResult(entities); }
         protected virtual Task OnUpdated(IEnumerable<TEntity> entities) { return Task.FromResult(entities); }
+        protected virtual Task OnUpdated(IEnumerable<TEntity> entities,TEntity valueBeforeUpdate) { return Task.FromResult(entities); }
         protected virtual Task WhileDeleting(IEnumerable<TEntity> entities) { return Task.FromResult(entities); }
         protected virtual Task OnDeleted(IEnumerable<TEntity> entities) { return Task.FromResult(entities); }
         #endregion
@@ -188,8 +189,7 @@ namespace PanoramBackend.Services.Core
 
         public async Task<(IEnumerable<TEntity> Entities, bool Success)> BulkInsert(IEnumerable<TEntity> entities)
         {
-            var connectionSettings = new ConnectionSettings(new Uri("http://localhost:9200/"));
-            var elasticClient = new ElasticClient(connectionSettings);
+
             ConcurrentBag<TEntity> newEntities = new ConcurrentBag<TEntity>();
             await Task.WhenAll(
                 entities.Select(async entity =>
@@ -197,7 +197,7 @@ namespace PanoramBackend.Services.Core
                     var newEntity = new TEntity();
                     this.Map(entity, newEntity);
                     newEntities.Add(newEntity);
-                     elasticClient.CreateDocument(newEntity);
+         
                 }));
 
             await this.WhileInserting(newEntities);

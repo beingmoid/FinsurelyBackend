@@ -40,7 +40,7 @@ namespace NukesLab.Core.Common
         public static IConfigurationRoot _config { get; set; }
         public static string NewAccessToken { get; set; }
 
-        public static string GetUserId(IServiceProvider serviceProvider)
+        public static Guid GetUserId(IServiceProvider serviceProvider)
         {
             return serviceProvider.GetRequiredService<IHttpContextAccessor>().HttpContext.User.GetUserId();
         }

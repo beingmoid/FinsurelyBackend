@@ -136,18 +136,7 @@
                                                                     <p style="margin: 0.35rem 0;margin: 0; font-family: 'Lexend Deca', sans-serif;font-style: normal;font-weight: 600;font-size: 14px;line-height: 18px;letter-spacing: 0.05em;color: #818E9B;">
                                                                         Period: 10/09/2021 - 30/10/2021
                                                                     </p>
-                                                                    <!-- <p
-                                                                style="margin: 0.35rem 0;font-family: 'Lexend Deca', sans-serif;font-style: normal;font-weight: 600;font-size: 14px;line-height: 21px;letter-spacing: 0.05em;color: #818E9B;">
-                                                                See Reverse or Call Time</p>
-                                                            <p
-                                                                style="margin: 0.35rem 0;font-family: 'Lexend Deca', sans-serif;font-style: normal;font-weight: 600;font-size: 14px;line-height: 21px;letter-spacing: 0.05em;color: #818E9B;">
-                                                                Text Phone +4470 326 232</p>
-                                                            <p
-                                                                style="margin: 0.35rem 0;font-family: 'Lexend Deca', sans-serif;font-style: normal;font-weight: 600;font-size: 12px;line-height: 18px;letter-spacing: 0.05em;color: #818E9B;">
-                                                                Used by Deaf Or speech Impaird Customers</p>
-                                                            <p
-                                                                style="margin: 0.35rem 0;font-family: 'Lexend Deca', sans-serif;font-style: normal;font-weight: 600;font-size: 12px;line-height: 18px;letter-spacing: 0.05em;color: #818E9B;">
-                                                                www.finsurely.com</p> -->
+                                                 
 
                                                                 </div>
                                                             </td>
@@ -177,7 +166,6 @@
                         </div>
                         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin:auto;">
                             <tbody>
-
                                 <tr style=" background:  #1F3563 !important ;color: #FFFFFF;font-family: 'Lexend Deca', sans-serif;font-style: normal;font-weight: 400;font-size: 13px;line-height: 15px;">
 
                                     <td style="padding:15px 0;text-align: center;">Invoice Date</td>
@@ -194,6 +182,25 @@
                                     <td style="padding: 15px 0;">Balance</td>
 
                                 </tr>
+                                @foreach (var item in Model.Statement)
+                                {
+                                    <tr style="background: #F2F5F9;font-family: 'Lexend Deca', sans-serif;font-style: normal;font-weight: 400;font-size: 10px;line-height: 18px;color: #505050;">
+
+                                        <td style="padding:15px 0;text-align: center;">@item?.InvoiceDate?.ToShortDateString()</td>
+                                        <td style="padding:15px 0;text-align: center;">@item?.TransactionType</td>
+                                        <td style="padding: 15px 0;">@item?.CustomerName</td>
+                                        <td style="padding: 15px 0;">@item?.PolicyNumber</td>
+                                        <td style="padding: 15px 0;">@item?.CompanyName</td>
+                                        <td style="padding: 15px 0;">@item?.TransactionRef</td>
+                                        <td style="padding: 15px 0;">@item?.Vehicle</td>
+                                        <td style="padding: 15px 0;">@item?.InsuranceType</td>
+                                        <td style="padding: 15px 0;">@item?.Debit</td>
+                                        <td style="padding: 15px 0;">@item?.Credit</td>
+                                        <td style="padding: 15px 0;">@item?.Balance</td>
+
+                                    </tr>
+                                }
+
                             </tbody>
                         </table>
                     </td>

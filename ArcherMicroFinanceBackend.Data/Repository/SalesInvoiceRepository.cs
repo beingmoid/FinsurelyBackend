@@ -1,12 +1,12 @@
-﻿using PanoramBackend.Data;
-using PanoramBackend.Data.Entities;
+﻿using PanoramaBackend.Data;
+using PanoramaBackend.Data.Entities;
 using NukesLab.Core.Repository;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PanoramBackend.Data.Repository
+namespace PanoramaBackend.Data.Repository
 {
     public class SalesInvoiceRepository : EFRepository<SalesInvoice, int>, ISalesInvoiceRepository
     {

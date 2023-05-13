@@ -1,13 +1,13 @@
 ﻿
 
 
-using PanoramBackend.Data;
-using PanoramBackend.Data.Entities;
+using PanoramaBackend.Data;
+using PanoramaBackend.Data.Entities;
 using NukesLab.Core.Repository;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using PanoramBackend.Data.CatalogDb;
+using PanoramaBackend.Data.CatalogDb;
 using AutoMapper;
 using System.Linq;
 using NukesLab.Core.Common;
@@ -16,7 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 
-namespace PanoramBackend.Data.CatalogDb.Repos
+namespace PanoramaBackend.Data.CatalogDb.Repos
 {
     public class StripePlanRequestDTO
     {

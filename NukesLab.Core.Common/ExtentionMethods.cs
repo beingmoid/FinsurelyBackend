@@ -29,15 +29,23 @@ namespace NukesLab.Core.Common
             return principal.Claims.ToList().FirstOrDefault(x => x.Type.Trim() == CustomClaims.Role).Value;
         }
 
-        public static string GetUserId(this ClaimsPrincipal principal)
+        public static Guid GetUserId(this ClaimsPrincipal principal)
         {
-            return principal.Claims.ToList().FirstOrDefault(x => x.Type.Trim() == CustomClaims.UserId).Value;
+            return principal.Claims.ToList().FirstOrDefault(x => x.Type == CustomClaims.UserId).Value.ToGuid();
         }
 		public static byte[] GetTenantId(this ClaimsPrincipal principal)
 		{
 			return Encoding.ASCII.GetBytes( principal.Claims.ToList().FirstOrDefault(x => x.Type.Trim() == CustomClaims.TenantId).Value);
 		}
-	}
+        public static Guid ToGuid(this string str)
+        {
+            if (Guid.TryParse(str, out Guid result))
+            {
+                return result;
+            }
+            throw new ArgumentException("Invalid Guid format");
+        }
+    }
 
     
 }

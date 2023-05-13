@@ -1,6 +1,6 @@
 ﻿
-using PanoramBackend.Services.Data.DTOs;
-using PanoramBackend.Data.Entities;
+using PanoramaBackend.Services.Data.DTOs;
+using PanoramaBackend.Data.Entities;
 using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -16,8 +16,9 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using static NukesLab.Core.Common.Constants;
+using NukesLab.Core.Common;
 
-namespace PanoramBackend.Data.Repository
+namespace PanoramaBackend.Data.Repository
 {
     public class ExtendedUserRepository : IExtendedUserRepository
     {
@@ -34,7 +35,7 @@ namespace PanoramBackend.Data.Repository
 
         public async Task<ExtendedUser> GetUser()
         {
-            var userId = _serviceProvider.GetRequiredService<IHttpContextAccessor>().HttpContext.User.FindFirstValue("UserId");
+            var userId = _serviceProvider.GetRequiredService<IHttpContextAccessor>().HttpContext.User.FindFirstValue("UserId").ToGuid();
 
             var user = _dbContext.Set<ExtendedUser>().Include(x => x.UserDetails).Where(x=>x.Id==userId).SingleOrDefault();
             return user;
@@ -77,7 +78,7 @@ namespace PanoramBackend.Data.Repository
             var _userManager = _serviceProvider.GetRequiredService<UserManager<ExtendedUser>>();
             var teamMember = _mapper.Map<ExtendedUser>(user);
 
-            teamMember.UserDetails=user.UserDetails;
+            teamMember.UserDetails.Add(user.UserDetails);
             var result = await _userManager.CreateAsync(teamMember, user.Password);
             if (result.Succeeded)
             {

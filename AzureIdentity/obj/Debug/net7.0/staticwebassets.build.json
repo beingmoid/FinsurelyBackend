@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "GEj7B1JsSHQWOZuvzcMflODEg/xMo5A0bcqNCe8p0JM=",
+  "Source": "AzureIdentity",
+  "BasePath": "_content/AzureIdentity",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

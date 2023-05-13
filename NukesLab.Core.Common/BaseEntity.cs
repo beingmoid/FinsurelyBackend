@@ -9,14 +9,7 @@ using System.Text.Json.Serialization;
 
 namespace NukesLab.Core.Common
 {
-	public partial class ApplicationUser : IdentityUser
-	{
-
-	}
-	public partial class ApplicationRole : IdentityRole
-	{
-
-	}
+	
 	public abstract class BaseEntity<TKey> : IBaseEntity<TKey>
 	{
 		[NotMapped]
@@ -27,21 +20,21 @@ namespace NukesLab.Core.Common
 		public virtual TKey Id { get; set; }
 
         [JsonIgnore]
-        public string CreateUserId { get;  set; }
+        public Guid? CreateUserId { get;  set; }
         [JsonIgnore]
         public DateTime? CreateTime { get;  set; }
         [JsonIgnore]
-        public string EditUserId { get;  set; }
+        public Guid? EditUserId { get;  set; }
         [JsonIgnore]
         public DateTime? EditTime { get;  set; }
 
 		[JsonIgnore]
-		public bool IsDeleted { get; set; }
+		public bool? IsDeleted { get; set; }
 
         public byte[] Timestamp { get; set; }
 		[NotMapped]
 		[JsonIgnore]
-		public bool IsNew => (this.Id == null) ? false : this.Id.Equals(default(TKey));
+		public bool? IsNew => (this.Id == null) ? false : this.Id.Equals(default(TKey));
 
 
 
@@ -61,13 +54,13 @@ namespace NukesLab.Core.Common
 	{
 		object Id { get; }
 
-		string CreateUserId { get; }
+		Guid? CreateUserId { get; }
 		DateTime? CreateTime { get; }
-		string EditUserId { get; }
+        Guid? EditUserId { get; }
 		DateTime? EditTime { get; }
-		bool IsDeleted { get; set; }
-		byte[] Timestamp { get; set; }
-		bool IsNew { get; }
+		bool? IsDeleted { get; set; }
+		byte[]? Timestamp { get; set; }
+		bool? IsNew { get; }
 
 	}
 	public abstract class AuditEntries<T> where T : IBaseEntity

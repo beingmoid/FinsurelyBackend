@@ -1,6 +1,6 @@
-﻿using PanoramBackend.Data.Entities;
-using PanoramBackend.Data.Repository;
-using PanoramBackend.Services.Core;
+﻿using PanoramaBackend.Data.Entities;
+using PanoramaBackend.Data.Repository;
+using PanoramaBackend.Services.Core;
 using NukesLab.Core.Repository;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using PanoramaBackend.Services;
-using PanoramBackend.Data;
+using PanoramaBackend.Data;
 using Microsoft.EntityFrameworkCore;
 using static NukesLab.Core.Common.Constants;
 
@@ -20,8 +20,8 @@ namespace PanoramaBackend.Services
         public TKey Id { get; set; }
         public DateTime? from { get; set; }
         public DateTime? to { get; set; }
-        public int? BranchId { get; set; }
-        public string? SearchQuery { get; set; }
+        public Guid BranchId { get; set; }
+        public string SearchQuery { get; set; }
         public bool? RequestExcel { get; set; }
         public bool? RequestPdf { get; set; }
         public bool RequestAllData { get; set; }
@@ -31,7 +31,7 @@ namespace PanoramaBackend.Services
 
     }
 }
-namespace PanoramBackend.Services.Services
+namespace PanoramaBackend.Services.Services
 {
 
     public class AgentService : BaseService<UserDetails, int>, IAgentService

@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using NukesLab.Core.Api;
 using NukesLab.Core.Repository;
 using PanoramaBackend.Controllers;
-using PanoramBackend.Data.Entities;
-using PanoramBackend.Services.Services;
+using PanoramaBackend.Data.Entities;
+using PanoramaBackend.Services.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,12 +20,14 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using DotLiquid;
 using Nest;
-using PanoramBackend.Data;
+using PanoramaBackend.Data;
 using Elastic.Apm;
 using FluentExcel;
 using PanoramaBackend.Services;
 using Wkhtmltopdf.NetCore;
 using Microsoft.AspNetCore.Routing;
+
+//using PanoramaBackend.Service.Syncronization;
 
 namespace PanoramaBackend.Api.Controllers
 {
@@ -40,6 +42,8 @@ namespace PanoramaBackend.Api.Controllers
         private readonly AMFContext _context;
         private readonly IGeneratePdf _generatePDF;
         private readonly IRazorViewToStringRenderer _engine;
+      
+
         const string Port = "5000";
         public AgentController(RequestScope requestScope, IAgentService service, ILedgerEntriesService entriesService
             , ITransactionService tranService,
@@ -48,7 +52,7 @@ namespace PanoramaBackend.Api.Controllers
             IRazorViewToStringRenderer engine,
             IGeneratePdf generatePDF,
 
-            IConverter converter            )
+            IConverter converter)
             : base(requestScope, service)
         {
             _service = service;
@@ -80,12 +84,13 @@ namespace PanoramaBackend.Api.Controllers
         public async Task<BaseResponse> GetOne(int id)
         {
             var userDetail = (await _service.Get(x =>
+
               x.Include(x => x.Addresses)
              .Include(x => x.PaymentAndBilling)
                .ThenInclude(x => x.Terms)
              .Include(x => x.PaymentAndBilling)
               .ThenInclude(x => x.PreferredPaymentMethod)
-              .Include(x => x.UserDetail)
+     
               .Include(x => x.SalesInvoicePersons).ThenInclude(x => x.Transactions),
               x => x.Id == id
              )).SingleOrDefault();
@@ -97,35 +102,35 @@ namespace PanoramaBackend.Api.Controllers
         [HttpGet("GetBalance")]
         public async Task<BaseResponse> GetBalance([FromQuery] int id)
         {
-            if (id>0)
+            if (id > 0)
             {
                 var balance = await _service.GetBalance(id);
                 OtherConstants.isSuccessful = true;
                 return constructResponse(new { balance = balance });
-             
+
             }
             OtherConstants.isSuccessful = false;
             OtherConstants.responseMsg = "Please use correct param";
             return constructResponse(BadRequest());
-         
+
         }
 
-        private async Task<PageConfig> GetAgentStatementByDate(int agentId , DateTime  dateFrom , DateTime dateTo)
+        private async Task<PageConfig> GetAgentStatementByDate(int agentId, DateTime dateFrom, DateTime dateTo)
         {
             var agent = (await _service.Get(x => x.Include(x => x.Accounts), x => x.Id == agentId)).SingleOrDefault();
 
             var ledgers = (await _entriesService.Get(x => x.Include(x => x.Transaction)
 
             .ThenInclude(x => x.SalesInvoice)
-                        .ThenInclude(x => x.SaleLineItem)
+
                             .ThenInclude(x => x.Vehicle)
 
             .Include(x => x.Transaction)
                    .ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.InsuranceType)
         .Include(x => x.Transaction)
                    .ThenInclude(x => x.SalesInvoice).ThenInclude(x => x.Branch)
-  
-   
+
+
 
 
         .Include(x => x.Transaction)
@@ -133,7 +138,7 @@ namespace PanoramaBackend.Api.Controllers
 
 
 
-            , x => x.TransactionDate>=dateFrom && x.TransactionDate<=dateTo && x.Transaction.UserDetailId == agentId)).GroupBy(x => x.TransactionId).Select(
+            , x => x.TransactionDate >= dateFrom && x.TransactionDate <= dateTo && x.Transaction.UserDetailId == agentId)).GroupBy(x => x.TransactionId).Select(
 
                 x => new
                 {
@@ -154,8 +159,11 @@ namespace PanoramaBackend.Api.Controllers
 
         public async Task<BaseResponse> GetAgentPaginated([FromBody] PaginationParams<int> @params)
         {
+
+           
+
             List<AgentStatementDTO> accountStatement = new List<AgentStatementDTO>();
-     
+
             PageConfig page = new PageConfig();
             int count = ((@params.ItemsPerPage > 10) || (@params.Page > 1)) ? @params.ItemsPerPage : 0;
 
@@ -168,11 +176,11 @@ namespace PanoramaBackend.Api.Controllers
 
 
             Console.Clear();
-    
+
             Console.WriteLine("Last SQL Execution");
             var query = _context.Set<LedgarEntries>().Include(x => x.Transaction)
            .ThenInclude(x => x.SalesInvoice)
-                       .ThenInclude(x => x.SaleLineItem)
+
                            .ThenInclude(x => x.Vehicle)
 
            .Include(x => x.Transaction)
@@ -190,14 +198,14 @@ namespace PanoramaBackend.Api.Controllers
                   .ThenInclude(x => x.Refund)
                       .Include(x => x.Transaction)
                       .ThenInclude(x => x.Refund)
-                      
+
                                               .Include(x => x.Transaction)
                                                    .ThenInclude(x => x.Refund)
                                                           .ThenInclude(x => x.Vehicle)
                    .Include(x => x.Transaction)
-                                              
+
                                                           .Include(x => x.Transaction)
-                                                 
+
                                                                     .Include(x => x.Transaction)
                                                    .ThenInclude(x => x.Refund)
 
@@ -280,13 +288,13 @@ namespace PanoramaBackend.Api.Controllers
                                 Balance += _actualItem.Amount;
                                 debit.InvoiceDate = _actualItem?.Transaction?.SalesInvoice?.SalesInvoiceDate;
                                 debit.CustomerName = _actualItem?.Transaction?.SalesInvoice?.CustomerName;
-                                debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.SingleOrDefault().PolicyNumber;
-                      
+                                debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.PolicyNumber;
+
                                 debit.InsuranceType = _actualItem?.Transaction?.SalesInvoice?.InsuranceType?.Name;
-                                debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
-                                            SingleOrDefault().Vehicle?.Make + " " + " | " +
-                                            _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
-                                            SingleOrDefault().Vehicle?.Model;
+                                debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.
+                                   Vehicle?.Make + " " + " | " +
+                                            _actualItem?.Transaction?.SalesInvoice?
+                                          .Vehicle?.Model;
                                 debit.BodyType = _actualItem?.Transaction?.SalesInvoice?.BodyType?.Name;
                                 debit.RefNo = _actualItem?.Transaction?.TransactionReferenceNumber;
                                 debit.Debit = item?.Value?.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id)?.Amount;
@@ -301,13 +309,13 @@ namespace PanoramaBackend.Api.Controllers
 
                                 debit.InvoiceDate = _actualItem?.Transaction?.SalesInvoice?.SalesInvoiceDate;
                                 debit.CustomerName = _actualItem?.Transaction?.SalesInvoice?.CustomerName;
-                                debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.SingleOrDefault()?.PolicyNumber;
-                 
+                                debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.PolicyNumber;
+
                                 debit.InsuranceType = _actualItem?.Transaction?.SalesInvoice?.InsuranceType?.Name;
-                                debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
-                                            SingleOrDefault().Vehicle?.Make + " " + " | " +
-                                            _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
-                                            SingleOrDefault().Vehicle?.Model;
+                                debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.
+                                       Vehicle?.Make + " " + " | " +
+                                            _actualItem?.Transaction?.SalesInvoice?
+                                      .Vehicle?.Model;
                                 debit.BodyType = _actualItem?.Transaction?.SalesInvoice?.BodyType?.Name;
                                 debit.RefNo = _actualItem?.Transaction?.TransactionReferenceNumber;
                                 debit.Debit = _actualItem?.Amount;
@@ -355,7 +363,7 @@ namespace PanoramaBackend.Api.Controllers
                             debit.InvoiceDate = _actualItem?.Transaction?.Refund?.RefundDate;
                             debit.CustomerName = _actualItem?.Transaction?.Refund?.CustomerName;
                             debit.PolicyNumber = _actualItem?.Transaction?.Refund?.PolicyNumber;
-                 
+
 
                             debit.InsuranceType = _actualItem?.Transaction?.Refund?.InsuranceType?.Name;
                             debit.Vehicle = _actualItem?.Transaction?.Refund?.Vehicle?.Make + " " + " | " + // Make 
@@ -379,7 +387,7 @@ namespace PanoramaBackend.Api.Controllers
 
                     }
 
-                        #region Excel Export Method
+                    #region Excel Export Method
 
                     string wwwPath = _env.WebRootPath;
                     string contentPath = _env.ContentRootPath;
@@ -450,13 +458,13 @@ namespace PanoramaBackend.Api.Controllers
                             debitBalance += _actualItem.Amount;
                             debit.InvoiceDate = _actualItem?.Transaction?.SalesInvoice?.SalesInvoiceDate;
                             debit.CustomerName = _actualItem?.Transaction?.SalesInvoice?.CustomerName;
-                            debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.SingleOrDefault().PolicyNumber;
-          
+                            debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.PolicyNumber;
+
                             debit.InsuranceType = _actualItem?.Transaction?.SalesInvoice?.InsuranceType?.Name;
-                            debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
-                                        SingleOrDefault().Vehicle?.Make + " " + " | " +
-                                        _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
-                                        SingleOrDefault().Vehicle?.Model;
+                            debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?
+                                     .Vehicle?.Make + " " + " | " +
+                                        _actualItem?.Transaction?.SalesInvoice?
+                                      .Vehicle?.Model;
                             debit.BodyType = _actualItem?.Transaction?.SalesInvoice?.BodyType?.Name;
                             debit.RefNo = _actualItem?.Transaction?.TransactionReferenceNumber;
                             debit.Debit = item?.Value?.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id)?.Amount;
@@ -471,13 +479,12 @@ namespace PanoramaBackend.Api.Controllers
 
                             debit.InvoiceDate = _actualItem?.Transaction?.SalesInvoice?.SalesInvoiceDate;
                             debit.CustomerName = _actualItem?.Transaction?.SalesInvoice?.CustomerName;
-                            debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.SingleOrDefault()?.PolicyNumber;
-            
+                            debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.PolicyNumber;
+
                             debit.InsuranceType = _actualItem?.Transaction?.SalesInvoice?.InsuranceType?.Name;
-                            debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
-                                        SingleOrDefault().Vehicle?.Make + " " + " | " +
-                                        _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
-                                        SingleOrDefault().Vehicle?.Model;
+                            debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?
+                          .Vehicle?.Make + " " + " | " +
+                                        _actualItem?.Transaction?.SalesInvoice?.Vehicle?.Model;
                             debit.BodyType = _actualItem?.Transaction?.SalesInvoice?.BodyType?.Name;
                             debit.RefNo = _actualItem?.Transaction?.TransactionReferenceNumber;
                             debit.Debit = _actualItem?.Amount;
@@ -569,7 +576,8 @@ namespace PanoramaBackend.Api.Controllers
                     statemenmtPDF.Country = "United Arab Emirates";
                     statemenmtPDF.Emirates = "Dubai";
                     statemenmtPDF.Statement = accountStatement;
-                    var render = await _engine.RenderViewToStringAsync("GetAgentPaginated", statemenmtPDF);
+                    var render = await _engine.RenderViewToStringAsync("GetAgentPaginated", 
+                        statemenmtPDF);
                     var doc = new HtmlToPdfDocument()
                     {
                         GlobalSettings = {
@@ -650,7 +658,7 @@ namespace PanoramaBackend.Api.Controllers
             ((x.Transaction.SalesInvoice.CustomerName.Contains(searchString) || (x.Transaction.Refund.CustomerName.Contains(searchString)))
             ||
 
-            ((x.Transaction.SalesInvoice.SaleLineItem.SingleOrDefault().PolicyNumber.Contains(searchString) || ((x.Transaction.Refund.PolicyNumber.Contains(searchString)))))
+            ((x.Transaction.SalesInvoice.PolicyNumber.Contains(searchString) || ((x.Transaction.Refund.PolicyNumber.Contains(searchString)))))
             )
             )
             )
@@ -703,14 +711,13 @@ namespace PanoramaBackend.Api.Controllers
                                 Balance += _actualItem.Amount;
                                 debit.InvoiceDate = _actualItem?.Transaction?.SalesInvoice?.SalesInvoiceDate;
                                 debit.CustomerName = _actualItem?.Transaction?.SalesInvoice?.CustomerName;
-                                debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.SingleOrDefault().PolicyNumber;
-                   
+                                debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.PolicyNumber;
+
 
                                 debit.InsuranceType = _actualItem?.Transaction?.SalesInvoice?.InsuranceType?.Name;
-                                debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
-                                            SingleOrDefault().Vehicle?.Make + " " + " | " +
-                                            _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
-                                            SingleOrDefault().Vehicle?.Model;
+                                debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.Vehicle
+                                           .Make + " " + " | " +
+                                            _actualItem?.Transaction?.SalesInvoice?.Vehicle?.Model;
                                 debit.BodyType = _actualItem?.Transaction?.SalesInvoice?.BodyType?.Name;
                                 debit.RefNo = _actualItem?.Transaction?.TransactionReferenceNumber;
                                 debit.Debit = item?.Value?.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id)?.Amount;
@@ -725,13 +732,13 @@ namespace PanoramaBackend.Api.Controllers
 
                                 debit.InvoiceDate = _actualItem?.Transaction?.SalesInvoice?.SalesInvoiceDate;
                                 debit.CustomerName = _actualItem?.Transaction?.SalesInvoice?.CustomerName;
-                                debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.SingleOrDefault()?.PolicyNumber;
-                
+                                debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.PolicyNumber;
+
                                 debit.InsuranceType = _actualItem?.Transaction?.SalesInvoice?.InsuranceType?.Name;
-                                debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
-                                            SingleOrDefault().Vehicle?.Make + " " + " | " +
-                                            _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
-                                            SingleOrDefault().Vehicle?.Model;
+                                debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.
+                                           Vehicle.Make + " " + " | " +
+                                            _actualItem?.Transaction?.SalesInvoice?.
+                                         Vehicle.Model;
                                 debit.BodyType = _actualItem?.Transaction?.SalesInvoice?.BodyType?.Name;
                                 debit.RefNo = _actualItem?.Transaction?.TransactionReferenceNumber;
                                 debit.Debit = _actualItem?.Amount;
@@ -820,7 +827,7 @@ namespace PanoramaBackend.Api.Controllers
                     #endregion 
                 }
                 #endregion
-               
+
                 var entries = ledgers.OrderBy(x => x.TransactionDate).GroupBy(x => x.TransactionId).Select(
 
                     x => new
@@ -872,13 +879,13 @@ namespace PanoramaBackend.Api.Controllers
                             debitBalance += _actualItem.Amount;
                             debit.InvoiceDate = _actualItem?.Transaction?.SalesInvoice?.SalesInvoiceDate;
                             debit.CustomerName = _actualItem?.Transaction?.SalesInvoice?.CustomerName;
-                            debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.SingleOrDefault().PolicyNumber;
-               
+                            debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.PolicyNumber;
+
                             debit.InsuranceType = _actualItem?.Transaction?.SalesInvoice?.InsuranceType?.Name;
-                            debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
-                                        SingleOrDefault().Vehicle?.Make + " " + " | " +
-                                        _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
-                                        SingleOrDefault().Vehicle?.Model;
+                            debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?
+                                       .Vehicle.Make + " " + " | " +
+                                        _actualItem?.Transaction?.SalesInvoice?
+                                      .Vehicle.Model;
                             debit.BodyType = _actualItem?.Transaction?.SalesInvoice?.BodyType?.Name;
                             debit.RefNo = _actualItem?.Transaction?.TransactionReferenceNumber;
                             debit.Debit = item?.Value?.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id)?.Amount;
@@ -893,13 +900,13 @@ namespace PanoramaBackend.Api.Controllers
 
                             debit.InvoiceDate = _actualItem?.Transaction?.SalesInvoice?.SalesInvoiceDate;
                             debit.CustomerName = _actualItem?.Transaction?.SalesInvoice?.CustomerName;
-                            debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.SingleOrDefault()?.PolicyNumber;
-                   
+                            debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice.PolicyNumber;
+
                             debit.InsuranceType = _actualItem?.Transaction?.SalesInvoice?.InsuranceType?.Name;
-                            debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
-                                        SingleOrDefault().Vehicle?.Make + " " + " | " +
-                                        _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
-                                        SingleOrDefault().Vehicle?.Model;
+                            debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?
+                                        .Vehicle.Make + " " + " | " +
+                                        _actualItem?.Transaction?.SalesInvoice?
+                                         .Vehicle.Model;
                             debit.BodyType = _actualItem?.Transaction?.SalesInvoice?.BodyType?.Name;
                             debit.RefNo = _actualItem?.Transaction?.TransactionReferenceNumber;
                             debit.Debit = _actualItem?.Amount;
@@ -1072,7 +1079,7 @@ namespace PanoramaBackend.Api.Controllers
             ||
 
 
-            ((x.Transaction.SalesInvoice.SaleLineItem.SingleOrDefault().PolicyNumber.Contains(searchString) || ((x.Transaction.Refund.PolicyNumber.Contains(searchString)))))
+            ((x.Transaction.SalesInvoice.PolicyNumber.Contains(searchString) || ((x.Transaction.Refund.PolicyNumber.Contains(searchString)))))
             )
             )
             )
@@ -1130,13 +1137,13 @@ namespace PanoramaBackend.Api.Controllers
                                 Balance += _actualItem.Amount;
                                 debit.InvoiceDate = _actualItem?.Transaction?.SalesInvoice?.SalesInvoiceDate;
                                 debit.CustomerName = _actualItem?.Transaction?.SalesInvoice?.CustomerName;
-                                debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.SingleOrDefault().PolicyNumber;
-                    
+                                debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.PolicyNumber;
+
                                 debit.InsuranceType = _actualItem?.Transaction?.SalesInvoice?.InsuranceType?.Name;
-                                debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
-                                            SingleOrDefault().Vehicle?.Make + " " + " | " +
-                                            _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
-                                            SingleOrDefault().Vehicle?.Model;
+                                debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?
+                                           .Vehicle.Make + " " + " | " +
+                                            _actualItem?.Transaction?.SalesInvoice?
+                                                 .Vehicle.Model;
                                 debit.BodyType = _actualItem?.Transaction?.SalesInvoice?.BodyType?.Name;
                                 debit.RefNo = _actualItem?.Transaction?.TransactionReferenceNumber;
                                 debit.Debit = item?.Value?.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id)?.Amount;
@@ -1151,13 +1158,13 @@ namespace PanoramaBackend.Api.Controllers
 
                                 debit.InvoiceDate = _actualItem?.Transaction?.SalesInvoice?.SalesInvoiceDate;
                                 debit.CustomerName = _actualItem?.Transaction?.SalesInvoice?.CustomerName;
-                                debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.SingleOrDefault()?.PolicyNumber;
-            
+                                debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.PolicyNumber;
+
                                 debit.InsuranceType = _actualItem?.Transaction?.SalesInvoice?.InsuranceType?.Name;
-                                debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
-                                            SingleOrDefault().Vehicle?.Make + " " + " | " +
-                                            _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
-                                            SingleOrDefault().Vehicle?.Model;
+                                debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?
+                                             .Vehicle.Make + " " + " | " +
+                                            _actualItem?.Transaction?.SalesInvoice?
+                                           .Vehicle.Model;
                                 debit.BodyType = _actualItem?.Transaction?.SalesInvoice?.BodyType?.Name;
                                 debit.RefNo = _actualItem?.Transaction?.TransactionReferenceNumber;
                                 debit.Debit = _actualItem?.Amount;
@@ -1301,13 +1308,13 @@ namespace PanoramaBackend.Api.Controllers
                             debitBalance += _actualItem.Amount;
                             debit.InvoiceDate = _actualItem?.Transaction?.SalesInvoice?.SalesInvoiceDate;
                             debit.CustomerName = _actualItem?.Transaction?.SalesInvoice?.CustomerName;
-                            debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.SingleOrDefault().PolicyNumber;
-                   
+                            debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.PolicyNumber;
+
                             debit.InsuranceType = _actualItem?.Transaction?.SalesInvoice?.InsuranceType?.Name;
-                            debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
-                                        SingleOrDefault().Vehicle?.Make + " " + " | " +
-                                        _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
-                                        SingleOrDefault().Vehicle?.Model;
+                            debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?
+                                        .Vehicle.Make + " " + " | " +
+                                        _actualItem?.Transaction?.SalesInvoice?
+                                         .Vehicle.Model;
                             debit.BodyType = _actualItem?.Transaction?.SalesInvoice?.BodyType?.Name;
                             debit.RefNo = _actualItem?.Transaction?.TransactionReferenceNumber;
                             debit.Debit = item?.Value?.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id)?.Amount;
@@ -1322,13 +1329,13 @@ namespace PanoramaBackend.Api.Controllers
 
                             debit.InvoiceDate = _actualItem?.Transaction?.SalesInvoice?.SalesInvoiceDate;
                             debit.CustomerName = _actualItem?.Transaction?.SalesInvoice?.CustomerName;
-                            debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.SingleOrDefault()?.PolicyNumber;
-                     
+                            debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.PolicyNumber;
+
                             debit.InsuranceType = _actualItem?.Transaction?.SalesInvoice?.InsuranceType?.Name;
-                            debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
-                                        SingleOrDefault().Vehicle?.Make + " " + " | " +
-                                        _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
-                                        SingleOrDefault().Vehicle?.Model;
+                            debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?
+                                         .Vehicle.Make + " " + " | " +
+                                        _actualItem?.Transaction?.SalesInvoice?
+                                         .Vehicle.Model;
                             debit.BodyType = _actualItem?.Transaction?.SalesInvoice?.BodyType?.Name;
                             debit.RefNo = _actualItem?.Transaction?.TransactionReferenceNumber;
                             debit.Debit = _actualItem?.Amount;
@@ -1400,10 +1407,10 @@ namespace PanoramaBackend.Api.Controllers
                 }
                 #endregion
 
-                if (@params.RequestPdf!=null)
+                if (@params.RequestPdf != null)
                 {
                     var serverUrl = this.HttpContext.Request.Host.ToString();
-                  
+
                     var statemenmtPDF = new AccountStatementPDF();
                     statemenmtPDF.AccountTRN = agent.Id.ToString() + "/" + agent.CreateTime?.ToBinary().ToString() + "/" + DateTime.Now.Ticks;
                     statemenmtPDF.AgentName = agent.DisplayNameAs;
@@ -1454,7 +1461,7 @@ namespace PanoramaBackend.Api.Controllers
                     string contentPath = _env.ContentRootPath;
                     var ransomeNameStr = new Random().Next(DateTime.Now.Second, 10000).ToString() +
                     new DateTime().Ticks.ToString();
-             
+
                     var isHttps = this.HttpContext.Request.IsHttps;
                     var serverPath = isHttps ? "https://" : "http://" + serverUrl + $"/uploads/{ransomeNameStr}.pdf";
                     System.IO.File.WriteAllBytes(contentPath + $"\\Uploads\\{ransomeNameStr}.pdf", pdf);
@@ -1534,13 +1541,13 @@ namespace PanoramaBackend.Api.Controllers
                             debitBalance += _actualItem.Amount;
                             debit.InvoiceDate = _actualItem?.Transaction?.SalesInvoice?.SalesInvoiceDate;
                             debit.CustomerName = _actualItem?.Transaction?.SalesInvoice?.CustomerName;
-                            debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.SingleOrDefault().PolicyNumber;
-                   
+                            debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.PolicyNumber;
+
                             debit.InsuranceType = _actualItem?.Transaction?.SalesInvoice?.InsuranceType?.Name;
-                            debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
-                                        SingleOrDefault().Vehicle?.Make + " " + " | " +
-                                        _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
-                                        SingleOrDefault().Vehicle?.Model;
+                            debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?
+                                         .Vehicle.Make + " " + " | " +
+                                        _actualItem?.Transaction?.SalesInvoice?
+                                         .Vehicle.Model;
                             debit.BodyType = _actualItem?.Transaction?.SalesInvoice?.BodyType?.Name;
                             debit.RefNo = _actualItem?.Transaction?.TransactionReferenceNumber;
                             debit.Debit = item?.Value?.SingleOrDefault(x => x.DebitAccountId == agent.Accounts.Id)?.Amount;
@@ -1555,13 +1562,13 @@ namespace PanoramaBackend.Api.Controllers
 
                             debit.InvoiceDate = _actualItem?.Transaction?.SalesInvoice?.SalesInvoiceDate;
                             debit.CustomerName = _actualItem?.Transaction?.SalesInvoice?.CustomerName;
-                            debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.SingleOrDefault()?.PolicyNumber;
-                 
+                            debit.PolicyNumber = _actualItem?.Transaction?.SalesInvoice?.PolicyNumber;
+
                             debit.InsuranceType = _actualItem?.Transaction?.SalesInvoice?.InsuranceType?.Name;
-                            debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
-                                        SingleOrDefault().Vehicle?.Make + " " + " | " +
-                                        _actualItem?.Transaction?.SalesInvoice?.SaleLineItem?.
-                                        SingleOrDefault().Vehicle?.Model;
+                            debit.Vehicle = _actualItem?.Transaction?.SalesInvoice?
+                                    .Vehicle?.Make + " " + " | " +
+                                        _actualItem?.Transaction?.SalesInvoice?
+                                      .Vehicle?.Model;
                             debit.BodyType = _actualItem?.Transaction?.SalesInvoice?.BodyType?.Name;
                             debit.RefNo = _actualItem?.Transaction?.TransactionReferenceNumber;
                             debit.Debit = _actualItem?.Amount;
@@ -1631,7 +1638,7 @@ namespace PanoramaBackend.Api.Controllers
                 var paginatedResult = accountStatement.Skip((@params.Page - 1) * @params.ItemsPerPage).Take(@params.ItemsPerPage).ToList();
                 // list = entries.Skip((@params.Page - 1) * @params.ItemsPerPage).Take(@params.ItemsPerPage).ToList();
                 OtherConstants.isSuccessful = true;
-          
+
                 page.Data.AddRange(paginatedResult);
                 page.TotalBalance = paginatedResult.Last().Balance;
                 return constructResponse(page);
@@ -1648,24 +1655,30 @@ namespace PanoramaBackend.Api.Controllers
 
         [AllowAnonymous]
         [HttpGet("GetAgentWithBalancePaginatedAsync")]
-        public async Task<BaseResponse> GetAgentWithBalancePaginatedAsync([FromQuery] PaginationParams<int> @params) =>
-                         constructResponse(await _service.GetPaginatedAgentsWithBalance(@params));
+        public async Task<BaseResponse> GetAgentWithBalancePaginatedAsync([FromQuery] PaginationParams<int> @params)
+                       {
+
+
+  //await _syncronization.MergeAll();
+
+            return  constructResponse(await _service.GetPaginatedAgentsWithBalance(@params));
+        }  
 
 
 
-        [HttpGet("GetCurrentAccountStatement")]
-        public async Task<BaseResponse> GetCurrentAccountStatement(int agentId)
-        {
-            var agent = (await _service.Get(x => x.Id == agentId)).SingleOrDefault();
-            var Debit_Balance = (await _entriesService.Get(x => x.CreditAccountId == agent.DefaultAccountId)).Sum(x => x.Amount);
-            var Credit_Balance = (await _entriesService.Get(x => x.CreditAccountId == agent.DefaultAccountId)).Sum(x => x.Amount);
-            var OpenBalance = Debit_Balance - Credit_Balance;
-            var AgentOpenBalance = new CurrentAgentStatementDTO()
-            {
-                OpenBalance = OpenBalance
-            };
-            return constructResponse(AgentOpenBalance);
-        }
+        //[HttpGet("GetCurrentAccountStatement")]
+        //public async Task<BaseResponse> GetCurrentAccountStatement(int agentId)
+        //{
+        //    var agent = (await _service.Get(x => x.Id == agentId));
+        //    var Debit_Balance = (await _entriesService.Get(x => x.CreditAccountId == agent?.DefaultAccountId)).Sum(x => x.Amount);
+        //    var Credit_Balance = (await _entriesService.Get(x => x.CreditAccountId == agent.DefaultAccountId)).Sum(x => x.Amount);
+        //    var OpenBalance = Debit_Balance - Credit_Balance;
+        //    var AgentOpenBalance = new CurrentAgentStatementDTO()
+        //    {
+        //        OpenBalance = OpenBalance
+        //    };
+        //    return constructResponse(AgentOpenBalance);
+        //}
 
     }
     public class CurrentAgentStatementDTO

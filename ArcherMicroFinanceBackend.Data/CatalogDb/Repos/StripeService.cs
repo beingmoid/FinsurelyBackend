@@ -1,10 +1,10 @@
-﻿using PanoramBackend.Data.CatalogDb.Stripe;
+﻿using PanoramaBackend.Data.CatalogDb.Stripe;
 using Stripe;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace PanoramBackend.Data.CatalogDb.Repos
+namespace PanoramaBackend.Data.CatalogDb.Repos
 {
     public class StripeService : IStripeService
     {

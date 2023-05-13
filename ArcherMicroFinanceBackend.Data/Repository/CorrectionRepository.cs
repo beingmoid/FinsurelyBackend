@@ -1,13 +1,13 @@
-﻿using PanoramBackend.Data;
-using PanoramBackend.Data.Entities;
+﻿using PanoramaBackend.Data;
+using PanoramaBackend.Data.Entities;
 using NukesLab.Core.Repository;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace PanoramBackend.Data.Repository
+namespace PanoramaBackend.Data.Repository
 {
-    public class CorrectionRepository : EFRepository<Corrections, int>, ICorrectionRepository
+    public class CorrectionRepository : EFRepository<CompanyInformation, int>, ICorrectionRepository
     { 
     
         public CorrectionRepository(AMFContext requestScope) : base(requestScope)
@@ -15,7 +15,7 @@ namespace PanoramBackend.Data.Repository
 
         }
     }
-    public interface ICorrectionRepository : IEFRepository<Corrections, int>
+    public interface ICorrectionRepository : IEFRepository<CompanyInformation, int>
     {
 
     }

@@ -1,17 +1,17 @@
 ﻿
-using PanoramBackend.Services.Data.DTOs;
-using PanoramBackend.Data.Entities;
+using PanoramaBackend.Services.Data.DTOs;
+using PanoramaBackend.Data.Entities;
 using AutoMapper;
 using NukesLab.Core.Common;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
-using PanoramBackend.Data.Repository;
-using PanoramBackend.Services.Services;
-using PanoramaBackend.Data.Entities;
+using PanoramaBackend.Data.Repository;
+using PanoramaBackend.Services.Services;
+using PanoramaBackend.Data.DTOs;
 
-namespace PanoramBackend.Services.Mapper
+namespace PanoramaBackend.Services.Mapper
 {
     public class AutoMapperMappings : Profile
     {
@@ -19,7 +19,8 @@ namespace PanoramBackend.Services.Mapper
         {
 
 			this.CreateMap<Payroll>();
-
+            this.CreateMap<SetupClient>();
+            this.CreateMap<UserCompanyInformation>();
             this.CreateMap<Announcement>();
             this.CreateMap<UserDetails>()
 				.ForMember(x => x.Addresses, x => x.MapFrom(x => x.Addresses))
@@ -46,7 +47,7 @@ namespace PanoramBackend.Services.Mapper
 			this.CreateMap<SalesInvoice>();
 			this.CreateMap<Branch>();
 			this.CreateMap<VacationApplication>();
-			this.CreateMap<SaleLineItem>();
+
 			this.CreateMap<SalesInvoice>();
 			
 			this.CreateMap<Transaction,LedgarEntries >().ForMember(x => x.Transaction,x=>x.MapFrom(x=>x.LedgarEntries))
@@ -56,7 +57,7 @@ namespace PanoramBackend.Services.Mapper
 			this.CreateMap<AccountsMapping>();
 			this.CreateMap<Vehicle>();
 			//this.CreateMap<InsuranceType>();
-			this.CreateMap<PanoramBackend.Data.Entities.Transaction>();
+			this.CreateMap<PanoramaBackend.Data.Entities.Transaction>();
 			this.CreateMap<Address>();
 
 			this.CreateMap<PaymentAndBilling>();
@@ -64,10 +65,10 @@ namespace PanoramBackend.Services.Mapper
 			this.CreateMap<Attachments>();
 			this.CreateMap<Terms>();
 			this.CreateMap<BodyType>();
-			this.CreateMap<Service>();
+			this.CreateMap<PanoramaBackend.Data.Entities.Service>();
 			this.CreateMap<PolicyType>();
 			this.CreateMap<Reconcilation>();
-			this.CreateMap<Corrections>();
+			this.CreateMap<PanoramaBackend.Data.Entities.CompanyInformation>();
 			this.CreateMap<Documents>();
 			this.CreateMap<Statement, SalesStatementReconcilation>().ReverseMap();
 
@@ -89,9 +90,22 @@ namespace PanoramBackend.Services.Mapper
 			this.CreateMap<Priority>();
 			this.CreateMap<Expense>();
 			this.CreateMap<ExpenseCategory>();
-			
+            CreateMap<UserCompanyInformation, SetupCompanyAccountDTO>()
+        .ForMember(dest => dest.LogoBase64, opt => opt.Ignore());
+            CreateMap<SetupCompanyAccountDTO, UserCompanyInformation>();
 
-		}
+			CreateMap<SetupCompanyAccountDTO, ExtendedUser>()
+	   .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.LoginEmail))
+	   .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.EmailAddress));
+    
+
+            CreateMap<SetupCompanyAccountDTO, UserDetails>()
+                   .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName))
+       .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName))
+                .ForMember(dest => dest.DisplayNameAs, opt => opt.MapFrom(src => src.DisplayName))
+                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ProfilePictureUrl));
+
+        }
     }
 
 

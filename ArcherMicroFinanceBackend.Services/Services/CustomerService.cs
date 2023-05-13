@@ -1,18 +1,18 @@
 ﻿
-using PanoramBackend.Data.Entities;
-using PanoramBackend.Data.Repository;
-using PanoramBackend.Services.Core;
+using PanoramaBackend.Data.Entities;
+using PanoramaBackend.Data.Repository;
+using PanoramaBackend.Services.Core;
 using NukesLab.Core.Repository;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using PanoramBackend.Services.Data.DTOs;
+using PanoramaBackend.Services.Data.DTOs;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity;
 
-namespace PanoramBackend.Services.Services
+namespace PanoramaBackend.Services.Services
 {
     public class CustomerService : BaseService<UserDetails, int>, ICustomerService
     {

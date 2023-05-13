@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AIB.Data\AIB.Data.csproj" />
     <ProjectReference Include="..\ArcherMicroFinanceBackend.Data\PanoramaBackend.Data.csproj" />
     <ProjectReference Include="..\NukesLab.Core.Repository\NukesLab.Core.Repository.csproj" />
     <ProjectReference Include="..\NukesLab.Core.Services\NukesLab.Core.Services.csproj" />

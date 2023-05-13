@@ -1,10 +1,10 @@
-﻿using PanoramBackend.Services.Data.DTOs;
-using PanoramBackend.Data.Entities;
+﻿using PanoramaBackend.Services.Data.DTOs;
+using PanoramaBackend.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace PanoramBackend.Services.Data.DTOs
+namespace PanoramaBackend.Services.Data.DTOs
 {
         public class TeamMemberDTO : BaseDTO
         {

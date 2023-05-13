@@ -1,12 +1,15 @@
-﻿using NukesLab.Core.Common;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using NukesLab.Core.Common;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace PanoramBackend.Data.Entities
+namespace PanoramaBackend.Data.Entities
 {
     public class TaskTodo:BaseEntity<int>
     {
+        [Column(TypeName = "nvarchar(100)")]
         public string TaskName { get; set; }
         public int? AssignedToId { get; set; }
         public int? AssignedById { get; set; }
@@ -15,6 +18,7 @@ namespace PanoramBackend.Data.Entities
         public string Time { get; set; }
         public int? PriorityId { get; set; }
         public int? StatusId { get; set; }
+        [Column(TypeName = "nvarchar(100)")]
         public string Notes { get; set; }
         public bool SendUpdate { get; set; }
         public virtual UserDetails AssignedTo { get; set; }

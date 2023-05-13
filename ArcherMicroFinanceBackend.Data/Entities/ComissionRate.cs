@@ -1,10 +1,10 @@
 ﻿using NukesLab.Core.Common;
-using PanoramBackend.Data.Entities;
+using PanoramaBackend.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace PanoramBackend.Data.Repository
+namespace PanoramaBackend.Data.Repository
 {
     public class ComissionRate:BaseEntity<int>
     {

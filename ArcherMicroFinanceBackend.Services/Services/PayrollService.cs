@@ -1,14 +1,14 @@
 ﻿
-using PanoramBackend.Data.Entities;
-using PanoramBackend.Data.Repository;
-using PanoramBackend.Services.Core;
+using PanoramaBackend.Data.Entities;
+using PanoramaBackend.Data.Repository;
+using PanoramaBackend.Services.Core;
 using NukesLab.Core.Repository;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using PanoramaBackend.Data.Entities;
 
-namespace PanoramBackend.Services.Services
+namespace PanoramaBackend.Services.Services
 {
     public class PayrollService : BaseService<Payroll, int>, IPayrollService
     {
