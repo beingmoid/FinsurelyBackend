@@ -46,7 +46,7 @@ using Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using AIB.Data;
+
 using PanoramaBackend.Service.Syncronization;
 //using AIB.Data;
 //using PanoramaBackend.Service.Syncronization;
@@ -97,6 +97,7 @@ namespace PanoramaBackend
 
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+           
 
             });
 
@@ -121,14 +122,14 @@ namespace PanoramaBackend
             services.AddScoped<IUserProvider, IdentityUserProvider>();
             services.AddScoped<UserGenerator>();
             ConnectionStrings.AIBConnectionString = Utils._config.GetConnectionString("AIBConnectionString");
-            services.AddDbContext<AIBContext>(options =>
-            {
-                options.UseSqlServer(Utils._config.GetConnectionString("AIBConnectionString"));
-                options.UseInternalServiceProvider(serviceProvider);
-                //option.EnableSensitiveDataLogging(true);
-                options.EnableDetailedErrors(true);
-                options.UseLoggerFactory(LoggerFactory.Create(builder => { builder.AddConsole(); }));
-            });
+            //services.AddDbContext<AIBContext>(options =>
+            //{
+            //    options.UseSqlServer(Utils._config.GetConnectionString("AIBConnectionString"));
+            //    options.UseInternalServiceProvider(serviceProvider);
+            //    //option.EnableSensitiveDataLogging(true);
+            //    options.EnableDetailedErrors(true);
+            //    options.UseLoggerFactory(LoggerFactory.Create(builder => { builder.AddConsole(); }));
+            //});
             services.AddDbContext<AMFContext>(option =>
             {
                 option.UseSqlServer(Utils._config.GetConnectionString("AMFDB"));
@@ -201,7 +202,7 @@ namespace PanoramaBackend
             services.AddScoped<IPaymentMethodService, PaymentMethodService>();
             services.AddScoped<ISalesInvoiceRepository, SalesInvoiceRepository>();
             services.AddScoped<ISalesInvoiceService, SalesInvoiceService>();
-            services.AddScoped<ISyncronizationRepository, SyncronizationRepository>();
+            //services.AddScoped<ISyncronizationRepository, SyncronizationRepository>();
 
             services.AddScoped<IInsuranceTypeRepository, InsuranceTypeRepository>();
             services.AddScoped<IInsuranceTypeService, InsuranceTypeService>();
