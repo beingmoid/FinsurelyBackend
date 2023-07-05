@@ -30,7 +30,7 @@ namespace PanoramaBackend
             webBuilder.ConfigureKestrel(serverOptions =>
             {
 
-                webBuilder.UseUrls("http://localhost:5000/");
+                serverOptions.Listen(IPAddress.Any, 5000 );
 
 
 

@@ -48,6 +48,8 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 using PanoramaBackend.Service.Syncronization;
+using Microsoft.Win32;
+using MongoDB.Driver.Core.Configuration;
 //using AIB.Data;
 //using PanoramaBackend.Service.Syncronization;
 namespace PanoramaBackend
@@ -56,7 +58,7 @@ namespace PanoramaBackend
     {
         private readonly IWebHostEnvironment _env;
         private IServiceProvider serviceProvider;
-
+        private readonly string registryPath;
         //public static readonly ILoggerFactory loggerFactory = new LoggerFactory(new[] {
         //      new ConsoleLoggerProvider((_, __) => true, true)
         //});
@@ -68,7 +70,24 @@ namespace PanoramaBackend
               .AddJsonFile("appSettings.json", optional: true, reloadOnChange: true)
                .AddEnvironmentVariables()
           .Build();
-            ConnectionStrings.PortalConnectionString = Utils._config.GetConnectionString("AMFDB");
+
+            registryPath = Utils._config.GetValue<string>("Registry");
+            using (RegistryKey key = Registry.LocalMachine.OpenSubKey(registryPath))
+            {
+                string connectionString = "";
+                if (key != null)
+                {
+                    connectionString = key.GetValue("ConnectionString") as string;
+
+                    ConnectionStrings.PortalConnectionString = connectionString;
+                }
+                else
+                {
+                    throw new ServiceException("Ask your administrator to load ConnectionString in Component Services");
+                }
+            }
+
+           
         }
 
         public IConfiguration Configuration { get; }
@@ -132,7 +151,7 @@ namespace PanoramaBackend
             //});
             services.AddDbContext<AMFContext>(option =>
             {
-                option.UseSqlServer(Utils._config.GetConnectionString("AMFDB"));
+                option.UseSqlServer(ConnectionStrings.PortalConnectionString);
                 option.UseInternalServiceProvider(serviceProvider);
 
                 //option.EnableSensitiveDataLogging(true);
@@ -372,6 +391,22 @@ namespace PanoramaBackend
         {
 
             ServiceActivator.Configure(app.ApplicationServices);
+            using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetService<AMFContext>();
+                var databaseExists = dbContext.Database.CanConnect();
+
+                if (!databaseExists)
+                {
+                    dbContext.Database.Migrate();
+                    // Additional code to seed data or perform other initializations if needed
+                }
+                else
+                {
+                    Console.WriteLine("ALREADY EXIST");
+                }
+            }
+
             ExpenseExcel.ConfigureExcel();
             //var syncronizationService = ServiceActivator.GetScope().ServiceProvider.GetService<ISyncronizationRepository>();
             //await syncronizationService.MergeAll();
@@ -406,9 +441,8 @@ namespace PanoramaBackend
                         .AllowAnyHeader()
                         .AllowAnyOrigin()
                         .SetIsOriginAllowed(origin => true) // allow any origin
-                        .DisallowCredentials()
-                        
-                        ); // allow credentials
+                       
+                        );; // allow credentials
                         
             app.UseRouting();
 

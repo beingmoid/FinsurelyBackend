@@ -27,3 +27,13 @@ J:\CommericalBrokers\AIB_Backend\AIB.Common\obj\Release\netcoreapp3.1\AIB.Common
 J:\CommericalBrokers\AIB_Backend\AIB.Common\obj\Release\netcoreapp3.1\AIB.Common.csproj.CoreCompileInputs.cache
 J:\CommericalBrokers\AIB_Backend\AIB.Common\obj\Release\netcoreapp3.1\AIB.Common.dll
 J:\CommericalBrokers\AIB_Backend\AIB.Common\obj\Release\netcoreapp3.1\AIB.Common.pdb
+J:\Finsurely\Afnan\afnaninsurancebackend\AIB.Common\bin\Release\netcoreapp3.1\AIB.Common.deps.json
+J:\Finsurely\Afnan\afnaninsurancebackend\AIB.Common\bin\Release\netcoreapp3.1\AIB.Common.dll
+J:\Finsurely\Afnan\afnaninsurancebackend\AIB.Common\bin\Release\netcoreapp3.1\AIB.Common.pdb
+J:\Finsurely\Afnan\afnaninsurancebackend\AIB.Common\obj\Release\netcoreapp3.1\AIB.Common.csproj.AssemblyReference.cache
+J:\Finsurely\Afnan\afnaninsurancebackend\AIB.Common\obj\Release\netcoreapp3.1\AIB.Common.GeneratedMSBuildEditorConfig.editorconfig
+J:\Finsurely\Afnan\afnaninsurancebackend\AIB.Common\obj\Release\netcoreapp3.1\AIB.Common.AssemblyInfoInputs.cache
+J:\Finsurely\Afnan\afnaninsurancebackend\AIB.Common\obj\Release\netcoreapp3.1\AIB.Common.AssemblyInfo.cs
+J:\Finsurely\Afnan\afnaninsurancebackend\AIB.Common\obj\Release\netcoreapp3.1\AIB.Common.csproj.CoreCompileInputs.cache
+J:\Finsurely\Afnan\afnaninsurancebackend\AIB.Common\obj\Release\netcoreapp3.1\AIB.Common.dll
+J:\Finsurely\Afnan\afnaninsurancebackend\AIB.Common\obj\Release\netcoreapp3.1\AIB.Common.pdb

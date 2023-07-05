@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>J:\Finsurely\Afnan\afnaninsurancebackend\PanoramaBackend\bin\Release\netcoreapp3.1\publish\</_PublishTargetUrl>
+    <History>True|2023-06-28T14:52:50.7214735Z;True|2023-06-24T23:49:51.6129124+05:00;True|2023-06-24T19:15:58.3232349+05:00;True|2023-06-24T19:13:06.3829489+05:00;True|2023-06-24T19:09:39.9885257+05:00;False|2023-06-24T18:45:26.5924411+05:00;True|2023-06-24T18:44:36.9297736+05:00;True|2023-06-24T12:44:57.2207852+05:00;True|2023-06-24T09:50:48.0504400+05:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+</Project>

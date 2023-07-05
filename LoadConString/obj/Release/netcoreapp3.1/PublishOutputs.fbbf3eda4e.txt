@@ -1,0 +1,12 @@
+J:\Finsurely\Afnan\afnaninsurancebackend\LoadConString\bin\Release\netcoreapp3.1\app.publish\LoadConString.exe
+J:\Finsurely\Afnan\afnaninsurancebackend\LoadConString\bin\Release\netcoreapp3.1\app.publish\LoadConString.dll
+J:\Finsurely\Afnan\afnaninsurancebackend\LoadConString\bin\Release\netcoreapp3.1\app.publish\LoadConString.deps.json
+J:\Finsurely\Afnan\afnaninsurancebackend\LoadConString\bin\Release\netcoreapp3.1\app.publish\LoadConString.runtimeconfig.json
+J:\Finsurely\Afnan\afnaninsurancebackend\LoadConString\bin\Release\netcoreapp3.1\app.publish\LoadConString.pdb
+J:\Finsurely\Afnan\afnaninsurancebackend\LoadConString\bin\Release\netcoreapp3.1\app.publish\Microsoft.Win32.Registry.dll
+J:\Finsurely\Afnan\afnaninsurancebackend\LoadConString\bin\Release\netcoreapp3.1\app.publish\System.Security.AccessControl.dll
+J:\Finsurely\Afnan\afnaninsurancebackend\LoadConString\bin\Release\netcoreapp3.1\app.publish\System.Security.Principal.Windows.dll
+J:\Finsurely\Afnan\afnaninsurancebackend\LoadConString\bin\Release\netcoreapp3.1\app.publish\runtimes\win\lib\netstandard2.0\Microsoft.Win32.Registry.dll
+J:\Finsurely\Afnan\afnaninsurancebackend\LoadConString\bin\Release\netcoreapp3.1\app.publish\runtimes\win\lib\netcoreapp2.0\System.Security.AccessControl.dll
+J:\Finsurely\Afnan\afnaninsurancebackend\LoadConString\bin\Release\netcoreapp3.1\app.publish\runtimes\unix\lib\netcoreapp2.1\System.Security.Principal.Windows.dll
+J:\Finsurely\Afnan\afnaninsurancebackend\LoadConString\bin\Release\netcoreapp3.1\app.publish\runtimes\win\lib\netcoreapp2.1\System.Security.Principal.Windows.dll
